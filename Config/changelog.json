@@ -1,0 +1,13 @@
+{
+    "terminalver": "Beta 1.3",
+    "newterminalfeatures": "Added uptime command lol\nAdded latest executed command (Such a dumb name actually lol)\nAdded a shutdown confirmation and added a force shutdown option",
+    "terminalbugfixes": "None",
+    "terminalissues": "None",
+
+    "botver": "6 Beta 5.1",
+    "newfeatures": "Added a shutdown command which sends a petition to the terminal to continue with the shutdown lol\n",
+    "bugfixes": "None",
+    "issues": "None",
+
+    "todo": "Fix this shit embed lol"
+}
