@@ -1,16 +1,16 @@
 {
   "name": "sanic-bot",
-  "version": "6.0.0",
+  "version": "1.0.0",
   "description": "a stupid bot for my friends or something i guess",
   "main": "index.js",
   "scripts": {
-    "iniciar": "node sanicbotcli.js"
+    "iniciar": ""
   },
   "author": "Sanic",
   "license": "ISC",
   "dependencies": {
     "cli-color": "^2.0.0",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.1.0",
     "inquirer": "^8.1.2",
     "vorpal": "^1.12.0"
   }
