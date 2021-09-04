@@ -211,6 +211,7 @@ client.on('interactionCreate', async (interaction) => {
 
     if (commandName == 'ping'){
         const pingembed = new Discord.MessageEmbed()
+        .setTitle('pong')
         .setDescription('pong');
 
         interaction.reply({
