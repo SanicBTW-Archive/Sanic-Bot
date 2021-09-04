@@ -42,9 +42,16 @@ client.on('ready', () => {
     if(mainguild) commands = mainguild.commands
     else commands = client.application.commands
 
+    commands.cache.clear;
+
     commands.create({
         name: 'ping',
         description: 'Replies with bot ping and message ping',
+    })
+
+    commands.create({
+        name: 'changelog',
+        description: 'Sends an embed with the current changelog'
     })
     //#endregion
 
@@ -210,12 +217,20 @@ client.on('interactionCreate', async (interaction) => {
     const { commandName, options } = interaction
 
     if (commandName == 'ping'){
-        const pingembed = new Discord.MessageEmbed()
-        .setTitle('pong')
-        .setDescription('pong');
 
         interaction.reply({
-            content: pingembed
+            content: 'Bot Ping: ' + client.ws.ping
+        })
+    } else if (commandName == 'changelog'){
+        const testebmed = new Discord.MessageEmbed()
+        .setTitle('hola')
+
+        interaction.reply({
+            data: {
+                embeds: {
+                    title: 'hoal'
+                }
+            }
         })
     }
 
