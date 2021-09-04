@@ -210,11 +210,14 @@ client.on('interactionCreate', async (interaction) => {
     const { commandName, options } = interaction
 
     if (commandName == 'ping'){
+        const pingembed = new Discord.MessageEmbed()
+        .setDescription('pong');
+
         interaction.reply({
-            content: client.ws.ping + ' ms'
+            content: pingembed
         })
     }
-    
+
 })
 
 client.login(config.token);
