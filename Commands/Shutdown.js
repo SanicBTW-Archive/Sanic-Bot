@@ -1,5 +1,7 @@
 const { mainaccowner, altaccowner } = require('../Config/settings.json')
 const Discord = require('discord.js');
+const vorpal = require('vorpal')();
+const clc = require('cli-color');
 
 module.exports = {
     category: 'Main Commands',
@@ -9,9 +11,9 @@ module.exports = {
 
     options: [
         {
-            name: 'shutdownopt',
-            description: 'Options to shutdown the bot',
-            required: false,
+            name: 'forceshutdown',
+            description: 'Force shutdown the bot',
+            required: true,
             type: 3,
         }
     ],
@@ -19,15 +21,32 @@ module.exports = {
     callback: ({ interaction, args }) => {
         const testembed = new Discord.MessageEmbed()
         .setDescription('test');
+        
+        const shutdownforce = new Discord.MessageEmbed()
+        .setDescription('Forcing the bot shutdown, not asking for confirmation to the terminal... (20s until shutdown)')
+
 
         if(interaction){
-            if (args[0].contains("force")) {
-                if(mainaccowner || altaccowner) {
+            switch(args[0]){
+                case 'true':
+                    if (mainaccowner || altaccowner){
+                        interaction.reply({
+                            embeds: [shutdownforce]
+                        }).then((resultMessage) => {
+                            vorpal.log(clc.red('Shutdown scheduled in 20s'))
+                            setTimeout(function() {
+                                vorpal.exec('exit')
+                            }, 20000)
+                        })
+                    }
+                break;
+
+                case 'false':
                     interaction.reply({
-                        content: 'hola',
+                        content: 'hola2',
                         embeds: [testembed]
                     })
-                }
+                break;
             }
         }
     }

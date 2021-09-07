@@ -42,7 +42,7 @@ client.on('ready', () => {
         }], status: config.status
     });
 
-    
+
 
     //#region Vorpal Commands
 
@@ -66,7 +66,7 @@ client.on('ready', () => {
 
                 this.log(clc.cyan('Shutting down the bot and closing the console'));
                 client.destroy();
-                process.exit(1);
+                process.exit();
             }
             catch (error) {
             console.error(error);
