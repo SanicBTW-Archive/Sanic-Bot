@@ -2,6 +2,8 @@ module.exports = {
     category: 'Main Commands',
     description: 'Sends a petition to shutdown the bot (Or can be forced without asking for petition to shutdown)',
 
+    slash: true,
+
     options: [
         {
             name: 'shutdownopt',
