@@ -42,6 +42,8 @@ client.on('ready', () => {
         }], status: config.status
     });
 
+    
+
     //#region Vorpal Commands
 
     //#region Vorpal config fr
