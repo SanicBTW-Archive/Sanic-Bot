@@ -2,6 +2,9 @@
 const Discord = require('discord.js');
 const intents = new Discord.Intents(32767);
 const client = new Discord.Client({ intents });
+
+const WOKCommands = require('wokcommands');
+const path = require('path');
 //#endregion
 
 //#region Config stuff and channel ids etc, i should really merge all together
@@ -26,6 +29,11 @@ process.title = 'Sanic Bot Terminal ' + idkwhylol.terminalver;
 //#endregion
 
 client.on('ready', () => {
+    new WOKCommands(client, {
+        commandsDir: path.join(__dirname, 'Commands'),
+        showWarns : false,
+    })
+
     vorpal.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)`));
 
     client.user.setPresence({
@@ -33,27 +41,6 @@ client.on('ready', () => {
             name: config.activityname
         }], status: config.status
     });
-
-    //#region Slash commands stuff
-    const mainguild = client.guilds.cache.get(config.mainguild);
-
-    let commands
-
-    if(mainguild) commands = mainguild.commands
-    else commands = client.application.commands
-
-    commands.cache.clear;
-
-    commands.create({
-        name: 'ping',
-        description: 'Replies with bot ping and message ping',
-    })
-
-    commands.create({
-        name: 'changelog',
-        description: 'Sends an embed with the current changelog'
-    })
-    //#endregion
 
     //#region Vorpal Commands
 
@@ -70,13 +57,14 @@ client.on('ready', () => {
         .description('Shuts down the bot and exits the console')
         .action(function(callback){
             try{
-                const requestedchannelidstuff = "Channel ID Name: " + tempchannelids[0].channelIDName + "\nChannel ID: " + tempchannelids[0].channelIDSubmit + "\n\n";
+                //const requestedchannelidstuff = "Channel ID Name: " + tempchannelids[0].channelIDName + "\nChannel ID: " + tempchannelids[0].channelIDSubmit + "\n\n";
 
-                fs.writeFileSync(__dirname + '/Temp/tempchannelids.txt', requestedchannelidstuff);
-                this.log(clc.green('Channel ids that were added to the list are now saved on a text file!'))
+                //fs.writeFileSync(__dirname + '/Temp/tempchannelids.txt', requestedchannelidstuff);
+                //this.log(clc.green('Channel ids that were added to the list are now saved on a text file!'))
 
                 this.log(clc.cyan('Shutting down the bot and closing the console'));
                 client.destroy();
+                process.exit(1);
             }
             catch (error) {
             console.error(error);
@@ -202,7 +190,28 @@ client.on('ready', () => {
         })
     //#endregion
 
-    //#region Last executed command needs to be ported to new command handler
+    //#region Last executed command
+    vorpal
+    .command('lastexecuted')
+    .description('Logs the last executed command from Discord, includes user and times executed')
+    .action(function(args, callback) {
+        if(executedcmdslist[0].latestexc == true){
+            this.log('The following command "' + clc.yellow(`${executedcmdslist[0].sprcmd}`) + '"')
+            this.log('It has been executed ' + clc.cyan(`${executedcmdslist[0].exectimes} times`))
+            this.log('Last user to execute the command ' + clc.cyan(`${executedcmdslist[0].lastusertoexec}`))
+        } else if(executedcmdslist[1].latestexc == true){
+            this.log('The following command "' + clc.yellow(`${executedcmdslist[1].sprcmd}`) + '"')
+            this.log('It has been executed ' + clc.cyan(`${executedcmdslist[1].exectimes} times`))
+            this.log('Last user to execute the command ' + clc.cyan(`${executedcmdslist[1].lastusertoexec}`))
+        } else if(executedcmdslist[2].latestexc == true){
+            this.log('The following command "' + clc.yellow(`${executedcmdslist[2].sprcmd}`) + '"')
+            this.log('It has been executed ' + clc.cyan(`${executedcmdslist[2].exectimes} times`))
+            this.log('Last user to execute the command ' + clc.cyan(`${executedcmdslist[2].lastusertoexec}`))
+        } else{
+            this.log(clc.red("Couldn't find recently executed commands"))
+        }
+        callback();
+    })
     //#endregion
 
     //#region Shutdown confirmation hidden command, needs to be ported to new command handler lol
@@ -210,30 +219,5 @@ client.on('ready', () => {
 
     //#endregion
 });
-
-client.on('interactionCreate', async (interaction) => {
-    if(!interaction.isCommand()) return;
-
-    const { commandName, options } = interaction
-
-    if (commandName == 'ping'){
-
-        interaction.reply({
-            content: 'Bot Ping: ' + client.ws.ping
-        })
-    } else if (commandName == 'changelog'){
-        const testebmed = new Discord.MessageEmbed()
-        .setTitle('hola')
-
-        interaction.reply({
-            data: {
-                embeds: {
-                    title: 'hoal'
-                }
-            }
-        })
-    }
-
-})
 
 client.login(config.token);
