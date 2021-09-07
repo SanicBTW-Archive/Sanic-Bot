@@ -242,6 +242,7 @@ client.on('ready', () => {
     //#endregion
 })
 
+/*
 client.on('message', message => {
     if(!message.content.startsWith(config.prefix) || message.author.bot) return;
 
@@ -357,5 +358,6 @@ client.on('message', message => {
         break;
     }
 })
+*/
 
 client.login(config.token);

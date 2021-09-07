@@ -16,7 +16,7 @@ module.exports = {
     callback: ({ interaction, args }) => {
         if(interaction){
             interaction.reply({
-                content: 'Test' + args[0]
+                content: 'Test ' + args[0]
             })
         }
     }
