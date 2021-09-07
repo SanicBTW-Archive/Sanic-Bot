@@ -1,8 +1,7 @@
 const { executedcmdslist } = require('../Config/lists.js');
-const vorpal = require('vorpal')();
 
 module.exports = {
-    category: 'Testing',
+    category: 'Main Commands',
     description: 'Replies with pong',
 
     slash: true,
