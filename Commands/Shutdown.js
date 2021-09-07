@@ -1,3 +1,6 @@
+const { mainaccowner, altaccowner } = require('../Config/settings.json')
+const Discord = require('discord.js');
+
 module.exports = {
     category: 'Main Commands',
     description: 'Sends a petition to shutdown the bot (Or can be forced without asking for petition to shutdown)',
@@ -14,10 +17,18 @@ module.exports = {
     ],
 
     callback: ({ interaction, args }) => {
+        const testembed = new Discord.MessageEmbed()
+        .setDescription('test');
+
         if(interaction){
-            interaction.reply({
-                content: 'Test ' + args[0]
-            })
+            if (args[0].contains("force")) {
+                if(mainaccowner || altaccowner) {
+                    interaction.reply({
+                        content: 'hola',
+                        embeds: [testembed]
+                    })
+                }
+            }
         }
     }
 }
