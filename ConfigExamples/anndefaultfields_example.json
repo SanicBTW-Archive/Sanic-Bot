@@ -1,0 +1,7 @@
+{
+  "_comment": "Here you should put the default fields you want your embed to have for announcin stuff (ONLY FOR THE TERMINAL)",
+  "_comment2": "I should make improve this and make it so you can actually add fields but i feel kinda lazy on finding out how to so i guess im going this way for now",
+  "example1": "field name",
+  "example1val": "field value",
+  "_comment3":  "It should go like this ig"
+}

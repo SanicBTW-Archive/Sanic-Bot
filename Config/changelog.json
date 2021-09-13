@@ -1,11 +1,10 @@
 {
-    "terminalver": "Beta 3",
-    "newterminalfeatures": "Ported the commands to Discord.JS 13.1.0 (still working on it)\n",
+    "terminalver": "Beta 3.6 (Rev 5)",
+    "newterminalfeatures": "Ported the commands to Discord.JS 13.1.0 (still working on it)\nChanged how the send message works,\nfinished embed command",
     "terminalbugfixes": "None",
     "terminalissues": "Annoying bug when asking for shutdown confirmation and then input not working until pressing tab",
 
-    "botver": "Beta 9",
-    "newfeatures": "Updated to Discord.JS 13.1.0\nAdded slash commands",
+    "newfeatures": "Updated to Discord.JS 13.1.0\n",
     "bugfixes": "None",
     "issues": "None",
 

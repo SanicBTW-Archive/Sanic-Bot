@@ -12,14 +12,7 @@ var shutdownlistig = [
     { userwhosentshutdown: 'user', vorpalanswer: true | false}
 ];
 
-//Although its not permament ill see a way to save the channel ids and then manually saving them into the file
-//Thinking about deleting this, its just stupid shit at this point lol
-var tempchannelids = [
-    { channelIDName: 'Channel ID Name', channelIDSubmit: 'Channel ID'},
-];
-
 module.exports = {
     executedcmdslist,
     shutdownlistig,
-    tempchannelids
 }
