@@ -1,0 +1,51 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.4.0 (Beta) - TERMINAL (Rev 1)]
+### Added
+- 
+
+### Changed
+- Migrated to Readline
+
+### Removed
+- Vorpal package to prevent vurnerabilities lol
+- Some commands that required inquirer stuff, due to readline limitation I can't ask a question without glitching the whole terminal
+- WOKCommands package (Finally lol)
+- Inquirer package because I don't know how to use it with readline bruh
+
+### Bug Fixes
+
+### Issues
+
+## [0.3.6 (Beta) - TERMINAL (Rev 5)] - 12-09-2021
+### Added
+
+### Changed
+- Ported the commands to Discord.JS 13.1.0 (Still working on it)
+- Changed how the send message works and finished the embed option
+- Migrated to Readline
+
+### Removed
+- Vorpal package
+- Some commands that required inquirer stuff, due to readline limitation I can't ask a question without glitching the whole terminal
+
+### Bug Fixes
+
+### Issues
+- Annoying bug when asking for shutdown confirmation and then input not working until pressing tab
+
+## [0.9.0 (Beta) - DISCORD BOT (Rev 10)] - 12-09-2021
+### Added
+
+### Changed
+- Upgraded to Discord.JS 13.1.0
+
+### Removed
+
+### Bug Fixes
+
+### Issues

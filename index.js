@@ -11,7 +11,7 @@ const { token, prefix, activityname, status,
 mainaccowner, altaccowner} = require('./Config/settings.json');
 
 const inqquest = require('./Config/cmdessentials');
-const { executedcmdslist, shutdownlistig, tempchannelids} = require('./Config/lists');
+const { executedcmdslist, shutdownlistig, defaultembedcolor} = require('./Config/lists');
 
 const spprchnlids = require('./Config/channelids.json');
 
@@ -22,14 +22,22 @@ const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
 newfeatures, bugfixes, issues, todo, } = require('./Config/changelog.json');
 //#endregion
 
-//#region Vorpal Stuff including terminal colors and shit its just the importing stuff lol
+//#region Terminal stuff including terminal colors and smth
 const clc = require('cli-color');
-const vorpal = require('vorpal')();
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: '> '
+});
+
+const inquirer = require('inquirer');
+
 process.title = 'Sanic Bot Terminal ' + terminalver;
 //#endregion
 
 client.on('ready', () => {
-    vorpal.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)`));
+    console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)`));
 
     client.user.setPresence({
         activities: [{
@@ -37,227 +45,94 @@ client.on('ready', () => {
         }], status: status
     });
 
-    //#region Vorpal Commands
+    //#region Terminal Commands
+    rl.prompt();
 
-    //#region Vorpal config fr
-    vorpal.delimiter(clc.cyan('>')).show();
-    
-    const exit = vorpal.find('exit');
-    if(exit) exit.remove();
-    //#endregion
-    
-    //#region Shutdown command
-    vorpal
-        .command('shutdown')
-        .description('Shuts down the bot and exits the console')
-        .action(function(callback){
-            try{
-                //const requestedchannelidstuff = "Channel ID Name: " + tempchannelids[0].channelIDName + "\nChannel ID: " + tempchannelids[0].channelIDSubmit + "\n\n";
+    rl.on('line', (line) => {
+        switch (line.trim()) {
+            case 'controlling':
+                console.log('Currently controlling: ' + clc.cyan(`${client.user.tag}`));
+            break;
 
-                //fs.writeFileSync(__dirname + '/Temp/tempchannelids.txt', requestedchannelidstuff);
-                //this.log(clc.green('Channel ids that were added to the list are now saved on a text file!'))
+            case 'status':
+                rl.question('Do you want to change or restart the status? ', (statusaction) => {
+                    switch (statusaction){
+                        case 'restart':
+                            client.user.setPresence({
+                                activities: [{
+                                    name: activityname
+                                }], status: status
+                            });
+                            console.log(clc.green('Activity name and status went back to normal!'));
+                            rl.prompt();
+                        break;
 
-                this.log(clc.cyan('Shutting down the bot and closing the console'));
-                client.destroy();
-                process.exit();
-            }
-            catch (error) {
-            console.error(error);
-            }
-        });
-    //#endregion
-    
-    //#region Controlling command
-    vorpal
-        .command('controlling')
-        .description('Tells you what bot you are controlling')
-        .action(function(args, callback){
-            this.log('Currently controlling: ' + clc.cyan(`${client.user.tag}`));
-            callback();
-        });
-    //#endregion
+                        case 'change':
+                            rl.question('Change the activity name to: ', (newprsncname) => {
 
-    //#region Change status command
-    vorpal
-        .command('status <action>')
-        .description('Changes the status of the bot')
-        .action(function(args, callback){
-            const self = this;
-            
-            //For the restart arg
-            if (args.action == 'restart') {
-                client.user.setPresence({
-                    activities:[{
-                        name: activityname
-                    }], status: status
-                })
-                self.log(clc.green('Activity name and status went back to normal!'))
-            }
-            //For the change arg
-            else if (args.action == 'change') {
-                return this.prompt(inqquest.statusquestions).then((answers) => {
-                    if (answers.selstatus == 'invisible') self.log(clc.redBright('bruh what the fuck, are you mentally challenged???'));
-                    else {
-                        client.user.setPresence({
-                            activities: [{
-                                name: answers.newprsnc
-                            }], status: answers.selstatus
-                        })
-                        self.log(clc.green('The activity name changed to: ') + answers.newprsnc);
-                        self.log(clc.green('And the status changed to: ') + answers.selstatus);
+                                rl.question('Change the status of the bot (online, idle, dnd): ', (prsncstatus) => {
+                                    if (newprsncname.length > 0){
+
+                                        if(prsncstatus == "online" || prsncstatus == "idle" || prsncstatus == "dnd"){
+                                            client.user.setPresence({
+                                                activities: [{
+                                                    name: newprsncname
+                                                }], status: prsncstatus
+                                            })
+                                            console.log(clc.green('The activity name changed to: ') + newprsncname);
+                                            console.log(clc.green('And the status changed to: ') + prsncstatus);
+                                            rl.prompt();
+                                        } else console.log(clc.red('You might want to provide a new status'));
+                                        rl.prompt();
+
+                                    } else console.log(clc.red('You might want to provide a name for the presence'));
+                                    rl.prompt();
+                                })
+
+                            })
+                        break;
                     }
-                    
                 })
-            } 
-            //Say something if wrong arg was given    
-            else self.log(clc.red('You need to provide a correct arg in order to use this command("restart", "change")'))
-            callback();
-        })
-    //#endregion
+            break;
 
-    //#region Send messages command
-    vorpal
-        .command('send')
-        .description('Sends a message to a specified channel (Using .json files to get the channel ids lol)')
-        .action(function(args, callback){
-            const self = this;
-            //I should improve this + the message content detection but i have to work on it
-            return this.prompt(inqquest.msgtypethingy).then((answers) => {
-                switch (answers.msgtype) {
-                    case 'Normal':
-                        return this.prompt(inqquest.normalmsgquestions).then((answers) => {
-                            switch (answers.selchnlid) {
-                                case 'General (Prueba bot)':
-                                    if (answers.msgcont.length > 0) {
-                                        client.channels.cache.get(spprchnlids['General (Prueba bot)']).send(answers.msgcont);
-                                    } else vorpal.log('if this is printed then idk why tf its my main code not working bruh');
-                                    break;
-                                case 'Prueba (Prueba bot)':
-                                    if (answers.msgcont.length > 0) {
-                                        client.channels.cache.get(spprchnlids['Prueba (Prueba bot)']).send(answers.msgcont);
-                                    } else vorpal.log('if this is printed then idk why tf its my main code not working bruh');
-                                    break;
-                            }
-                        })
-                        break;
+            case 'exit':
+                rl.close();
+            break;
 
-                    case 'Embed':
-                        return this.prompt(inqquest.embedmsgquestions).then((answers) => {
-                            //This code sucks ass like really it sucks, should search a way to optimize it
-                            if (answers.embedtitle.length > 0) {
-                                if (answers.embeddesc.length > 0) {
-                                    if (answers.embedfooter.length > 0) {
-                                        if (answers.embedcolor.length > 0) {
-                                            const mainembed = new Discord.MessageEmbed()
-                                                .setTitle(answers.embedtitle)
-                                                .setDescription(answers.embeddesc)
-                                                .setFooter(answers.embedfooter)
-                                                .setColor(answers.embedcolor);
+            case 'ping':
+                if(client.ws.ping > "150")
+                    console.log('The current ping is: ' + clc.red(`${client.ws.ping}ms`))
+                else if(client.ws.ping > "100")
+                    console.log('The current ping is: ' + clc.yellow(`${client.ws.ping}ms`))
+                else if (client.ws.ping < "100")
+                    console.log('The current ping is: ' + clc.green(`${client.ws.ping}ms`)) 
+            break;
 
-                                            switch (answers.selchnlid) {
-                                                case 'Noticias (Prueba bot)':
-                                                    client.channels.cache.get(annchnls['Noticias (Prueba bot)']).send({ embeds: [mainembed] })
-                                                    break;
-                                            }
-                                        } else {
-                                            vorpal.log('axd');
-                                        }
-                                    }
-                                }
-                            }
-                        })
-                        break;
+            case 'uptime':
+                let totalSeconds = (client.uptime / 1000);
+                let dias = Math.floor(totalSeconds / 86400);
+                totalSeconds %= 86400;
+    
+                let horas = Math.floor(totalSeconds / 3600);
+                totalSeconds %= 3600;
+    
+                let minutos = Math.floor(totalSeconds / 60);
+                let segundos = Math.floor(totalSeconds % 60);
+                
+                console.log(`${dias} days ${horas} hours ${minutos} minutes ${segundos} seconds`);
+            break;
 
-                    case 'Custom':
-                        return this.prompt(inqquest.custommsgtype).then((answers) => {
-                            switch (answers.custommsgtype) {
-                                case 'Normal':
-                                    return this.prompt(inqquest.custommsgquestions).then((answers) => {
-                                        if (answers.customchnlid.length > 0) {
-                                            if (answers.msgcont.length > 0) {
-                                                client.channels.cache.get(answers.customchnlid).send(answers.msgcont);
-                                            }
-                                        }
-                                    })
-                                    break;
-
-                                case 'Embed':
-                                    vorpal.log(clc.yellow('Working on the embed message type, not custom one'))
-                                    break;
-                            }
-                        })
-                        break;
-                }
-            })
-
-            callback();
-        })
-    //#endregion    
-
-    //#region Ping command
-    vorpal
-    .command('ping')
-    .description('Tells you the actual bot ping ig')
-    .action(function(args, callback) {
-        if(client.ws.ping > "150")
-            this.log('The current ping is: ' + clc.red(`${client.ws.ping}ms`))
-        else if(client.ws.ping > "100")
-            this.log('The current ping is: ' + clc.yellow(`${client.ws.ping}ms`))
-        else if (client.ws.ping < "100")
-            this.log('The current ping is: ' + clc.green(`${client.ws.ping}ms`))
-        callback();
-    })
-    //#endregion
-
-    //#region Uptime command
-        vorpal
-        .command('uptime')
-        .description('Tells you how long has been the bot on')
-        .action(function(args, callback) {
-            let totalSeconds = (client.uptime / 1000);
-            let dias = Math.floor(totalSeconds / 86400);
-            totalSeconds %= 86400;
-
-            let horas = Math.floor(totalSeconds / 3600);
-            totalSeconds %= 3600;
-
-            let minutos = Math.floor(totalSeconds / 60);
-            let segundos = Math.floor(totalSeconds % 60);
-            
-
-            this.log(clc.green(`${dias} days `) + clc.cyan(`${horas} hours `) + 
-            clc.yellow(`${minutos} minutes `) + clc.red(`${segundos} seconds`));
-            callback();
-        })
-    //#endregion
-
-    //#region Last executed command
-    vorpal
-    .command('last executed')
-    .description('Logs the last executed command from Discord, includes user and times executed')
-    .action(function(args, callback) {
-        if(executedcmdslist[0].latestexc == true){
-            this.log('The following command "' + clc.yellow(`${executedcmdslist[0].sprcmd}`) + '"')
-            this.log('It has been executed ' + clc.cyan(`${executedcmdslist[0].exectimes} times`))
-            this.log('Last user to execute the command ' + clc.cyan(`${executedcmdslist[0].lastusertoexec}`))
-        } else if(executedcmdslist[1].latestexc == true){
-            this.log('The following command "' + clc.yellow(`${executedcmdslist[1].sprcmd}`) + '"')
-            this.log('It has been executed ' + clc.cyan(`${executedcmdslist[1].exectimes} times`))
-            this.log('Last user to execute the command ' + clc.cyan(`${executedcmdslist[1].lastusertoexec}`))
-        } else if(executedcmdslist[2].latestexc == true){
-            this.log('The following command "' + clc.yellow(`${executedcmdslist[2].sprcmd}`) + '"')
-            this.log('It has been executed ' + clc.cyan(`${executedcmdslist[2].exectimes} times`))
-            this.log('Last user to execute the command ' + clc.cyan(`${executedcmdslist[2].lastusertoexec}`))
-        } else{
-            this.log(clc.red("Couldn't find recently executed commands"))
+            default:
+                console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`)));
+            break;
         }
-        callback();
-    })
-    //#endregion
-
-    //#region Shutdown confirmation hidden command, needs to be ported to new command handler lol
-    //#endregion
-
+        rl.prompt();
+    }).on('close', () => {
+        console.log(clc.red('\nShutting down Sanic Bot'));
+        client.destroy();
+        console.log(clc.red('Closing the console...'));
+        process.exit(0);
+    });
     //#endregion
 });
 
@@ -314,7 +189,7 @@ client.on('messageCreate', (message) => {
                 {name: 'Issues', value: issues},
                 {name: 'To Do', value: todo}
             )
-            .setFooter('Terminal Version: ' + terminalver + ' | Sanic Bot Version: ' + activityname)
+            .setFooter('Terminal Version: ' + terminalver + ' | Sanic Bot Version: ' + activityname + '\nA Full changelog will be available soon')
             message.reply({
                 embeds: [changelogembed]
             });

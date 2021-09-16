@@ -6,6 +6,12 @@ var executedcmdslist = [
     { sprcmd: 'shutdown', exectimes: 0, lastusertoexec: 'user', latestexc: false}
 ];
 
+//Used to log the user who sent the shutdown petition
+//and to save the vorpal answer towards the petition
+var shutdownlistig = [
+    { userwhosentshutdown: 'user', vorpalanswer: true | false}
+];
+
 //Really bad way to store a value but meh
 //Plus doesn't really work for some reason so uh yeah
 var defaultembedcolor = [
@@ -14,5 +20,6 @@ var defaultembedcolor = [
 
 module.exports = {
     executedcmdslist,
+    shutdownlistig,
     
 }
