@@ -1,5 +1,5 @@
 {
-    "terminalver": "Beta 4 (Rev 1)",
+    "terminalver": "Beta 4.1",
     "newterminalfeatures": "None",
     "terminalbugfixes": "None",
     "terminalissues": "None",
@@ -8,5 +8,5 @@
     "bugfixes": "None",
     "issues": "None",
 
-    "todo": "Merge all the config stuff in one file or something\n"
+    "todo": "Merge all the config stuff in one file or something\nShould add more commands or something"
 }

@@ -4,7 +4,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0 (Beta) - TERMINAL (Rev 1)]
+## [0.0.4.2 - TERMINAL]
+### Added
+
+### Changed
+
+### Removed
+
+### Bug Fixes
+
+### Issues
+
+## [0.0.4.1 - TERMINAL]
+### Added
+- A help command for the terminal, idk it looked cool
+- The help command uses the helpmenu.js
+- Migrated the send command to readline, embed pending
+
+### Changed
+- Now when not typing correctly a command, a message will log saying the correct command or something
+- The thing above me will probably be reverted and also now the command has to be typed with the first letter in capital
+- The two above will probably get reverted
+- Split Status command to 2 different ones, "Status Change" and "Status Restart" due to idk how to make commands with args
+
+### Removed
+- The cmdessentials.js file due to deleting Inquirer and Vorpal since 0.0.4 tho I did a backup just in case
+
+### Bug Fixes
+
+### Issues
+
+## [0.0.4 - TERMINAL]
 ### Added
 - 
 
@@ -21,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Issues
 
-## [0.3.6 (Beta) - TERMINAL (Rev 5)] - 12-09-2021
+## [0.0.3.6 - TERMINAL] - 12-09-2021
 ### Added
 
 ### Changed
@@ -38,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Issues
 - Annoying bug when asking for shutdown confirmation and then input not working until pressing tab
 
-## [0.9.0 (Beta) - DISCORD BOT (Rev 10)] - 12-09-2021
+## [0.0.9 - DISCORD BOT] - 12-09-2021
 ### Added
 
 ### Changed
