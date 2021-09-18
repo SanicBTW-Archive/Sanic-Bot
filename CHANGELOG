@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.4.2 - TERMINAL]
+## [0.0.4.2 - TERMINAL] - 18-09-2021
 ### Added
 - Settings command for the terminal, I don't know why lol
 - Settings for the terminal, change them via the settings command
@@ -17,12 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reverted the update of capital letter command and detection of it idk how to call it lol
 
 ### Bug Fixes
+- Lil hotfix, added the code for the terminal title and the terminal ver option stuff
 
 ### Issues
 - When the .json file that contains the terminal settings doesnt exists the terminal just doesnt runs
 - Sometimes the settings menu wont work if there isnt a valid state / value for the option, only happens if you mess up the .json file
 
-## [0.0.4.1 - TERMINAL]
+## [0.0.4.1 - TERMINAL] - 17-09-2021
 ### Added
 - A help command for the terminal, idk it looked cool
 - The help command uses the helpmenu.js
@@ -41,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Issues
 
-## [0.0.4 - TERMINAL]
+## [0.0.4 - TERMINAL] - 16-09-2021
 ### Added
 - 
 
