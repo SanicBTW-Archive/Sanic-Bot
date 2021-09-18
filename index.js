@@ -17,6 +17,9 @@ const spprchnlids = require('./Config/channelids.json');
 const annchnls = require('./Config/annchannelids.json');
 
 const { HelpMenuEntry } = require('./Commands/helpmenu');
+const { SettingsMenuEntry, optionlist } = require('./Commands/settingsmenu');
+
+const TerminalSettings = require('./Config/TerminalSettings.json');
 
 //Previously called idkwhylol
 const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
@@ -32,7 +35,19 @@ const rl = readline.createInterface({
     prompt: '> '
 });
 
-process.title = 'Sanic Bot Terminal ' + terminalver;
+//process.title = 'Sanic Bot Terminal ' + terminalver;
+
+//#region Load Terminal settings/stuff
+optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
+optionlist[1].value = TerminalSettings.consoletitleoption.value;
+//optionlist[2].state = 
+
+process.title = TerminalSettings.consoletitleoption.value + terminalver;
+
+if(optionlist[0].state.includes("Enabled")){
+    console.clear();
+}
+//#endregion
 //#endregion
 
 client.on('ready', () => {
@@ -49,11 +64,11 @@ client.on('ready', () => {
 
     rl.on('line', (line) => {
         switch (line.trim()) {
-            case 'Controlling':
+            case 'controlling':
                 console.log('Currently controlling: ' + clc.cyan(`${client.user.tag}`));
             break;
 
-            case 'Status Change':
+            case 'status change':
                 rl.question('Change the activity name to: ', (newprsncname) => {
 
                     rl.question('Change the status of the bot (online, idle, dnd): ', (prsncstatus) => {
@@ -78,7 +93,7 @@ client.on('ready', () => {
                 })
             break;
 
-            case 'Status Restart':
+            case 'status restart':
                 client.user.setPresence({
                     activities: [{
                         name: activityname
@@ -87,11 +102,11 @@ client.on('ready', () => {
                 console.log(clc.green('Activity name and status went back to normal!'));
             break;
 
-            case 'Exit':
+            case 'exit':
                 rl.close();
             break;
 
-            case 'Ping':
+            case 'ping':
                 if(client.ws.ping > "150")
                     console.log('The current ping is: ' + clc.red(`${client.ws.ping}ms`))
                 else if(client.ws.ping > "100")
@@ -100,7 +115,7 @@ client.on('ready', () => {
                     console.log('The current ping is: ' + clc.green(`${client.ws.ping}ms`)) 
             break;
 
-            case 'Uptime':
+            case 'uptime':
                 let totalSeconds = (client.uptime / 1000);
                 let dias = Math.floor(totalSeconds / 86400);
                 totalSeconds %= 86400;
@@ -114,18 +129,19 @@ client.on('ready', () => {
                 console.log(`${dias} days ${horas} hours ${minutos} minutes ${segundos} seconds`);
             break;
 
-            case 'Help':
+            case 'help':
                 //idk why i did this but it looked cool ngl
-                new HelpMenuEntry('Controlling', 'Tells what bot you are controlling');
-                new HelpMenuEntry('Status Change', 'Changes the bot status');
-                new HelpMenuEntry('Status Restart', 'Restarts the bot status');
-                new HelpMenuEntry('Exit', 'Shutdown the bot and eit the console');
-                new HelpMenuEntry('Ping', 'Prints the bot ping');
-                new HelpMenuEntry('Uptime', 'Prints the bot uptime, separated by the days, hours, minutes and seconds');
-                new HelpMenuEntry('Send', 'Sends a message to a channel, you can specify it or just use the preset ones in the .json file');
+                new HelpMenuEntry('controlling', 'Tells what bot you are controlling');
+                new HelpMenuEntry('status change', 'Changes the bot status');
+                new HelpMenuEntry('status restart', 'Restarts the bot status');
+                new HelpMenuEntry('exit', 'Shutdown the bot and eit the console');
+                new HelpMenuEntry('ping', 'Prints the bot ping');
+                new HelpMenuEntry('uptime', 'Prints the bot uptime, separated by the days, hours, minutes and seconds');
+                new HelpMenuEntry('send', 'Sends a message to a channel, you can specify it or just use the preset ones in the .json file');
+                new HelpMenuEntry('settings', 'Displays a settings menu for the console');
             break;
 
-            case 'Send':
+            case 'send':
                 console.log('1 - General (Prueba bot)\n2 - Prueba (Prueba bot)')
                 rl.question('To which channel do you want to send the message? ', (selectedchnlid) => {
                     rl.question('What do you want to say? ', (msgcont) => {
@@ -145,52 +161,140 @@ client.on('ready', () => {
                 })
             break;
 
-            
+            case 'settings':
+                //gets the list value from the settingsmenu.js lol
+                //also i should try to improve this code or smth
+                new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared', optionlist[0].state, null);
+                new SettingsMenuEntry(optionlist[1].option, 'Change the console title', null, optionlist[1].value);
+                new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version', optionlist[2].state, null);
+
+                rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
+                    switch(confirmation) {
+                        case 'y':
+                            rl.question('What option do you want to modify? ', (modifyopt) => {
+                                switch(modifyopt){
+                                    //for the first option
+                                    case optionlist[0].option:
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[0].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[0].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                case 'disable':
+                                                    optionlist[0].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[0].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
+                                    case optionlist[1].option:
+                                        rl.question('Type a new title for the console ', (newconsoletitle) => {
+                                            if(newconsoletitle.length > 0){
+                                                optionlist[1].vale = newconsoletitle;
+                                                console.log(clc.green('Successfully changed the console title to ' + clc.white(newconsoletitle)));
+                                            } else {
+                                                console.log(clc.red('Type something longer'));
+                                            }
+                                        })
+                                    break;
+
+                                    case optionlist[2].option:
+                                        //just a copy paste of the first option lol
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[2].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[2].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                case 'disable':
+                                                    optionlist[2].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[2].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
+                                    default:
+                                        console.log(clc.red('Maybe you should provide an option to modify lol'));
+                                        rl.prompt();
+                                    break;
+                                }
+                            })
+                        break;
+
+                        //these two are useless ig
+                        case 'n':
+                            rl.prompt();
+                        break;
+
+                        default:
+                            rl.prompt();
+                        break;
+                    }
+                })
+            break;
 
             default:
-                //useless code ig
-                switch(line.trim()){
-                    case 'controlling':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Controlling'") + "?"));
-                    break;
-
-                    case 'status change':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Status Change'") + "?"));
-                    break;
-
-                    case 'status restart':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Status Restart'") + "?"));
-                    break;
-
-                    case 'exit':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Exit'") + "?"));
-                    break;
-
-                    case 'ping':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Ping'") + "?"));
-                    break;
-
-                    case 'uptime':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Uptime'") + "?"));
-                    break;
-
-                    case 'help':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Help'") + "?"));
-                    break;
-
-                    case 'send':
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`) + " maybe you meant " + clc.cyan("'Send'") + "?"));
-                    break;
-
-                    default:
-                        console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`)));
-                    break;
-                }
+                console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`)));
             break;
         }
         rl.prompt();
     }).on('close', () => {
-        console.log(clc.red('\nShutting down Sanic Bot'));
+        //const clearconsoleonstartupopt = optionlist[0].option + "\n" + optionlist[0].state;
+
+        const clearconsoleoptions = {
+            "option": optionlist[0].option,
+            "state": optionlist[0].state,
+        };
+
+        const consoletitleoption = {
+            "option": optionlist[1].option,
+            "value": optionlist[1].value,
+        };
+
+        const displaytermveroption = {
+            "option": optionlist[2].option,
+            "state": optionlist[2].state,
+        };
+
+        const alltogetherig = {
+            clearconsoleoptions,
+            consoletitleoption,
+            displaytermveroption
+        }
+
+        const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
+
+        try {
+            console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
+            console.log(clc.yellowBright('Trying to save the terminal settings...'))
+            fs.writeFileSync(__dirname + '/Config/TerminalSettings.json', fixedoptionsig);
+            console.log(clc.green('Saved terminal settings!\nProceeding with the shutdown'));
+
+        } catch (error) {
+            console.error(error);
+        }
+
+        console.log(clc.white('-------------------'))
+        console.log(clc.red('Shutting down Sanic Bot'));
         client.destroy();
         console.log(clc.red('Closing the console...'));
         process.exit(0);

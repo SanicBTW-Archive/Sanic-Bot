@@ -6,14 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.4.2 - TERMINAL]
 ### Added
+- Settings command for the terminal, I don't know why lol
+- Settings for the terminal, change them via the settings command
+- When closing the terminal now it saves a .json file that contains the terminal settings
 
 ### Changed
+- The exit message
 
 ### Removed
+- Reverted the update of capital letter command and detection of it idk how to call it lol
 
 ### Bug Fixes
 
 ### Issues
+- When the .json file that contains the terminal settings doesnt exists the terminal just doesnt runs
+- Sometimes the settings menu wont work if there isnt a valid state / value for the option, only happens if you mess up the .json file
 
 ## [0.0.4.1 - TERMINAL]
 ### Added
