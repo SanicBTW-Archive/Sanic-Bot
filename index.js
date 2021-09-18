@@ -40,12 +40,17 @@ const rl = readline.createInterface({
 //#region Load Terminal settings/stuff
 optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
 optionlist[1].value = TerminalSettings.consoletitleoption.value;
-//optionlist[2].state = 
+optionlist[2].state = TerminalSettings.displaytermveroption.state;
 
-process.title = TerminalSettings.consoletitleoption.value + terminalver;
 
 if(optionlist[0].state.includes("Enabled")){
     console.clear();
+}
+
+if (optionlist[2].state.includes("Enabled")){
+    process.title = TerminalSettings.consoletitleoption.value + terminalver;
+} else {
+    process.title = TerminalSettings.consoletitleoption.value;
 }
 //#endregion
 //#endregion
