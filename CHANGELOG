@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 # LIL HOTFIX - Ddded the code for the terminal title and the terminal ver option stuff
+# HOTFIX 3 - More fixes to settings menu thing
 
 ### Issues
 - When the .json file that contains the terminal settings doesnt exists the terminal just doesnt runs

@@ -17,15 +17,15 @@ class SettingsMenuEntry {
         this.curstate = curstate;
         this.value = value;
 
-        if(curstate == "Active" || curstate == "On" || curstate == "Enabled" || value == null){
+        if(curstate == "Active" || curstate == "On" || curstate == "Enabled" && value == null){
             console.log(clc.cyan(option) + " " + clc.white(description) + "\nCurrent state: " + clc.green(curstate));
         }
 
-        else if ( curstate == "Inactive" || curstate == "Off" || curstate == "Disabled" || value == null) {
+        else if ( curstate == "Inactive" || curstate == "Off" || curstate == "Disabled" && value == null) {
             console.log(clc.cyan(option) + " " + clc.white(description) + "\nCurrent state: " + clc.red(curstate));
         }
          
-        else if (curstate == null && value.length > 0){
+        else if ( curstate == null && value.length > 0){
             console.log(clc.cyan(option) + " " + clc.white(description) + "\nCurrent value: " + clc.white(value)); 
         }
 
