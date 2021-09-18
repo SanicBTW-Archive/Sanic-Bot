@@ -48,7 +48,7 @@ if(optionlist[0].state.includes("Enabled")){
 }
 
 if (optionlist[2].state.includes("Enabled")){
-    process.title = TerminalSettings.consoletitleoption.value + terminalver;
+    process.title = TerminalSettings.consoletitleoption.value + " " + terminalver;
 } else {
     process.title = TerminalSettings.consoletitleoption.value;
 }
