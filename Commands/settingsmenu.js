@@ -5,9 +5,9 @@ const clc = require('cli-color');
 
 //idk why i did it here but ig it fits here
 var optionlist = [
-    { option: 'clear console on startup', state: 'Disabled'},
-    { option: 'console title', value: 'Sanic Bot Terminal'},
-    { option: 'display terminal version', state: 'Enabled'}
+    { option: 'clear console on startup', state: 'Disabled', value: null},
+    { option: 'console title', state: null, value: 'Sanic Bot Terminal'},
+    { option: 'display terminal version', state: 'Enabled', value: null},
 ];
 
 class SettingsMenuEntry {

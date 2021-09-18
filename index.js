@@ -144,6 +144,7 @@ client.on('ready', () => {
                 new HelpMenuEntry('uptime', 'Prints the bot uptime, separated by the days, hours, minutes and seconds');
                 new HelpMenuEntry('send', 'Sends a message to a channel, you can specify it or just use the preset ones in the .json file');
                 new HelpMenuEntry('settings', 'Displays a settings menu for the console');
+                new HelpMenuEntry('restore settings', 'The name says it all, restore settings to its default value');
             break;
 
             case 'send':
@@ -205,10 +206,12 @@ client.on('ready', () => {
                                     case optionlist[1].option:
                                         rl.question('Type a new title for the console ', (newconsoletitle) => {
                                             if(newconsoletitle.length > 0){
-                                                optionlist[1].vale = newconsoletitle;
+                                                optionlist[1].value = newconsoletitle;
                                                 console.log(clc.green('Successfully changed the console title to ' + clc.white(newconsoletitle)));
+                                                rl.prompt();
                                             } else {
                                                 console.log(clc.red('Type something longer'));
+                                                rl.prompt();
                                             }
                                         })
                                     break;
@@ -251,6 +254,30 @@ client.on('ready', () => {
                         break;
 
                         default:
+                            rl.prompt();
+                        break;
+                    }
+                })
+            break;
+
+            case 'restore settings':
+                rl.question('Are you sure that you want to restore the Terminal Settings? (y/n) ', (restoreconf) => {
+                    switch(restoreconf){
+                        case 'y':
+                            console.log(clc.red('Restoring Terminal Settings...'));
+                            optionlist[0].state = 'Disabled';
+                            optionlist[1].value = 'Sanic Bot Terminal';
+                            optionlist[2].state = 'Enabled';
+                            console.log(clc.green('Terminal Settings restored! Restarting the console to apply the changes'));
+                            rl.prompt();
+                        break;
+
+                        case 'n':
+                            rl.prompt();
+                        break;
+
+                        default:
+                            console.log(clc.red('Provide a valid answer'));
                             rl.prompt();
                         break;
                     }

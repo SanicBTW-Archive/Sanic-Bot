@@ -1,7 +1,7 @@
 {
     "clearconsoleoptions": {
         "option": "clear console on startup",
-        "state": "Enabled"
+        "state": "Disabled"
     },
     "consoletitleoption": {
         "option": "console title",

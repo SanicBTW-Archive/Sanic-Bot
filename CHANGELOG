@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Settings command for the terminal, I don't know why lol
 - Settings for the terminal, change them via the settings command
 - When closing the terminal now it saves a .json file that contains the terminal settings
+# HOTFIX 2 - Added a restore settings command just in case
+# HOTFIX 2 - Added the restore settings command entry to the help menu
 
 ### Changed
 - The exit message
@@ -17,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reverted the update of capital letter command and detection of it idk how to call it lol
 
 ### Bug Fixes
-- Lil hotfix, added the code for the terminal title and the terminal ver option stuff
+# LIL HOTFIX - Ddded the code for the terminal title and the terminal ver option stuff
 
 ### Issues
 - When the .json file that contains the terminal settings doesnt exists the terminal just doesnt runs
