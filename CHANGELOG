@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4.3 - TERMINAL] - 19-09-2021
+### Added
+- Creation of a TerminalSettings.json file when it doesn't exists
+
+### Changed
+- The Config region code, now its more organized i hope
+- settings.json => DiscordSettings.json (Due to having 2 settings so i can recognize them easily lol)
+- How config loads, now it loads when the bot is ready (To prevent issues with the file not existing sometimes)
+
+### Removed
+
+### Bug Fixes
+
+### Issues
+
 ## [0.0.4.2 - TERMINAL] - 18-09-2021
 ### Added
 - Settings command for the terminal, I don't know why lol

@@ -4,55 +4,78 @@ const intents = new Discord.Intents(32767);
 const client = new Discord.Client({ intents });
 //#endregion
 
-//#region Config stuff and channel ids etc, i should really merge all together
+//#region Config stuff, Terminal and Discord Bot
+//#region Imports
 const fs = require("fs");
+const clc = require('cli-color');
+const readline = require('readline');
+//#endregion
 
+//#region Discord Imports
 const { token, prefix, activityname, status, 
-mainaccowner, altaccowner} = require('./Config/settings.json');
-
+mainaccowner, altaccowner} = require('./Config/DiscordSettings.json');
+    
+const { HelpMenuEntry } = require('./Commands/helpmenu');
+const { SettingsMenuEntry, optionlist } = require('./Commands/settingsmenu');
+    
 const { executedcmdslist, shutdownlistig, defaultembedcolor} = require('./Config/lists');
+    
+//Previously called idkwhylol
+const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
+newfeatures, bugfixes, issues, todo, } = require('./Config/changelog.json');    
+//#endregion    
 
+//#region TerminalSettings.json fields
+const clearconsoleoptions = {
+    "option": optionlist[0].option,
+    "state": optionlist[0].state,
+};
+
+const consoletitleoption = {
+    "option": optionlist[1].option,
+    "value": optionlist[1].value,
+};
+
+const displaytermveroption = {
+    "option": optionlist[2].option,
+    "state": optionlist[2].state,
+};
+
+const alltogetherig = {
+    clearconsoleoptions,
+    consoletitleoption,
+    displaytermveroption
+}
+
+const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
+//#endregion
+
+//#region Check if the term settings file exists
+try {
+    if(!fs.existsSync(__dirname + '/Config/TerminalSettings.json')){
+        console.log(clc.yellow("Looks like you don't have a TerminalSettings.json, creating it..."));
+        fs.writeFileSync(__dirname + '/Config/TerminalSettings.json', fixedoptionsig);
+        console.log(clc.green('Successfully created your TerminalSettings.json!\nProceeding with the bot startup'));
+    }
+} catch (error){
+    console.error(error);
+    console.log(clc.red("Couldn't make TerminalSettings.json"))
+}
+//#endregion
+
+//#region Console Imports
 const spprchnlids = require('./Config/channelids.json');
 
 const annchnls = require('./Config/annchannelids.json');
 
-const { HelpMenuEntry } = require('./Commands/helpmenu');
-const { SettingsMenuEntry, optionlist } = require('./Commands/settingsmenu');
-
 const TerminalSettings = require('./Config/TerminalSettings.json');
-
-//Previously called idkwhylol
-const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
-newfeatures, bugfixes, issues, todo, } = require('./Config/changelog.json');
 //#endregion
 
-//#region Terminal stuff including terminal colors and smth
-const clc = require('cli-color');
-const readline = require('readline');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: '> '
 });
-
-//process.title = 'Sanic Bot Terminal ' + terminalver;
-
-//#region Load Terminal settings/stuff
-optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
-optionlist[1].value = TerminalSettings.consoletitleoption.value;
-optionlist[2].state = TerminalSettings.displaytermveroption.state;
-
-
-if(optionlist[0].state.includes("Enabled")){
-    console.clear();
-}
-
-if (optionlist[2].state.includes("Enabled")){
-    process.title = TerminalSettings.consoletitleoption.value + " " + terminalver;
-} else {
-    process.title = TerminalSettings.consoletitleoption.value;
-}
-//#endregion
 //#endregion
 
 client.on('ready', () => {
@@ -63,6 +86,23 @@ client.on('ready', () => {
             name: activityname
         }], status: status
     });
+
+    //#region Load Terminal settings/stuff
+    optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
+    optionlist[1].value = TerminalSettings.consoletitleoption.value;
+    optionlist[2].state = TerminalSettings.displaytermveroption.state;
+
+
+    if(optionlist[0].state.includes("Enabled")){
+        console.clear();
+    }
+
+    if (optionlist[2].state.includes("Enabled")){
+        process.title = TerminalSettings.consoletitleoption.value + " " + terminalver;
+    } else {
+        process.title = TerminalSettings.consoletitleoption.value;
+    }
+    //#endregion
 
     //#region Terminal Commands
     rl.prompt();
@@ -291,30 +331,6 @@ client.on('ready', () => {
         rl.prompt();
     }).on('close', () => {
         //const clearconsoleonstartupopt = optionlist[0].option + "\n" + optionlist[0].state;
-
-        const clearconsoleoptions = {
-            "option": optionlist[0].option,
-            "state": optionlist[0].state,
-        };
-
-        const consoletitleoption = {
-            "option": optionlist[1].option,
-            "value": optionlist[1].value,
-        };
-
-        const displaytermveroption = {
-            "option": optionlist[2].option,
-            "state": optionlist[2].state,
-        };
-
-        const alltogetherig = {
-            clearconsoleoptions,
-            consoletitleoption,
-            displaytermveroption
-        }
-
-        const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
-
         try {
             console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
             console.log(clc.yellowBright('Trying to save the terminal settings...'))
