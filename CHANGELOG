@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4.4 - TERMINAL] - 27-09-2021
+### Added
+- Settings command for the Discord Bot
+- Categories for the Settings menu
+- Helper folder for important shit
+
+### Changed
+- Hardcoded the settings menu cuz I'm dumb
+- Moved config files to their respective folder
+- Moved some files to a helper folder
+- FINALLY ORGANIZED EVERYTHING I HOPE
+
+### Removed
+- Backup Files because there is github commit history lol
+- Example config stuff
+- The temp folder finally lol
+
+### Bug Fixes
+
+### Issues
+
 ## [0.0.4.3 - TERMINAL] - 19-09-2021
 ### Added
 - Creation of a TerminalSettings.json file when it doesn't exists

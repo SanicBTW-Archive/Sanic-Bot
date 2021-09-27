@@ -12,7 +12,12 @@ var defaultembedcolor = [
     { defaultcolor: '#0099ff', oldcolor: '#0099ff'}
 ];
 
+//please tell me there is an easier way or something to do this
+var idkwhythefuck = [
+    { lasttime: Date.now()}
+]
+
 module.exports = {
     executedcmdslist,
-    
+    idkwhythefuck
 }
