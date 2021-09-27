@@ -17,10 +17,10 @@ const readline = require('readline');
 //I have to figure out a way that it doesn't give an error when starting the console
 
 const { HelpMenuEntry } = require('./Commands/helpmenu');
-const { SettingsMenu, optionlist, PrintAvailableCat } = require('./Commands/settingsmenu');
+const { SettingsMenuEntry, optionlist} = require('./Commands/settingsmenu');
 
 const { token, prefix, activityname, status, 
-mainaccowner, altaccowner} = require('./Config/Discord/DiscordSettings.json');
+mainaccowner, altaccowner} = require('./Config/DiscordSettings.json');
     
 const { executedcmdslist, defaultembedcolor} = require('./Helper/lists');
     
@@ -29,38 +29,11 @@ const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
 newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');    
 //#endregion    
 
-//#region TerminalSettings.json fields
-const clearconsoleoptions = {
-    "option": optionlist[0].option,
-    "state": optionlist[0].state,
-};
-
-const consoletitleoption = {
-    "option": optionlist[1].option,
-    "value": optionlist[1].value,
-};
-
-const displaytermveroption = {
-    "option": optionlist[2].option,
-    "state": optionlist[2].state,
-};
-
-
-const alltogetherig = {
-    clearconsoleoptions,
-    consoletitleoption,
-    displaytermveroption,
-}
-
-const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
-//#endregion
-
-//#region Check if the term settings file exists
+//#region Check if the term settings file exists, due to my horrible coding skills cant figure out how to check if the file exists without moving the important shit
 try {
-    if(!fs.existsSync(__dirname + '/Config/Terminal/TerminalSettings.json')){
-        console.log(clc.yellow("Looks like you don't have a TerminalSettings.json, creating it..."));
-        fs.writeFileSync(__dirname + '/Config/Terminal/TerminalSettings.json', fixedoptionsig);
-        console.log(clc.green('Successfully created your TerminalSettings.json!\nProceeding with the bot startup'));
+    if(!fs.existsSync(__dirname + '/Config/TerminalSettings.json')){
+        console.log(clc.yellow("Looks like you don't have a TerminalSettings.json"));
+        console.log(clc.red("Can't proceed with the bot startup"));
     }
 } catch (error){
     console.error(error);
@@ -69,11 +42,11 @@ try {
 //#endregion
 
 //#region Console Imports
-const spprchnlids = require('./Config/Terminal/channelids.json');
+const spprchnlids = require('./Helper/channelids.json');
 
-const annchnls = require('./Config/Terminal/annchannelids.json');
+const annchnls = require('./Helper/annchannelids.json');
 
-const TerminalSettings = require('./Config/Terminal/TerminalSettings.json');
+const TerminalSettings = require('./Config/TerminalSettings.json');
 //#endregion
 
 const rl = readline.createInterface({
@@ -84,25 +57,30 @@ const rl = readline.createInterface({
 //#endregion
 
 client.on('ready', () => {
-    console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)\n`));
-    console.log(clc.white("Type 'help' to show the list of available commands"))
-
     //#region Load Terminal settings/stuff
     optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
     optionlist[1].value = TerminalSettings.consoletitleoption.value;
     optionlist[2].state = TerminalSettings.displaytermveroption.state;
-
-
+    
     if(optionlist[0].state.includes("Enabled")){
-        console.clear();
+         console.clear();
     }
-
+    
     if (optionlist[2].state.includes("Enabled")){
         process.title = TerminalSettings.consoletitleoption.value + " " + terminalver;
     } else {
         process.title = TerminalSettings.consoletitleoption.value;
     }
     //#endregion
+        
+    console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)\n`));
+    console.log(clc.white("Type 'help' to show the list of available commands"))
+
+    client.user.setPresence({
+        activities: [{
+            name: activityname
+        }], status: status
+    });
 
     //#region Terminal Commands
     rl.prompt();
@@ -210,73 +188,90 @@ client.on('ready', () => {
             case 'settings':
                 //gets the list value from the settingsmenu.js lol
                 //also i should try to improve this code or smth
-                new PrintAvailableCat('Terminal', 'The terminal settings category', 'term');
-                new PrintAvailableCat('Discord Bot', 'The discord bot settings (idk why lol)', 'discb');
-                rl.question('Do you want to see the Terminal Settings Category or the Discord Bot Settings Category? ', (selcat) => {
-                    switch(selcat){
-                        case 'term':
-                            new SettingsMenu('Terminal');
-                            rl.question('Do you want to modify some option? (y/n) ', (modconf) => {
-                                if (modconf == "y" || modconf == "yes" || modconf == "Y" || modconf == "Yes"){
-                                    rl.question('Which option do you want to modify? ', (opttomod) => {
-                                        switch(opttomod)
-                                        {
-                                            case optionlist[0].option:
-                                                rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
-                                                    if(newoptstate == "enable" || newoptstate == "Enable"){
-                                                        optionlist[0].state = "Enabled";
-                                                        console.log(clc.green('Successfully enabled ' + clc.white(optionlist[0].option)));
-                                                        rl.prompt();    
-                                                    } else if (newoptstate == "disable" || newoptstate == "Disable") {
-                                                        optionlist[0].state = "Disabled";
-                                                        console.log(clc.green('Successfully disabled ' + clc.white(optionlist[0].option)));
-                                                        rl.prompt();    
-                                                    } else {
-                                                        console.log(clc.red('Maybe you should provide a new state for the option'));
-                                                        rl.prompt();                 
-                                                    }
-                                                })
-                                            break;
+                new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared', optionlist[0].state, null);
+                new SettingsMenuEntry(optionlist[1].option, 'Change the console title', null, optionlist[1].value);
+                new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version', optionlist[2].state, null);
 
-                                            case optionlist[1].option:
-                                                rl.question('Type a new title for the console ', (newconsoletitle) => {
-                                                    if(newconsoletitle.length > 0){
-                                                        optionlist[1].value = newconsoletitle;
-                                                        console.log(clc.green('Successfully changed the console title to ' + clc.white(newconsoletitle)));
-                                                        rl.prompt();
-                                                    } else {
-                                                        console.log(clc.red('Type something longer'));
-                                                        rl.prompt();
-                                                    }
-                                                })        
-                                            break;
+                rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
+                    switch(confirmation) {
+                        case 'y':
+                            rl.question('What option do you want to modify? ', (modifyopt) => {
+                                switch(modifyopt){
+                                    //for the first option
+                                    case optionlist[0].option:
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[0].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[0].option)));
+                                                    rl.prompt();
+                                                break;
 
-                                            case optionlist[2].option:
-                                                rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
-                                                    if(newoptstate == "enable" || newoptstate == "Enable"){
-                                                        optionlist[2].state = "Enabled";
-                                                        console.log(clc.green('Successfully enabled ' + clc.white(optionlist[2].option)));
-                                                        rl.prompt();    
-                                                    } else if (newoptstate == "disable" || newoptstate == "Disable") {
-                                                        optionlist[2].state = "Disabled";
-                                                        console.log(clc.green('Successfully disabled ' + clc.white(optionlist[2].option)));
-                                                        rl.prompt();    
-                                                    } else {
-                                                        console.log(clc.red('Maybe you should provide a new state for the option'));
-                                                        rl.prompt();                 
-                                                    }
-                                                })
-                                            break;
-                                        }
-                                    })
-                                } else {
-                                    rl.prompt();
+                                                case 'disable':
+                                                    optionlist[0].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[0].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
+                                    case optionlist[1].option:
+                                        rl.question('Type a new title for the console ', (newconsoletitle) => {
+                                            if(newconsoletitle.length > 0){
+                                                optionlist[1].value = newconsoletitle;
+                                                console.log(clc.green('Successfully changed the console title to ' + clc.white(newconsoletitle)));
+                                                rl.prompt();
+                                            } else {
+                                                console.log(clc.red('Type something longer'));
+                                                rl.prompt();
+                                            }
+                                        })
+                                    break;
+
+                                    case optionlist[2].option:
+                                        //just a copy paste of the first option lol
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[2].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[2].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                case 'disable':
+                                                    optionlist[2].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[2].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
+                                    default:
+                                        console.log(clc.red('Maybe you should provide an option to modify lol'));
+                                        rl.prompt();
+                                    break;
                                 }
                             })
                         break;
 
-                        case 'discb':
-                            new SettingsMenu('Discord Bot');
+                        //these two are useless ig
+                        case 'n':
+                            rl.prompt();
+                        break;
+
+                        default:
                             rl.prompt();
                         break;
                     }
@@ -314,10 +309,34 @@ client.on('ready', () => {
         rl.prompt();
     }).on('close', () => {
         //const clearconsoleonstartupopt = optionlist[0].option + "\n" + optionlist[0].state;
+        const clearconsoleoptions = {
+            "option": optionlist[0].option,
+            "state": optionlist[0].state,
+        };
+        
+        const consoletitleoption = {
+            "option": optionlist[1].option,
+            "value": optionlist[1].value,
+        };
+        
+        const displaytermveroption = {
+            "option": optionlist[2].option,
+            "state": optionlist[2].state,
+        };
+        
+        
+        const alltogetherig = {
+            clearconsoleoptions,
+            consoletitleoption,
+            displaytermveroption,
+        }
+        
+        const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
+
         try {
             console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
             console.log(clc.yellowBright('Trying to save the terminal settings...'))
-            fs.writeFileSync(__dirname + '/Config/Terminal/TerminalSettings.json', fixedoptionsig);
+            fs.writeFileSync(__dirname + '/Config/TerminalSettings.json', fixedoptionsig);
             console.log(clc.green('Saved terminal settings!\nProceeding with the shutdown'));
 
         } catch (error) {
