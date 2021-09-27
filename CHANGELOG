@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bug Fixes
 
 ### Issues
+- Settings doesn't work for some reason, looking into it for the next version
 
 ## [0.0.4.3 - TERMINAL] - 19-09-2021
 ### Added
