@@ -214,6 +214,7 @@ client.on('ready', () => {
                 new HelpMenuEntry('settings', 'Displays a settings menu for the console');
                 new HelpMenuEntry('restore settings', 'The name says it all, restore settings to its default value');
                 new HelpMenuEntry('add channelid', 'You can add a channel id to a list that you can use to send messages to the specified channel id');
+                new HelpMenuEntry('restore channelids', 'Basically restores the channel ids');
             break;
 
             case 'send':
