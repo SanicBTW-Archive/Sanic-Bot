@@ -1,0 +1,46 @@
+{
+    "firstchannelid": {
+        "name": "General prueba bot nuevo",
+        "chnlid": "805870628884185159"
+    },
+    "secondchannelid": {
+        "name": "Polls prueba bot",
+        "chnlid": "824664145646321674"
+    },
+    "thirdchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "fourthchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "fifthchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "sixthchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "seventhchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "eighthchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "ninethchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "tenthchannelid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "eleventhchannelid": {
+        "name": "",
+        "chnlid": 0
+    }
+}

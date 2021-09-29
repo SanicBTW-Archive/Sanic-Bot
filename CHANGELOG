@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4.5 - TERMINAL] - 29-09-2021
+### NEW CHANNEL ID SYSTEM HOW DOES IT WORK?
+- You can add a new Channel ID by using the "add channelid" command that its on the terminal
+- You are prompted with 2 questions, asking the channel name and the channel id
+- After answering these 2 questions you can select where do you want to save these values
+- There are 10 slots for these available which you can fill up and I will probably add more
+- The setting thingy will probably be removed after this update
+
+### Added
+- A new Channel IDS System which fully works
+- A setting that its basically useless, probably gonna get deleted in the next update lol
+- A command to add Channel IDS
+
 ## [0.0.4.4 HOTFIX - TERMINAL] - 27-09-2021
 ### Reverted
 - To the old settings code due to it working better than the new one

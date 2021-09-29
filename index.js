@@ -1,3 +1,5 @@
+//Redo the channelids system in a way that it isnt a lot of useless code lol
+
 //#region Discord stuff
 const Discord = require('discord.js');
 const intents = new Discord.Intents(32767);
@@ -18,11 +20,12 @@ const readline = require('readline');
 
 const { HelpMenuEntry } = require('./Commands/helpmenu');
 const { SettingsMenuEntry, optionlist} = require('./Commands/settingsmenu');
+const { SendMenuHelp } = require('./Commands/sendmenu');
 
 const { token, prefix, activityname, status, 
 mainaccowner, altaccowner} = require('./Config/DiscordSettings.json');
     
-const { executedcmdslist, defaultembedcolor} = require('./Helper/lists');
+const { executedcmdslist, defaultembedcolor, channelidslist} = require('./Helper/lists');
     
 //Previously called idkwhylol
 const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
@@ -42,7 +45,7 @@ try {
 //#endregion
 
 //#region Console Imports
-const spprchnlids = require('./Helper/channelids.json');
+//const spprchnlids = require('./Helper/channelids.json');
 
 const annchnls = require('./Helper/annchannelids.json');
 
@@ -61,15 +64,64 @@ client.on('ready', () => {
     optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
     optionlist[1].value = TerminalSettings.consoletitleoption.value;
     optionlist[2].state = TerminalSettings.displaytermveroption.state;
+    optionlist[3].state = TerminalSettings.usechannelidsjson.state;
     
     if(optionlist[0].state.includes("Enabled")){
-         console.clear();
+        console.clear();
     }
     
     if (optionlist[2].state.includes("Enabled")){
         process.title = TerminalSettings.consoletitleoption.value + " " + terminalver;
     } else {
         process.title = TerminalSettings.consoletitleoption.value;
+    }
+
+    if(optionlist[3].state.includes("Enabled")){
+        const channelidsstuff = require('./Helper/ChannelIDS.json');
+
+        //Load the first thingy lol
+        channelidslist[0].name = channelidsstuff.firstchannelid.name;
+        channelidslist[0].chnlid = channelidsstuff.firstchannelid.chnlid;
+
+        //Load the second thingy lol
+        channelidslist[1].name = channelidsstuff.secondchannelid.name;
+        channelidslist[1].chnlid = channelidsstuff.secondchannelid.chnlid;
+
+        //Load the third thingy lol
+        channelidslist[2].name = channelidsstuff.thirdchannelid.name;
+        channelidslist[2].chnlid = channelidsstuff.thirdchannelid.chnlid;
+
+        //Load the fourth thingy lol
+        channelidslist[3].name = channelidsstuff.fourthchannelid.name;
+        channelidslist[3].chnlid = channelidsstuff.fourthchannelid.chnlid;
+
+        //Load the fifth thingy lol
+        channelidslist[4].name = channelidsstuff.fifthchannelid.name;
+        channelidslist[4].chnlid = channelidsstuff.fifthchannelid.chnlid;
+
+        //Load the sixth thingy lol
+        channelidslist[5].name = channelidsstuff.sixthchannelid.name;
+        channelidslist[5].chnlid = channelidsstuff.sixthchannelid.chnlid;
+
+        //Load the seventh thingy lol
+        channelidslist[6].name = channelidsstuff.seventhchannelid.name;
+        channelidslist[6].chnlid = channelidsstuff.seventhchannelid.chnlid;
+
+        //Load the eighth thingy lol
+        channelidslist[7].name = channelidsstuff.eighthchannelid.name;
+        channelidslist[7].chnlid = channelidsstuff.eighthchannelid.chnlid;
+
+        //Load the nineth thingy lol
+        channelidslist[8].name = channelidsstuff.ninethchannelid.name;
+        channelidslist[8].chnlid = channelidsstuff.ninethchannelid.chnlid;
+
+        //Load the tenth thingy lol
+        channelidslist[9].name = channelidsstuff.tenthchannelid.name;
+        channelidslist[9].chnlid = channelidsstuff.tenthchannelid.chnlid;
+
+        //Load the eleventh thingy lol
+        channelidslist[10].name = channelidsstuff.eleventhchannelid.name;
+        channelidslist[10].chnlid = channelidsstuff.eleventhchannelid.chnlid;
     }
     //#endregion
         
@@ -163,23 +215,109 @@ client.on('ready', () => {
                 new HelpMenuEntry('send', 'Sends a message to a channel, you can specify it or just use the preset ones in the .json file');
                 new HelpMenuEntry('settings', 'Displays a settings menu for the console');
                 new HelpMenuEntry('restore settings', 'The name says it all, restore settings to its default value');
+                new HelpMenuEntry('add channelid', 'You can add a channel id to a list that you can use to send messages to the specified channel id');
             break;
 
             case 'send':
-                console.log('1 - General (Prueba bot)\n2 - Prueba (Prueba bot)')
+                new SendMenuHelp();
                 rl.question('To which channel do you want to send the message? ', (selectedchnlid) => {
                     rl.question('What do you want to say? ', (msgcont) => {
-
                         if(msgcont.length > 0 ){
-                            if (selectedchnlid == '1'){
-                                client.channels.cache.get(spprchnlids['General (Prueba bot)']).send(msgcont);
-                            } else if (selectedchnlid == '2'){
-                                client.channels.cache.get(spprchnlids['Prueba (Prueba bot)']).send(msgcont);
-                            } else if (selectedchnlid.length = 18){
+                            switch(selectedchnlid){
+                                //Weird code lol
+                                case "0":
+                                    if(channelidslist[0].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[0].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+                                
+                                case "1":
+                                    if(channelidslist[1].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[1].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "2":
+                                    if(channelidslist[2].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[2].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "3":
+                                    if(channelidslist[3].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[3].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+                                    
+                                case "4":
+                                    if(channelidslist[4].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[4].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "5":
+                                    if(channelidslist[5].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[5].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "6":
+                                    if(channelidslist[6].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[6].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "7":
+                                    if(channelidslist[7].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[7].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "8":
+                                    if(channelidslist[8].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[8].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "9":
+                                    if(channelidslist[9].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[9].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "10":
+                                    if(channelidslist[10].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[10].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+                            }
+
+                            if(selectedchnlid.toString().length == 18){
                                 client.channels.cache.get(selectedchnlid).send(msgcont);
                             }
                         }
-
                         rl.prompt();
                     })
                 })
@@ -188,9 +326,10 @@ client.on('ready', () => {
             case 'settings':
                 //gets the list value from the settingsmenu.js lol
                 //also i should try to improve this code or smth
-                new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared', optionlist[0].state, null);
-                new SettingsMenuEntry(optionlist[1].option, 'Change the console title', null, optionlist[1].value);
-                new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version', optionlist[2].state, null);
+                new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared\nIf enabled the console will be wiped once the bot starts', optionlist[0].state, null);
+                new SettingsMenuEntry(optionlist[1].option, 'Change the console title\nIts really basic stuff right?', null, optionlist[1].value);
+                new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version\nIf disabled it wont display the Terminal Version', optionlist[2].state, null);
+                new SettingsMenuEntry(optionlist[3].option, 'Use the channelids.json instead of manually adding them with the console\nIf disabled it will overwrite changes made to the file\nIf enabled it will load the stuff from ChannelIDS.json', optionlist[3].state, null);
 
                 rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
                     switch(confirmation) {
@@ -258,6 +397,30 @@ client.on('ready', () => {
                                         })
                                     break;
 
+                                    case optionlist[3].option:
+                                        //just a copy paste of the first option lol
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[3].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[3].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                case 'disable':
+                                                    optionlist[3].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[3].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
                                     default:
                                         console.log(clc.red('Maybe you should provide an option to modify lol'));
                                         rl.prompt();
@@ -286,6 +449,7 @@ client.on('ready', () => {
                             optionlist[0].state = 'Disabled';
                             optionlist[1].value = 'Sanic Bot Terminal';
                             optionlist[2].state = 'Enabled';
+                            optionlist[3].state = "Disabled";
                             console.log(clc.green('Terminal Settings restored! Restarting the console to apply the changes'));
                             rl.prompt();
                         break;
@@ -302,6 +466,103 @@ client.on('ready', () => {
                 })
             break;
 
+            case 'add channelid':
+                rl.question('Please enter the Channel Name: ', (chnlidname) => {
+                    if(chnlidname.length > 0){
+                        rl.question('Please enter the Channel ID: ', (chnlid) => {
+                            if(chnlid.length = 18){
+                                rl.question('Where do you want to save this info? (0 to 10): ', (wheretosave) => {
+                                    switch(wheretosave){
+                                        case "0":
+                                            channelidslist[0].name = chnlidname.toString();
+                                            channelidslist[0].chnlid = chnlid.toString();
+                                            console.log(clc.green("Successfully saved the info to the index 0"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "1":
+                                            channelidslist[1].name = chnlidname;
+                                            channelidslist[1].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 1"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "2":
+                                            channelidslist[2].name = chnlidname;
+                                            channelidslist[2].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 2"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "3":
+                                            channelidslist[3].name = chnlidname;
+                                            channelidslist[3].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 3"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "4":
+                                            channelidslist[4].name = chnlidname;
+                                            channelidslist[4].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 4"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "5":
+                                            channelidslist[5].name = chnlidname;
+                                            channelidslist[5].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 5"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "6":
+                                            channelidslist[6].name = chnlidname;
+                                            channelidslist[6].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 6"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "7":
+                                            channelidslist[7].name = chnlidname;
+                                            channelidslist[7].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 7"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "8":
+                                            channelidslist[8].name = chnlidname;
+                                            channelidslist[8].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 8"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "9":
+                                            channelidslist[9].name = chnlidname;
+                                            channelidslist[9].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 9"));
+                                            rl.prompt();
+                                            break;
+                                        
+                                        case "10":
+                                            channelidslist[10].name = chnlidname;
+                                            channelidslist[10].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 10"));
+                                            rl.prompt();
+                                            break;
+                                    }
+                                })
+                            } else {
+                                console.log(clc.red("This doesn't look like a Channel ID\n(Channel ID must be 18 characters long)"))
+                            }
+                        })
+                    } else {
+                        console.log(clc.red('Please provide a longer name'));
+                        rl.prompt();
+                    }
+                })
+
+            break;
+
             default:
                 console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`)));
             break;
@@ -309,6 +570,7 @@ client.on('ready', () => {
         rl.prompt();
     }).on('close', () => {
         //const clearconsoleonstartupopt = optionlist[0].option + "\n" + optionlist[0].state;
+        //#region TerminalConfig.json file fields
         const clearconsoleoptions = {
             "option": optionlist[0].option,
             "state": optionlist[0].state,
@@ -323,21 +585,95 @@ client.on('ready', () => {
             "option": optionlist[2].option,
             "state": optionlist[2].state,
         };
+
+        const usechannelidsjson = {
+            "option": optionlist[3].option,
+            "state": optionlist[3].state
+        };
         
         
         const alltogetherig = {
             clearconsoleoptions,
             consoletitleoption,
             displaytermveroption,
+            usechannelidsjson
         }
         
         const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
+        //#endregion
+        
+        //#region New ChannelIDS.json file fields
+        //Holy shit what in the world is this
+        const firstchannelid = {
+            "name": channelidslist[0].name,
+            "chnlid": channelidslist[0].chnlid
+        };
+        const secondchannelid = {
+            "name": channelidslist[1].name,
+            "chnlid": channelidslist[1].chnlid
+        };
+        const thirdchannelid = {
+            "name": channelidslist[2].name,
+            "chnlid": channelidslist[2].chnlid
+        };
+        const fourthchannelid = {
+            "name": channelidslist[3].name,
+            "chnlid": channelidslist[3].chnlid
+        };
+        const fifthchannelid = {
+            "name": channelidslist[4].name,
+            "chnlid": channelidslist[4].chnlid
+        };
+        const sixthchannelid = {
+            "name": channelidslist[5].name,
+            "chnlid": channelidslist[5].chnlid
+        };
+        const seventhchannelid = {
+            "name": channelidslist[6].name,
+            "chnlid": channelidslist[6].chnlid
+        };
+        const eighthchannelid = {
+            "name": channelidslist[7].name,
+            "chnlid": channelidslist[7].chnlid
+        };
+        const ninethchannelid = {
+            "name": channelidslist[8].name,
+            "chnlid": channelidslist[8].chnlid
+        };
+        const tenthchannelid = {
+            "name": channelidslist[9].name,
+            "chnlid": channelidslist[9].chnlid
+        };
+        const eleventhchannelid = {
+            "name": channelidslist[10].name,
+            "chnlid": channelidslist[10].chnlid
+        };
 
+        const allchannelidstogether = {
+            firstchannelid,
+            secondchannelid,
+            thirdchannelid,
+            fourthchannelid,
+            fifthchannelid,
+            sixthchannelid,
+            seventhchannelid,
+            eighthchannelid,
+            ninethchannelid,
+            tenthchannelid,
+            eleventhchannelid
+        }
+
+        const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
+        //#endregion
         try {
             console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
-            console.log(clc.yellowBright('Trying to save the terminal settings...'))
+            console.log(clc.yellowBright('Trying to save the terminal settings...'));
             fs.writeFileSync(__dirname + '/Config/TerminalSettings.json', fixedoptionsig);
-            console.log(clc.green('Saved terminal settings!\nProceeding with the shutdown'));
+            console.log(clc.green('Saved terminal settings!'));
+            console.log(clc.white('\n-------------------'));
+            console.log(clc.yellowBright('Trying to save the channel ids...'));
+            fs.writeFileSync(__dirname + "/Helper/ChannelIDS.json", fixedchannelidsig);
+            console.log(clc.green('Saved new channel ids!\nProceeding with the shutdown'));
 
         } catch (error) {
             console.error(error);
@@ -418,6 +754,7 @@ client.on('messageCreate', (message) => {
             executedcmdslist[2].latestexc = false;
         break;
     }
+
 })
 
 client.login(token);
