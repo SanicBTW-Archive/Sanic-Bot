@@ -8,7 +8,6 @@ var optionlist = [
     { option: 'clear console on startup', state: 'Disabled', value: null},
     { option: 'console title', state: null, value: 'Sanic Bot Terminal'},
     { option: 'display terminal version', state: 'Enabled', value: null},
-    { option: 'use channelids.json', state: 'Disabled', value: null},
 ];
 
 class SettingsMenuEntry {

@@ -76,53 +76,52 @@ client.on('ready', () => {
         process.title = TerminalSettings.consoletitleoption.value;
     }
 
-    if(optionlist[3].state.includes("Enabled")){
-        const channelidsstuff = require('./Helper/ChannelIDS.json');
+    const channelidsstuff = require('./Helper/ChannelIDS.json');
 
-        //Load the first thingy lol
-        channelidslist[0].name = channelidsstuff.firstchannelid.name;
-        channelidslist[0].chnlid = channelidsstuff.firstchannelid.chnlid;
+    //Load the first thingy lol
+    channelidslist[0].name = channelidsstuff.firstchannelid.name;
+    channelidslist[0].chnlid = channelidsstuff.firstchannelid.chnlid;
 
-        //Load the second thingy lol
-        channelidslist[1].name = channelidsstuff.secondchannelid.name;
-        channelidslist[1].chnlid = channelidsstuff.secondchannelid.chnlid;
+    //Load the second thingy lol
+    channelidslist[1].name = channelidsstuff.secondchannelid.name;
+    channelidslist[1].chnlid = channelidsstuff.secondchannelid.chnlid;
 
-        //Load the third thingy lol
-        channelidslist[2].name = channelidsstuff.thirdchannelid.name;
-        channelidslist[2].chnlid = channelidsstuff.thirdchannelid.chnlid;
+    //Load the third thingy lol
+    channelidslist[2].name = channelidsstuff.thirdchannelid.name;
+    channelidslist[2].chnlid = channelidsstuff.thirdchannelid.chnlid;
 
-        //Load the fourth thingy lol
-        channelidslist[3].name = channelidsstuff.fourthchannelid.name;
-        channelidslist[3].chnlid = channelidsstuff.fourthchannelid.chnlid;
+    //Load the fourth thingy lol
+    channelidslist[3].name = channelidsstuff.fourthchannelid.name;
+    channelidslist[3].chnlid = channelidsstuff.fourthchannelid.chnlid;
 
-        //Load the fifth thingy lol
-        channelidslist[4].name = channelidsstuff.fifthchannelid.name;
-        channelidslist[4].chnlid = channelidsstuff.fifthchannelid.chnlid;
+    //Load the fifth thingy lol
+    channelidslist[4].name = channelidsstuff.fifthchannelid.name;
+    channelidslist[4].chnlid = channelidsstuff.fifthchannelid.chnlid;
 
-        //Load the sixth thingy lol
-        channelidslist[5].name = channelidsstuff.sixthchannelid.name;
-        channelidslist[5].chnlid = channelidsstuff.sixthchannelid.chnlid;
+    //Load the sixth thingy lol
+    channelidslist[5].name = channelidsstuff.sixthchannelid.name;
+    channelidslist[5].chnlid = channelidsstuff.sixthchannelid.chnlid;
 
-        //Load the seventh thingy lol
-        channelidslist[6].name = channelidsstuff.seventhchannelid.name;
-        channelidslist[6].chnlid = channelidsstuff.seventhchannelid.chnlid;
+    //Load the seventh thingy lol
+    channelidslist[6].name = channelidsstuff.seventhchannelid.name;
+    channelidslist[6].chnlid = channelidsstuff.seventhchannelid.chnlid;
 
-        //Load the eighth thingy lol
-        channelidslist[7].name = channelidsstuff.eighthchannelid.name;
-        channelidslist[7].chnlid = channelidsstuff.eighthchannelid.chnlid;
+    //Load the eighth thingy lol
+    channelidslist[7].name = channelidsstuff.eighthchannelid.name;
+    channelidslist[7].chnlid = channelidsstuff.eighthchannelid.chnlid;
 
-        //Load the nineth thingy lol
-        channelidslist[8].name = channelidsstuff.ninethchannelid.name;
-        channelidslist[8].chnlid = channelidsstuff.ninethchannelid.chnlid;
+    //Load the nineth thingy lol
+    channelidslist[8].name = channelidsstuff.ninethchannelid.name;
+    channelidslist[8].chnlid = channelidsstuff.ninethchannelid.chnlid;
 
-        //Load the tenth thingy lol
-        channelidslist[9].name = channelidsstuff.tenthchannelid.name;
-        channelidslist[9].chnlid = channelidsstuff.tenthchannelid.chnlid;
+    //Load the tenth thingy lol
+    channelidslist[9].name = channelidsstuff.tenthchannelid.name;
+    channelidslist[9].chnlid = channelidsstuff.tenthchannelid.chnlid;
 
-        //Load the eleventh thingy lol
-        channelidslist[10].name = channelidsstuff.eleventhchannelid.name;
-        channelidslist[10].chnlid = channelidsstuff.eleventhchannelid.chnlid;
-    }
+    //Load the eleventh thingy lol
+    channelidslist[10].name = channelidsstuff.eleventhchannelid.name;
+    channelidslist[10].chnlid = channelidsstuff.eleventhchannelid.chnlid;
+
     //#endregion
         
     console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)\n`));
@@ -329,7 +328,6 @@ client.on('ready', () => {
                 new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared\nIf enabled the console will be wiped once the bot starts', optionlist[0].state, null);
                 new SettingsMenuEntry(optionlist[1].option, 'Change the console title\nIts really basic stuff right?', null, optionlist[1].value);
                 new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version\nIf disabled it wont display the Terminal Version', optionlist[2].state, null);
-                new SettingsMenuEntry(optionlist[3].option, 'Use the channelids.json instead of manually adding them with the console\nIf disabled it will overwrite changes made to the file\nIf enabled it will load the stuff from ChannelIDS.json', optionlist[3].state, null);
 
                 rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
                     switch(confirmation) {
@@ -397,30 +395,6 @@ client.on('ready', () => {
                                         })
                                     break;
 
-                                    case optionlist[3].option:
-                                        //just a copy paste of the first option lol
-                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
-                                            switch(newoptstate) {
-                                                case 'enable':
-                                                    optionlist[3].state = "Enabled";
-                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[3].option)));
-                                                    rl.prompt();
-                                                break;
-
-                                                case 'disable':
-                                                    optionlist[3].state = "Disabled";
-                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[3].option)));
-                                                    rl.prompt();
-                                                break;
-
-                                                default:
-                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
-                                                    rl.prompt();
-                                                break;
-                                            }
-                                        })
-                                    break;
-
                                     default:
                                         console.log(clc.red('Maybe you should provide an option to modify lol'));
                                         rl.prompt();
@@ -449,8 +423,7 @@ client.on('ready', () => {
                             optionlist[0].state = 'Disabled';
                             optionlist[1].value = 'Sanic Bot Terminal';
                             optionlist[2].state = 'Enabled';
-                            optionlist[3].state = "Disabled";
-                            console.log(clc.green('Terminal Settings restored! Restarting the console to apply the changes'));
+                            console.log(clc.green('Terminal Settings restored! Restart the console to apply the changes'));
                             rl.prompt();
                         break;
 
@@ -561,6 +534,73 @@ client.on('ready', () => {
                     }
                 })
 
+            break;
+
+            case 'restore channelids':
+                rl.question('Are you sure that you want to restore the Channel IDS json? (y/n) ', (restoreconf) => {
+                    switch(restoreconf){
+                        case 'y':
+                            console.log(clc.red('Restoring the Channel IDS json...'));
+                            const channelidsstuff = require('./Helper/ChannelIDS.json');
+
+                            //Restore the first thingy lol
+                            channelidslist[0].name = "";
+                            channelidslist[0].chnlid = 0;
+                    
+                            //Restore the second thingy lol
+                            channelidslist[1].name = "";
+                            channelidslist[1].chnlid = 0;
+                    
+                            //Restore the third thingy lol
+                            channelidslist[2].name = "";
+                            channelidslist[2].chnlid = 0;
+                    
+                            //Restore the fourth thingy lol
+                            channelidslist[3].name = "";
+                            channelidslist[3].chnlid = 0;
+                    
+                            //Restore the fifth thingy lol
+                            channelidslist[4].name = "";
+                            channelidslist[4].chnlid = 0;
+                    
+                            //Restore the sixth thingy lol
+                            channelidslist[5].name = "";
+                            channelidslist[5].chnlid = 0;
+                    
+                            //Restore the seventh thingy lol
+                            channelidslist[6].name = "";
+                            channelidslist[6].chnlid = 0;
+                    
+                            //Restore the eighth thingy lol
+                            channelidslist[7].name = "";
+                            channelidslist[7].chnlid = 0;
+                    
+                            //Restore the nineth thingy lol
+                            channelidslist[8].name = "";
+                            channelidslist[8].chnlid = 0;
+                    
+                            //Restore the tenth thingy lol
+                            channelidslist[9].name = "";
+                            channelidslist[9].chnlid = 0;
+                    
+                            //Restore the eleventh thingy lol
+                            channelidslist[10].name = "";
+                            channelidslist[10].chnlid = 0;
+                    
+                            console.log(clc.green('Channel IDS json restored! Restart the console to apply the changes'));
+                            rl.prompt();
+                        break;
+
+                        case 'n':
+                            rl.prompt();
+                        break;
+
+                        default:
+                            console.log(clc.red('Provide a valid answer'));
+                            rl.prompt();
+                        break;
+                    }
+                })
             break;
 
             default:
