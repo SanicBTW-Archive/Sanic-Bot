@@ -64,7 +64,6 @@ client.on('ready', () => {
     optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
     optionlist[1].value = TerminalSettings.consoletitleoption.value;
     optionlist[2].state = TerminalSettings.displaytermveroption.state;
-    optionlist[3].state = TerminalSettings.usechannelidsjson.state;
     
     if(optionlist[0].state.includes("Enabled")){
         console.clear();
