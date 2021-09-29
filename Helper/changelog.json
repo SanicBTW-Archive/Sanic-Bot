@@ -1,7 +1,7 @@
 {
-    "terminalver": "Beta 4.5 H3",
+    "terminalver": "Beta 4.5 H4",
     "newterminalfeatures": "New channel ids support and system, added a forgotten menu entry ",
-    "terminalbugfixes": "Latest settings entries fixed i guess",
+    "terminalbugfixes": "Removed the latest setting from everywhere i hope",
     "terminalissues": "None",
 
     "newfeatures": "None",

@@ -625,18 +625,11 @@ client.on('ready', () => {
             "option": optionlist[2].option,
             "state": optionlist[2].state,
         };
-
-        const usechannelidsjson = {
-            "option": optionlist[3].option,
-            "state": optionlist[3].state
-        };
-        
         
         const alltogetherig = {
             clearconsoleoptions,
             consoletitleoption,
             displaytermveroption,
-            usechannelidsjson
         }
         
         const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
