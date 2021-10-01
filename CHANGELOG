@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4.6 - TERMINAL] - 01-10-2021
+### Added
+- 10 New Slots on the new Channel ID system
+- Re-Added the creation of important files when they don't exist
+
+### For future updates
+- Add a types string in the channel ids list
+- Add more new commands for the discord bot
+
 ## [0.0.4.5 HOTFIX 4 - TERMINAL] - 29-09-2021
 ### Bug Fixes
 - I forgor again to delete the save settings event from the rl.close bruh

@@ -1,45 +1,85 @@
 {
-    "firstchannelid": {
-        "name": "General prueba bot nuevo",
-        "chnlid": "805870628884185159"
-    },
-    "secondchannelid": {
-        "name": "Polls prueba bot",
-        "chnlid": "824664145646321674"
-    },
-    "thirdchannelid": {
+    "fstchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "fourthchannelid": {
+    "scndchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "fifthchannelid": {
+    "thrdchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "sixthchannelid": {
+    "fthchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "seventhchannelid": {
+    "fifthchlid": {
         "name": "",
         "chnlid": 0
     },
-    "eighthchannelid": {
+    "sixthchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "ninethchannelid": {
+    "svnthchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "tenthchannelid": {
+    "eigthchnlid": {
         "name": "",
         "chnlid": 0
     },
-    "eleventhchannelid": {
+    "nnthchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "tnthchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "elvnthchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "twlvchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "thrtnchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "frtnchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "ftennchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "sxtennchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "svtnchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "eitnchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "nntnchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "twntchnlid": {
+        "name": "",
+        "chnlid": 0
+    },
+    "twntochnlid": {
         "name": "",
         "chnlid": 0
     }

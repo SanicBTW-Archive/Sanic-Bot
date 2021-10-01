@@ -1,7 +1,7 @@
 {
-    "terminalver": "Beta 4.5 H4",
-    "newterminalfeatures": "New channel ids support and system, added a forgotten menu entry ",
-    "terminalbugfixes": "Removed the latest setting from everywhere i hope",
+    "terminalver": "Beta 4.6",
+    "newterminalfeatures": "Creation of files when they don't exist is back,\n10 more slots on the new channel id system",
+    "terminalbugfixes": "None",
     "terminalissues": "None",
 
     "newfeatures": "None",

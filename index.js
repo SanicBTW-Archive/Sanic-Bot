@@ -32,21 +32,199 @@ const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
 newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');    
 //#endregion    
 
-//#region Check if the term settings file exists, due to my horrible coding skills cant figure out how to check if the file exists without moving the important shit
+//#region Check for important files
+//I literally copied the fields from the exit event bruh, also im really fucking lazy to fix the spaces and shit in the channel ids field thingy
+//#region TerminalConfig.json file fields
+    const clearconsoleoptions = {
+        "option": optionlist[0].option,
+        "state": optionlist[0].state,
+    };
+        
+    const consoletitleoption = {
+        "option": optionlist[1].option,
+        "value": optionlist[1].value,
+    };
+        
+    const displaytermveroption = {
+        "option": optionlist[2].option,
+        "state": optionlist[2].state,
+    };
+        
+    const alltogetherig = {
+        clearconsoleoptions,
+        consoletitleoption,
+        displaytermveroption,
+    }
+        
+    const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
+//#endregion
+        
+//#region New ChannelIDS.json file fields
+        //I'm really fucking sorry for all of this
+        const fstchnlid = {
+            "name": channelidslist[0].name,
+            "chnlid": channelidslist[0].chnlid
+        };
+        const scndchnlid = {
+            "name": channelidslist[1].name,
+            "chnlid": channelidslist[1].chnlid
+        };
+        const thrdchnlid = {
+            "name": channelidslist[2].name,
+            "chnlid": channelidslist[2].chnlid
+        };
+        const fthchnlid = {
+            "name": channelidslist[3].name,
+            "chnlid": channelidslist[3].chnlid
+        };
+        const fifthchlid = {
+            "name": channelidslist[4].name,
+            "chnlid": channelidslist[4].chnlid
+        };
+        const sixthchnlid = {
+            "name": channelidslist[5].name,
+            "chnlid": channelidslist[5].chnlid
+        };
+        const svnthchnlid = {
+            "name": channelidslist[6].name,
+            "chnlid": channelidslist[6].chnlid
+        };
+        const eigthchnlid = {
+            "name": channelidslist[7].name,
+            "chnlid": channelidslist[7].chnlid
+        };
+        const nnthchnlid = {
+            "name": channelidslist[8].name,
+            "chnlid": channelidslist[8].chnlid
+        };
+        const tnthchnlid = {
+            "name": channelidslist[9].name,
+            "chnlid": channelidslist[9].chnlid
+        };
+        const elvnthchnlid = {
+            "name": channelidslist[10].name,
+            "chnlid": channelidslist[10].chnlid
+        };
+
+        const twlvchnlid = {
+            "name": channelidslist[11].name,
+            "chnlid": channelidslist[11].chnlid
+        };
+        
+        const thrtnchnlid = {
+            "name": channelidslist[12].name,
+            "chnlid": channelidslist[12].chnlid
+        };
+
+        const frtnchnlid = {
+            "name": channelidslist[13].name,
+            "chnlid": channelidslist[13].chnlid
+        };
+
+        const ftennchnlid = {
+            "name": channelidslist[14].name,
+            "chnlid": channelidslist[14].chnlid
+        };
+
+        const sxtennchnlid = {
+            "name": channelidslist[15].name,
+            "chnlid": channelidslist[15].chnlid
+        };
+
+        const svtnchnlid = {
+            "name": channelidslist[16].name,
+            "chnlid": channelidslist[16].chnlid
+        };
+
+        const eitnchnlid = {
+            "name": channelidslist[17].name,
+            "chnlid": channelidslist[17].chnlid
+        };
+
+        const nntnchnlid = {
+            "name": channelidslist[18].name,
+            "chnlid": channelidslist[18].chnlid
+        };
+
+        const twntchnlid = {
+            "name": channelidslist[19].name,
+            "chnlid": channelidslist[19].chnlid
+        };
+
+        const twntochnlid = {
+            "name": channelidslist[20].name,
+            "chnlid": channelidslist[20].chnlid
+        };
+
+        //I'm also really fucking sorry for this too
+        const allchannelidstogether = {
+            //1, 0
+            fstchnlid,
+            //2, 1
+            scndchnlid,
+            //3, 2
+            thrdchnlid,
+            //4, 3
+            fthchnlid,
+            //5, 4
+            fifthchlid,
+            //6, 5
+            sixthchnlid,
+            //7, 6
+            svnthchnlid,
+            //8, seven
+            eigthchnlid,
+            //9, 8
+            nnthchnlid,
+            //10, 9
+            tnthchnlid,
+            //11, 10
+            elvnthchnlid,
+            //New slots
+            //12, 11
+            twlvchnlid,
+            //13, 12
+            thrtnchnlid,
+            //14, 13
+            frtnchnlid,
+            //15, 14
+            ftennchnlid,
+            //16, 15
+            sxtennchnlid,
+            //17, 16
+            svtnchnlid,
+            //18, 17
+            eitnchnlid,
+            //19, 18
+            nntnchnlid,
+            //20, 19
+            twntchnlid,
+            //21, 20
+            twntochnlid
+        }
+
+        const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
+        //#endregion
+        
 try {
     if(!fs.existsSync(__dirname + '/Config/TerminalSettings.json')){
-        console.log(clc.yellow("Looks like you don't have a TerminalSettings.json"));
-        console.log(clc.red("Can't proceed with the bot startup"));
+        console.log(clc.yellow("Looks like you don't have a TerminalSettings.json, creating it..."));
+        fs.writeFileSync(__dirname + '/Config/TerminalSettings.json', fixedoptionsig);
+        console.log(clc.greenBright("Successfully created TerminalSettings.json!\n"));
+    }
+
+    if(!fs.existsSync(__dirname + '/Helper/ChannelIDS.json')){
+        console.log(clc.yellow("Looks like you don't have a ChannelIDS.json, creating it..."));
+        fs.writeFileSync(__dirname + '/Helper/ChannelIDS.json', fixedchannelidsig);
+        console.log(clc.greenBright("Successfully created TerminalSettings.json!\n"));
     }
 } catch (error){
     console.error(error);
-    console.log(clc.red("Couldn't make TerminalSettings.json"))
+    console.log(clc.red("Couldn't make the missing files"))
 }
 //#endregion
 
 //#region Console Imports
-//const spprchnlids = require('./Helper/channelids.json');
-
 const annchnls = require('./Helper/annchannelids.json');
 
 const TerminalSettings = require('./Config/TerminalSettings.json');
@@ -75,52 +253,71 @@ client.on('ready', () => {
         process.title = TerminalSettings.consoletitleoption.value;
     }
 
+    //Hell
     const channelidsstuff = require('./Helper/ChannelIDS.json');
 
-    //Load the first thingy lol
-    channelidslist[0].name = channelidsstuff.firstchannelid.name;
-    channelidslist[0].chnlid = channelidsstuff.firstchannelid.chnlid;
+    channelidslist[0].name = channelidsstuff.fstchnlid.name;
+    channelidslist[0].chnlid = channelidsstuff.fstchnlid.chnlid;
 
-    //Load the second thingy lol
-    channelidslist[1].name = channelidsstuff.secondchannelid.name;
-    channelidslist[1].chnlid = channelidsstuff.secondchannelid.chnlid;
+    channelidslist[1].name = channelidsstuff.scndchnlid.name;
+    channelidslist[1].chnlid = channelidsstuff.scndchnlid.chnlid;
 
-    //Load the third thingy lol
-    channelidslist[2].name = channelidsstuff.thirdchannelid.name;
-    channelidslist[2].chnlid = channelidsstuff.thirdchannelid.chnlid;
+    channelidslist[2].name = channelidsstuff.thrdchnlid.name;
+    channelidslist[2].chnlid = channelidsstuff.thrdchnlid.chnlid;
 
-    //Load the fourth thingy lol
-    channelidslist[3].name = channelidsstuff.fourthchannelid.name;
-    channelidslist[3].chnlid = channelidsstuff.fourthchannelid.chnlid;
+    channelidslist[3].name = channelidsstuff.fthchnlid.name;
+    channelidslist[3].chnlid = channelidsstuff.fthchnlid.chnlid;
 
-    //Load the fifth thingy lol
-    channelidslist[4].name = channelidsstuff.fifthchannelid.name;
-    channelidslist[4].chnlid = channelidsstuff.fifthchannelid.chnlid;
+    channelidslist[4].name = channelidsstuff.fifthchlid.name;
+    channelidslist[4].chnlid = channelidsstuff.fifthchlid.chnlid;
 
-    //Load the sixth thingy lol
-    channelidslist[5].name = channelidsstuff.sixthchannelid.name;
-    channelidslist[5].chnlid = channelidsstuff.sixthchannelid.chnlid;
+    channelidslist[5].name = channelidsstuff.sixthchnlid.name;
+    channelidslist[5].chnlid = channelidsstuff.sixthchnlid.chnlid;
 
-    //Load the seventh thingy lol
-    channelidslist[6].name = channelidsstuff.seventhchannelid.name;
-    channelidslist[6].chnlid = channelidsstuff.seventhchannelid.chnlid;
+    channelidslist[6].name = channelidsstuff.svnthchnlid.name;
+    channelidslist[6].chnlid = channelidsstuff.svnthchnlid.chnlid;
 
-    //Load the eighth thingy lol
-    channelidslist[7].name = channelidsstuff.eighthchannelid.name;
-    channelidslist[7].chnlid = channelidsstuff.eighthchannelid.chnlid;
+    channelidslist[7].name = channelidsstuff.eigthchnlid.name;
+    channelidslist[7].chnlid = channelidsstuff.eigthchnlid.chnlid;
 
-    //Load the nineth thingy lol
-    channelidslist[8].name = channelidsstuff.ninethchannelid.name;
-    channelidslist[8].chnlid = channelidsstuff.ninethchannelid.chnlid;
+    channelidslist[8].name = channelidsstuff.nnthchnlid.name;
+    channelidslist[8].chnlid = channelidsstuff.nnthchnlid.chnlid;
 
-    //Load the tenth thingy lol
-    channelidslist[9].name = channelidsstuff.tenthchannelid.name;
-    channelidslist[9].chnlid = channelidsstuff.tenthchannelid.chnlid;
+    channelidslist[9].name = channelidsstuff.tnthchnlid.name;
+    channelidslist[9].chnlid = channelidsstuff.tnthchnlid.chnlid;
 
-    //Load the eleventh thingy lol
-    channelidslist[10].name = channelidsstuff.eleventhchannelid.name;
-    channelidslist[10].chnlid = channelidsstuff.eleventhchannelid.chnlid;
+    channelidslist[10].name = channelidsstuff.elvnthchnlid.name;
+    channelidslist[10].chnlid = channelidsstuff.elvnthchnlid.chnlid;
+    
+    channelidslist[11].name = channelidsstuff.twlvchnlid.name;
+    channelidslist[11].chnlid = channelidsstuff.twlvchnlid.chnlid;
 
+    channelidslist[12].name = channelidsstuff.thrtnchnlid.name;
+    channelidslist[12].chnlid = channelidsstuff.thrtnchnlid.chnlid;
+
+    channelidslist[13].name = channelidsstuff.frtnchnlid.name;
+    channelidslist[13].chnlid = channelidsstuff.frtnchnlid.chnlid;
+
+    channelidslist[14].name = channelidsstuff.ftennchnlid.name;
+    channelidslist[14].chnlid = channelidsstuff.ftennchnlid.chnlid;
+    
+    channelidslist[15].name = channelidsstuff.sxtennchnlid.name;
+    channelidslist[15].chnlid = channelidsstuff.sxtennchnlid.chnlid;
+
+    channelidslist[16].name = channelidsstuff.svtnchnlid.name;
+    channelidslist[16].chnlid = channelidsstuff.svtnchnlid.chnlid;
+
+    channelidslist[17].name = channelidsstuff.eitnchnlid.name;
+    channelidslist[17].chnlid = channelidsstuff.eitnchnlid.chnlid;
+
+    channelidslist[18].name = channelidsstuff.nnthchnlid.name;
+    channelidslist[18].chnlid = channelidsstuff.nnthchnlid.chnlid;
+
+    channelidslist[19].name = channelidsstuff.twntchnlid.name;
+    channelidslist[19].chnlid = channelidsstuff.twntchnlid.chnlid;
+
+    channelidslist[20].name = channelidsstuff.twntochnlid.name;
+    channelidslist[20].chnlid = channelidsstuff.twntochnlid.chnlid;
     //#endregion
         
     console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)\n`));
@@ -311,6 +508,86 @@ client.on('ready', () => {
                                         console.log(clc.red("Couldn't find a Channel ID on that list number"));
                                     }
                                     break;
+
+                                case "11":
+                                    if(channelidslist[11].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[11].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "12":
+                                    if(channelidslist[12].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[12].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "13":
+                                    if(channelidslist[13].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[13].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "14":
+                                    if(channelidslist[14].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[14].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "15":
+                                    if(channelidslist[15].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[15].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "16":
+                                    if(channelidslist[16].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[16].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "17":
+                                    if(channelidslist[17].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[17].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "18":
+                                    if(channelidslist[18].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[18].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "19":
+                                    if(channelidslist[19].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[19].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
+
+                                case "20":
+                                    if(channelidslist[20].chnlid.toString().length = 18){
+                                        client.channels.cache.get(channelidslist[20].chnlid.toString()).send(msgcont);
+                                    } else {
+                                        console.log(clc.red("Couldn't find a Channel ID on that list number"));
+                                    }
+                                    break;
                             }
 
                             if(selectedchnlid.toString().length == 18){
@@ -444,7 +721,7 @@ client.on('ready', () => {
                     if(chnlidname.length > 0){
                         rl.question('Please enter the Channel ID: ', (chnlid) => {
                             if(chnlid.length = 18){
-                                rl.question('Where do you want to save this info? (0 to 10): ', (wheretosave) => {
+                                rl.question('Where do you want to save this info? (0 to 20): ', (wheretosave) => {
                                     switch(wheretosave){
                                         case "0":
                                             channelidslist[0].name = chnlidname.toString();
@@ -522,6 +799,76 @@ client.on('ready', () => {
                                             console.log(clc.green("Successfully saved the info to the index 10"));
                                             rl.prompt();
                                             break;
+
+                                        case "11":
+                                            channelidslist[11].name = chnlidname;
+                                            channelidslist[11].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 11"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "12":
+                                            channelidslist[12].name = chnlidname;
+                                            channelidslist[12].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 12"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "13":
+                                            channelidslist[13].name = chnlidname;
+                                            channelidslist[13].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 13"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "14":
+                                            channelidslist[14].name = chnlidname;
+                                            channelidslist[14].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 14"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "15":
+                                            channelidslist[15].name = chnlidname;
+                                            channelidslist[15].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 15"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "16":
+                                            channelidslist[16].name = chnlidname;
+                                            channelidslist[16].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 16"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "17":
+                                            channelidslist[17].name = chnlidname;
+                                            channelidslist[17].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 1"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "18":
+                                            channelidslist[18].name = chnlidname;
+                                            channelidslist[18].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 18"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "19":
+                                            channelidslist[19].name = chnlidname;
+                                            channelidslist[19].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 19"));
+                                            rl.prompt();
+                                            break;
+
+                                        case "20":
+                                            channelidslist[20].name = chnlidname;
+                                            channelidslist[20].chnlid = chnlid;
+                                            console.log(clc.green("Successfully saved the info to the index 20"));
+                                            rl.prompt();
+                                            break;
                                     }
                                 })
                             } else {
@@ -541,52 +888,70 @@ client.on('ready', () => {
                     switch(restoreconf){
                         case 'y':
                             console.log(clc.red('Restoring the Channel IDS json...'));
-                            const channelidsstuff = require('./Helper/ChannelIDS.json');
 
-                            //Restore the first thingy lol
                             channelidslist[0].name = "";
                             channelidslist[0].chnlid = 0;
                     
-                            //Restore the second thingy lol
                             channelidslist[1].name = "";
                             channelidslist[1].chnlid = 0;
                     
-                            //Restore the third thingy lol
                             channelidslist[2].name = "";
                             channelidslist[2].chnlid = 0;
                     
-                            //Restore the fourth thingy lol
                             channelidslist[3].name = "";
                             channelidslist[3].chnlid = 0;
                     
-                            //Restore the fifth thingy lol
                             channelidslist[4].name = "";
                             channelidslist[4].chnlid = 0;
                     
-                            //Restore the sixth thingy lol
                             channelidslist[5].name = "";
                             channelidslist[5].chnlid = 0;
                     
-                            //Restore the seventh thingy lol
                             channelidslist[6].name = "";
                             channelidslist[6].chnlid = 0;
                     
-                            //Restore the eighth thingy lol
                             channelidslist[7].name = "";
                             channelidslist[7].chnlid = 0;
                     
-                            //Restore the nineth thingy lol
                             channelidslist[8].name = "";
                             channelidslist[8].chnlid = 0;
                     
-                            //Restore the tenth thingy lol
                             channelidslist[9].name = "";
                             channelidslist[9].chnlid = 0;
                     
-                            //Restore the eleventh thingy lol
                             channelidslist[10].name = "";
                             channelidslist[10].chnlid = 0;
+
+                            channelidslist[11].name = "";
+                            channelidslist[11].chnlid = 0;
+
+                            channelidslist[12].name = "";
+                            channelidslist[12].chnlid = 0;
+
+                            channelidslist[13].name = "";
+                            channelidslist[13].chnlid = 0;
+
+                            channelidslist[14].name = "";
+                            channelidslist[14].chnlid = 0;
+
+                            channelidslist[15].name = "";
+                            channelidslist[15].chnlid = 0;
+
+                            channelidslist[16].name = "";
+                            channelidslist[16].chnlid = 0;
                     
+                            channelidslist[17].name = "";
+                            channelidslist[17].chnlid = 0;
+
+                            channelidslist[18].name = "";
+                            channelidslist[18].chnlid = 0;
+
+                            channelidslist[19].name = "";
+                            channelidslist[19].chnlid = 0;
+
+                            channelidslist[20].name = "";
+                            channelidslist[20].chnlid = 0;
+
                             console.log(clc.green('Channel IDS json restored! Restart the console to apply the changes'));
                             rl.prompt();
                         break;
@@ -635,69 +1000,153 @@ client.on('ready', () => {
         const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
         //#endregion
         
-        //#region New ChannelIDS.json file fields
-        //Holy shit what in the world is this
-        const firstchannelid = {
+        //#region New ChannelIDS.json file fields, reworking the field names cuz large
+        //I'm really fucking sorry for all of this
+        const fstchnlid = {
             "name": channelidslist[0].name,
             "chnlid": channelidslist[0].chnlid
         };
-        const secondchannelid = {
+        const scndchnlid = {
             "name": channelidslist[1].name,
             "chnlid": channelidslist[1].chnlid
         };
-        const thirdchannelid = {
+        const thrdchnlid = {
             "name": channelidslist[2].name,
             "chnlid": channelidslist[2].chnlid
         };
-        const fourthchannelid = {
+        const fthchnlid = {
             "name": channelidslist[3].name,
             "chnlid": channelidslist[3].chnlid
         };
-        const fifthchannelid = {
+        const fifthchlid = {
             "name": channelidslist[4].name,
             "chnlid": channelidslist[4].chnlid
         };
-        const sixthchannelid = {
+        const sixthchnlid = {
             "name": channelidslist[5].name,
             "chnlid": channelidslist[5].chnlid
         };
-        const seventhchannelid = {
+        const svnthchnlid = {
             "name": channelidslist[6].name,
             "chnlid": channelidslist[6].chnlid
         };
-        const eighthchannelid = {
+        const eigthchnlid = {
             "name": channelidslist[7].name,
             "chnlid": channelidslist[7].chnlid
         };
-        const ninethchannelid = {
+        const nnthchnlid = {
             "name": channelidslist[8].name,
             "chnlid": channelidslist[8].chnlid
         };
-        const tenthchannelid = {
+        const tnthchnlid = {
             "name": channelidslist[9].name,
             "chnlid": channelidslist[9].chnlid
         };
-        const eleventhchannelid = {
+        const elvnthchnlid = {
             "name": channelidslist[10].name,
             "chnlid": channelidslist[10].chnlid
         };
 
+        const twlvchnlid = {
+            "name": channelidslist[11].name,
+            "chnlid": channelidslist[11].chnlid
+        };
+        
+        const thrtnchnlid = {
+            "name": channelidslist[12].name,
+            "chnlid": channelidslist[12].chnlid
+        };
+
+        const frtnchnlid = {
+            "name": channelidslist[13].name,
+            "chnlid": channelidslist[13].chnlid
+        };
+
+        const ftennchnlid = {
+            "name": channelidslist[14].name,
+            "chnlid": channelidslist[14].chnlid
+        };
+
+        const sxtennchnlid = {
+            "name": channelidslist[15].name,
+            "chnlid": channelidslist[15].chnlid
+        };
+
+        const svtnchnlid = {
+            "name": channelidslist[16].name,
+            "chnlid": channelidslist[16].chnlid
+        };
+
+        const eitnchnlid = {
+            "name": channelidslist[17].name,
+            "chnlid": channelidslist[17].chnlid
+        };
+
+        const nntnchnlid = {
+            "name": channelidslist[18].name,
+            "chnlid": channelidslist[18].chnlid
+        };
+
+        const twntchnlid = {
+            "name": channelidslist[19].name,
+            "chnlid": channelidslist[19].chnlid
+        };
+
+        const twntochnlid = {
+            "name": channelidslist[20].name,
+            "chnlid": channelidslist[20].chnlid
+        };
+
+        //I'm also really fucking sorry for this too
         const allchannelidstogether = {
-            firstchannelid,
-            secondchannelid,
-            thirdchannelid,
-            fourthchannelid,
-            fifthchannelid,
-            sixthchannelid,
-            seventhchannelid,
-            eighthchannelid,
-            ninethchannelid,
-            tenthchannelid,
-            eleventhchannelid
+            //1, 0
+            fstchnlid,
+            //2, 1
+            scndchnlid,
+            //3, 2
+            thrdchnlid,
+            //4, 3
+            fthchnlid,
+            //5, 4
+            fifthchlid,
+            //6, 5
+            sixthchnlid,
+            //7, 6
+            svnthchnlid,
+            //8, seven
+            eigthchnlid,
+            //9, 8
+            nnthchnlid,
+            //10, 9
+            tnthchnlid,
+            //11, 10
+            elvnthchnlid,
+            //New slots
+            //12, 11
+            twlvchnlid,
+            //13, 12
+            thrtnchnlid,
+            //14, 13
+            frtnchnlid,
+            //15, 14
+            ftennchnlid,
+            //16, 15
+            sxtennchnlid,
+            //17, 16
+            svtnchnlid,
+            //18, 17
+            eitnchnlid,
+            //19, 18
+            nntnchnlid,
+            //20, 19
+            twntchnlid,
+            //21, 20
+            twntochnlid
         }
 
         const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
         //#endregion
+        
         try {
             console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
             console.log(clc.yellowBright('Trying to save the terminal settings...'));

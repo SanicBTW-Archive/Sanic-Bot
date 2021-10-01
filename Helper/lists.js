@@ -12,6 +12,7 @@ var defaultembedcolor = [
 ];
 
 //Gonna try to improve the channel ids system 
+//The type should be normal or announcements, probably gonna work on this new sys whenever i feel like it
 var channelidslist = [
     { chnlid: 0, name: ''}, //0
     { chnlid: 0, name: ''}, //1
@@ -24,6 +25,17 @@ var channelidslist = [
     { chnlid: 0, name: ''}, //8
     { chnlid: 0, name: ''}, //9
     { chnlid: 0, name: ''}, //10
+    //New slots
+    { chnlid: 0, name: ''}, //11
+    { chnlid: 0, name: ''}, //12
+    { chnlid: 0, name: ''}, //13
+    { chnlid: 0, name: ''}, //14
+    { chnlid: 0, name: ''}, //15
+    { chnlid: 0, name: ''}, //16
+    { chnlid: 0, name: ''}, //17
+    { chnlid: 0, name: ''}, //18
+    { chnlid: 0, name: ''}, //19
+    { chnlid: 0, name: ''}, //20
 ];
 
 
