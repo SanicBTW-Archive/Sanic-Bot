@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.10 - DISCORD BOT] - 03-10-2021
+### Added
+- Added music commands
+- Music stuff may not be the best but it works
+- NPM Packages to make music stuff work properly
+- I'm really fucking sorry for the idle event on the play music command
+
+### Changed
+- Kinda cleaned gitignore lol
+
+### Currently in work
+- Changing everything to Spanish
+
 ## [0.0.4.6 - TERMINAL] - 01-10-2021
 ### Added
 - 10 New Slots on the new Channel ID system

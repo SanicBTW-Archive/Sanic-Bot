@@ -4,6 +4,10 @@
 const Discord = require('discord.js');
 const intents = new Discord.Intents(32767);
 const client = new Discord.Client({ intents });
+
+const ytdl = require('ytdl-core');
+const ytSearch = require('yt-search');
+const Voice = require('@discordjs/voice');
 //#endregion
 
 //#region Config stuff, Terminal and Discord Bot
@@ -25,7 +29,7 @@ const { SendMenuHelp } = require('./Commands/sendmenu');
 const { token, prefix, activityname, status, 
 mainaccowner, altaccowner} = require('./Config/DiscordSettings.json');
     
-const { executedcmdslist, defaultembedcolor, channelidslist} = require('./Helper/lists');
+const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff} = require('./Helper/lists');
     
 //Previously called idkwhylol
 const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
@@ -323,6 +327,9 @@ client.on('ready', () => {
     console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)\n`));
     console.log(clc.white("Type 'help' to show the list of available commands"))
 
+    //Set the fucking curplayingmusic thingy to false, using the lists.js from the Helper folder
+    formusicstuff[0].curplayingmusic = false;
+    
     client.user.setPresence({
         activities: [{
             name: activityname
@@ -1170,7 +1177,7 @@ client.on('ready', () => {
     //#endregion
 });
 
-client.on('messageCreate', (message) => {
+client.on('messageCreate', async (message) => {
     if (!message.content.startsWith(prefix) || message.author.bot) return; 
 
     let args = message.content.substring(prefix.length).split(" ");
@@ -1235,6 +1242,92 @@ client.on('messageCreate', (message) => {
             executedcmdslist[1].latestexc = true;
             executedcmdslist[2].latestexc = false;
         break;
+
+        case 'reproducir':
+            const { channel } = message.member.voice;
+
+            if(!channel) return message.reply('Necesitas estar en un canal de voz!');
+            const permissions = channel.permissionsFor(message.client.user);
+            if(!permissions.has('CONNECT')) return message.reply('No tienes los permisos correctos');
+            if(!permissions.has('SPEAK')) return message.reply('No tienes los permisos correctos');
+            if(!args[1]) return message.reply('Necesitas añadir un link o poner una frase para buscar la música');
+
+            let VoiceConnection = Voice.joinVoiceChannel({channelId: channel.id, guildId: channel.guild.id, adapterCreator: channel.guild.voiceAdapterCreator});
+
+            const videoFinder = async(query) => {
+                const videoResult = await ytSearch(query);
+
+                return(videoResult.videos.length > 1) ? videoResult.videos[0] : null;
+            }
+
+            const video = await videoFinder(args.join(' '));
+            
+            if(video) {
+                const streamurl = ytdl(video.url, {filter: 'audioonly'});
+
+                const resource = Voice.createAudioResource(streamurl, {inlineVolume: true});
+                resource.volume.setVolume(0.2);
+                const player = Voice.createAudioPlayer();
+                VoiceConnection.subscribe(player);
+                player.play(resource);
+
+                const funnyvidembed = new Discord.MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle(`Ahora reproduciendo ***${video.title}***`)
+                .setDescription(video.description)
+                .setImage(video.image)
+                .setAuthor(video.author.name)
+                .setURL(video.url);
+
+                await message.reply({embeds: [funnyvidembed]});
+                formusicstuff[0].curplayingmusic = true;
+
+                player.on('idle', () => {
+                    const funnyidletimerthingy = new Discord.MessageEmbed()
+                    .setTitle('He estado sin reproducir música por 5 minutos, desconectadome!');
+                    
+                    setTimeout(() => {
+                        try {
+                            player.stop();
+                            formusicstuff[0].curplayingmusic = false;
+                        } catch (e){
+                            console.log(clc.red(e));
+                        }
+
+                        try {
+                            VoiceConnection.destroy();
+                            formusicstuff[0].curplayingmusic = false;
+                        } catch (e){
+                            console.log(clc.red(e));
+                        }
+
+                        message.channel.send({embeds: [funnyidletimerthingy]});
+                    }, 300000);
+                })
+            } else {
+                const funnynoresultsfound = new Discord.MessageEmbed()
+                .setTitle('No se han encontrado resultados');
+
+                message.reply({ embeds: [funnynoresultsfound]});
+            }
+        break;
+
+        case 'detener musica':
+            const whythefuckitisntworking = message.member.voice;
+            const connection = Voice.getVoiceConnection(whythefuckitisntworking.guild.id);
+
+            if(!whythefuckitisntworking.channel) return message.reply('Necesitas estar en un canal de voz para poder parar de reproducir música!');
+            //I'm really fucking sorry for this if condition
+            if(formusicstuff[0].curplayingmusic == false) return message.reply('No estoy reproduciendo música actualmente'); 
+            if(Voice.VoiceConnectionStatus.Ready || formusicstuff[0].curplayingmusic == true){
+                const funnystopmusicsad = new Discord.MessageEmbed()
+                .setTitle('Parando de reproducir música :pensive:');
+
+                await message.reply({ embeds: [funnystopmusicsad]});
+                connection.destroy();
+            }
+        break;
+        
     }
 
 })

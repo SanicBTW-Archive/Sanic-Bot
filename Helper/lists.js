@@ -1,8 +1,9 @@
 //Used to save values for the lastexecuted command for the terminal
+//{ sprcmd: 'shutdown', exectimes: 0, lastusertoexec: 'user', latestexc: false}
 var executedcmdslist = [
     { sprcmd: 'ping', exectimes: 0, lastusertoexec: 'user', latestexc: false},
     { sprcmd: 'changelog', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'shutdown', exectimes: 0, lastusertoexec: 'user', latestexc: false}
+    { sprcmd: 'play', exectimes: 0, lastusertoexec: 'user', latestexc: false}
 ];
 
 //Really bad way to store a value but meh
@@ -38,8 +39,14 @@ var channelidslist = [
     { chnlid: 0, name: ''}, //20
 ];
 
+//I'm extremely fucking sorry for this, I don't know any other way to check if I'm playing music
+var formusicstuff = [
+    { curplayingmusic: true | false}
+]
+
 
 module.exports = {
     executedcmdslist,
-    channelidslist
+    channelidslist,
+    formusicstuff
 }
