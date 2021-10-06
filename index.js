@@ -26,10 +26,10 @@ const { HelpMenuEntry } = require('./Commands/helpmenu');
 const { SettingsMenuEntry, optionlist} = require('./Commands/settingsmenu');
 const { SendMenuHelp } = require('./Commands/sendmenu');
 
-const { token, prefix, activityname, status, 
+const { token, prefix, activityname, thingypresencestatus, 
 mainaccowner, altaccowner} = require('./Config/DiscordSettings.json');
     
-const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff} = require('./Helper/lists');
+const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff, quotesoptions} = require('./Helper/lists');
     
 //Previously called idkwhylol
 const {terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
@@ -53,11 +53,17 @@ newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');
         "option": optionlist[2].option,
         "state": optionlist[2].state,
     };
+
+    const autochangestatus = {
+        "option": optionlist[3].option,
+        "state": optionlist[3].state,
+    }
         
     const alltogetherig = {
         clearconsoleoptions,
         consoletitleoption,
         displaytermveroption,
+        autochangestatus
     }
         
     const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
@@ -212,9 +218,11 @@ newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');
 
 //#region Example status options fields ig
 const quotesthingyfields = {
-    "firstquote": "Nunca valoras lo que tienes hasta que lo pierdes",
-    "secondstatus": "Yo que se",
-    "thirdstatus": "Hola que tal"
+    "firstquote": quotesoptions[0].quote,
+    "secondquote": quotesoptions[1].quote,
+    "thirdquote": quotesoptions[2].quote,
+    "fourthquote": quotesoptions[3].quote,
+    "fifthquote": quotesoptions[4].quote
 };
 
 //I'm extremely sorry for these I'm really fucking dumb
@@ -250,7 +258,6 @@ const annchnls = require('./Helper/annchannelids.json');
 
 const TerminalSettings = require('./Config/TerminalSettings.json');
 
-const QuotesOptions = require('./Helper/StatusOptions.json');
 //#endregion
 
 const rl = readline.createInterface({
@@ -346,17 +353,37 @@ client.on('ready', () => {
 
     //I'm extremely sorry for this again, I'm really sorry for everything from the settings thingy
     if (optionlist[3].state.includes("Enabled")){
+        //#region Load the quotes
+        const QuotesOptions = require('./Helper/StatusOptions.json');
+
+        quotesoptions[0].quote = QuotesOptions.firstquote;
+        quotesoptions[1].quote = QuotesOptions.secondquote;
+        quotesoptions[2].quote = QuotesOptions.thirdquote;
+        quotesoptions[3].quote = QuotesOptions.fourthquote;
+        quotesoptions[4].quote = QuotesOptions.fifthquote;
+        //#endregion
+
+        const updateStatus = () => {
+            let counter = 0;
+            client.user.setPresence({
+                activities: [{
+                    name: quotesoptions[counter].quote
+                }], status: thingypresencestatus
+            });
+    
+            if(++counter >= quotesoptions.length){
+                counter = 0;
+            }
+    
+            setTimeout(updateStatus, 1000 * 5)
+        }
+        updateStatus()
         
-
-        let counter = 0;
-        client.user.setPresence({
-
-        })
     } else {
         client.user.setPresence({
             activities: [{
                 name: activityname
-            }], status: status
+            }], status: thingypresencestatus
         });    
     }
     //#endregion
@@ -1217,6 +1244,19 @@ client.on('ready', () => {
         const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
         //#endregion
         
+        //#region Example status options fields ig
+        const quotesthingyfields = {
+            "firstquote": quotesoptions[0].quote,
+            "secondquote": quotesoptions[1].quote,
+            "thirdquote": quotesoptions[2].quote,
+            "fourthquote": quotesoptions[3].quote,
+            "fifthquote": quotesoptions[4].quote
+        };
+
+        //I'm extremely sorry for these I'm really fucking dumb
+        const fixedquotesig = JSON.stringify(quotesthingyfields, null, 4);
+        //#endregion
+
         try {
             console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
             console.log(clc.yellowBright('Trying to save the terminal settings...'));
@@ -1225,7 +1265,10 @@ client.on('ready', () => {
             console.log(clc.white('\n-------------------'));
             console.log(clc.yellowBright('Trying to save the channel ids...'));
             fs.writeFileSync(__dirname + "/Helper/ChannelIDS.json", fixedchannelidsig);
-            console.log(clc.green('Saved new channel ids!\nProceeding with the shutdown'));
+            console.log(clc.white('\n-------------------'));
+            console.log(clc.yellowBright('Trying to save the quotes...'));
+            fs.writeFileSync(__dirname + "/Helper/StatusOptions.json", fixedquotesig);
+            console.log(clc.green('Saved all the necessary!\nProceeding with the shutdown'));
 
         } catch (error) {
             console.error(error);

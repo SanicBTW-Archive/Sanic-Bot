@@ -45,12 +45,17 @@ var formusicstuff = [
 ]
 
 var quotesoptions = [
-
+    { quote: ''},
+    { quote: ''},
+    { quote: ''},
+    { quote: ''},
+    { quote: ''},
 ];
 
 
 module.exports = {
     executedcmdslist,
     channelidslist,
-    formusicstuff
+    formusicstuff,
+    quotesoptions
 }
