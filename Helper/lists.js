@@ -44,6 +44,10 @@ var formusicstuff = [
     { curplayingmusic: true | false}
 ]
 
+var quotesoptions = [
+
+];
+
 
 module.exports = {
     executedcmdslist,

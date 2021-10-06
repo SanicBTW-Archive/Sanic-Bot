@@ -209,7 +209,18 @@ newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');
 
         const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
         //#endregion
-        
+
+//#region Example status options fields ig
+const quotesthingyfields = {
+    "firstquote": "Nunca valoras lo que tienes hasta que lo pierdes",
+    "secondstatus": "Yo que se",
+    "thirdstatus": "Hola que tal"
+};
+
+//I'm extremely sorry for these I'm really fucking dumb
+const fixedquotesig = JSON.stringify(quotesthingyfields, null, 4);
+//#endregion
+
 try {
     if(!fs.existsSync(__dirname + '/Config/TerminalSettings.json')){
         console.log(clc.yellow("Looks like you don't have a TerminalSettings.json, creating it..."));
@@ -220,7 +231,13 @@ try {
     if(!fs.existsSync(__dirname + '/Helper/ChannelIDS.json')){
         console.log(clc.yellow("Looks like you don't have a ChannelIDS.json, creating it..."));
         fs.writeFileSync(__dirname + '/Helper/ChannelIDS.json', fixedchannelidsig);
-        console.log(clc.greenBright("Successfully created TerminalSettings.json!\n"));
+        console.log(clc.greenBright("Successfully created ChannelIDS.json!\n"));
+    }
+
+    if(!fs.existsSync(__dirname + '/Helper/StatusOptions.json')){
+        console.log(clc.yellow("Looks like you don't have a StatusOptions.json, creating it..."));
+        fs.writeFileSync(__dirname + '/Helper/StatusOptions.json', fixedquotesig);
+        console.log(clc.greenBright("Successfully created StatusOptions.json!\n"));
     }
 } catch (error){
     console.error(error);
@@ -232,6 +249,8 @@ try {
 const annchnls = require('./Helper/annchannelids.json');
 
 const TerminalSettings = require('./Config/TerminalSettings.json');
+
+const QuotesOptions = require('./Helper/StatusOptions.json');
 //#endregion
 
 const rl = readline.createInterface({
@@ -246,6 +265,7 @@ client.on('ready', () => {
     optionlist[0].state = TerminalSettings.clearconsoleoptions.state;
     optionlist[1].value = TerminalSettings.consoletitleoption.value;
     optionlist[2].state = TerminalSettings.displaytermveroption.state;
+    optionlist[3].state = TerminalSettings.autochangestatus.state;
     
     if(optionlist[0].state.includes("Enabled")){
         console.clear();
@@ -257,7 +277,7 @@ client.on('ready', () => {
         process.title = TerminalSettings.consoletitleoption.value;
     }
 
-    //Hell
+    //#region Hell like those below 
     const channelidsstuff = require('./Helper/ChannelIDS.json');
 
     channelidslist[0].name = channelidsstuff.fstchnlid.name;
@@ -323,18 +343,29 @@ client.on('ready', () => {
     channelidslist[20].name = channelidsstuff.twntochnlid.name;
     channelidslist[20].chnlid = channelidsstuff.twntochnlid.chnlid;
     //#endregion
+
+    //I'm extremely sorry for this again, I'm really sorry for everything from the settings thingy
+    if (optionlist[3].state.includes("Enabled")){
+        
+
+        let counter = 0;
+        client.user.setPresence({
+
+        })
+    } else {
+        client.user.setPresence({
+            activities: [{
+                name: activityname
+            }], status: status
+        });    
+    }
+    //#endregion
         
     console.log(clc.green(`Logged in as ${client.user.tag} (I will probably add more stuff to login thingy)\n`));
     console.log(clc.white("Type 'help' to show the list of available commands"))
 
     //Set the fucking curplayingmusic thingy to false, using the lists.js from the Helper folder
     formusicstuff[0].curplayingmusic = false;
-    
-    client.user.setPresence({
-        activities: [{
-            name: activityname
-        }], status: status
-    });
 
     //#region Terminal Commands
     rl.prompt();
@@ -612,6 +643,7 @@ client.on('ready', () => {
                 new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared\nIf enabled the console will be wiped once the bot starts', optionlist[0].state, null);
                 new SettingsMenuEntry(optionlist[1].option, 'Change the console title\nIts really basic stuff right?', null, optionlist[1].value);
                 new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version\nIf disabled it wont display the Terminal Version', optionlist[2].state, null);
+                new SettingsMenuEntry(optionlist[3].option, 'Auto changes the Bot status/presence', optionlist[3].state, null);
 
                 rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
                     switch(confirmation) {
@@ -679,6 +711,30 @@ client.on('ready', () => {
                                         })
                                     break;
 
+                                    case optionlist[3].option:
+                                        //just a copy paste of the first option lol
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[3].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[3].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                case 'disable':
+                                                    optionlist[3].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[3].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
                                     default:
                                         console.log(clc.red('Maybe you should provide an option to modify lol'));
                                         rl.prompt();
@@ -707,6 +763,7 @@ client.on('ready', () => {
                             optionlist[0].state = 'Disabled';
                             optionlist[1].value = 'Sanic Bot Terminal';
                             optionlist[2].state = 'Enabled';
+                            optionlist[3].state = 'Enabled';
                             console.log(clc.green('Terminal Settings restored! Restart the console to apply the changes'));
                             rl.prompt();
                         break;
@@ -997,11 +1054,17 @@ client.on('ready', () => {
             "option": optionlist[2].option,
             "state": optionlist[2].state,
         };
+
+        const autochangestatus = {
+            "option": optionlist[3].option,
+            "state": optionlist[3].state,
+        }
         
         const alltogetherig = {
             clearconsoleoptions,
             consoletitleoption,
             displaytermveroption,
+            autochangestatus,
         }
         
         const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
@@ -1182,6 +1245,10 @@ client.on('messageCreate', async (message) => {
 
     let args = message.content.substring(prefix.length).split(" ");
 
+    let erigai = ["si sos", "no sos"];
+
+    let randomgai2 = erigai[Math.floor(Math.random() * erigai.length)];
+
     switch(args[0])
     {
         case 'ping':
@@ -1279,40 +1346,28 @@ client.on('messageCreate', async (message) => {
                 .setAuthor(video.author.name)
                 .setURL(video.url);
 
-                await message.reply({embeds: [funnyvidembed]});
+                await message.channel.send({embeds: [funnyvidembed]});
                 formusicstuff[0].curplayingmusic = true;
 
-                player.on('idle', () => {
-                    const funnyidletimerthingy = new Discord.MessageEmbed()
-                    .setTitle('He estado sin reproducir música por 5 minutos, desconectadome!');
-                    
-                    setTimeout(() => {
-                        try {
-                            player.stop();
-                            formusicstuff[0].curplayingmusic = false;
-                        } catch (e){
-                            console.log(clc.red(e));
-                        }
-
-                        try {
-                            VoiceConnection.destroy();
-                            formusicstuff[0].curplayingmusic = false;
-                        } catch (e){
-                            console.log(clc.red(e));
-                        }
-
-                        message.channel.send({embeds: [funnyidletimerthingy]});
-                    }, 300000);
-                })
+                VoiceConnection.on(Voice.VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
+                    try {
+                        await Promise.race([
+                            Voice.entersState(connection, Voice.VoiceConnectionStatus.Signalling, 5_000),
+                            Voice.entersState(connection, Voice.VoiceConnectionStatus.Connecting, 5_000),
+                        ]);
+                    } catch (error) {
+                        connection.destroy();
+                    }
+                });
             } else {
                 const funnynoresultsfound = new Discord.MessageEmbed()
                 .setTitle('No se han encontrado resultados');
 
-                message.reply({ embeds: [funnynoresultsfound]});
+                message.channel.send({ embeds: [funnynoresultsfound]});
             }
         break;
 
-        case 'detener musica':
+        case 'desconectarse':
             const whythefuckitisntworking = message.member.voice;
             const connection = Voice.getVoiceConnection(whythefuckitisntworking.guild.id);
 
@@ -1323,13 +1378,32 @@ client.on('messageCreate', async (message) => {
                 const funnystopmusicsad = new Discord.MessageEmbed()
                 .setTitle('Parando de reproducir música :pensive:');
 
-                await message.reply({ embeds: [funnystopmusicsad]});
+                await message.channel.send({ embeds: [funnystopmusicsad]});
                 connection.destroy();
+                formusicstuff[0].curplayingmusic = true;
             }
         break;
         
-    }
+        //k mierda man mira como cambiarlo a que sea como antes osea soy gai? 
+        case 'gaycheck':
+            const funnygaiembedxd = new Discord.MessageEmbed()
+            .setTitle(randomgai2)
+            .setDescription("Se siente hermano");
 
+            const funnynotgaiembedxd = new Discord.MessageEmbed()
+            .setTitle(randomgai2)
+            .setDescription("Que suerte tienes manito");
+
+            if(randomgai2 == "si sos"){
+                message.reply({embeds: [funnygaiembedxd]});
+            } else {
+                message.reply({embeds: [funnynotgaiembedxd]});
+            }
+       
+        break;
+
+        
+    }
 })
 
 client.login(token);
