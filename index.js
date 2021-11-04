@@ -58,12 +58,18 @@ newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');
         "option": optionlist[3].option,
         "state": optionlist[3].state,
     }
+
+    const useconsole = {
+        "option": optionlist[4].option,
+        "state": optionlist[4].state,
+    }
         
     const alltogetherig = {
         clearconsoleoptions,
         consoletitleoption,
         displaytermveroption,
-        autochangestatus
+        autochangestatus,
+        useconsole
     }
         
     const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
@@ -395,7 +401,9 @@ client.on('ready', () => {
     formusicstuff[0].curplayingmusic = false;
 
     //#region Terminal Commands
-    rl.prompt();
+    if(optionlist[4].state.includes("Enabled")) 
+    //the {} are placed in a weird way, i will probably fix this later but i really lazy to and also with such a fucking rejection that i got i dont want to do anything
+{    rl.prompt();
 
     rl.on('line', (line) => {
         switch (line.trim()) {
@@ -671,6 +679,7 @@ client.on('ready', () => {
                 new SettingsMenuEntry(optionlist[1].option, 'Change the console title\nIts really basic stuff right?', null, optionlist[1].value);
                 new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version\nIf disabled it wont display the Terminal Version', optionlist[2].state, null);
                 new SettingsMenuEntry(optionlist[3].option, 'Auto changes the Bot status/presence', optionlist[3].state, null);
+                new SettingsMenuEntry(optionlist[4].option, 'Literally use this mode, warning if you disable this\nyou will need to enable it through the json file or through the bot', optionlist[4].state, null);
 
                 rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
                     switch(confirmation) {
@@ -762,6 +771,30 @@ client.on('ready', () => {
                                         })
                                     break;
 
+                                    case optionlist[4].option:
+                                        //just a copy paste of the first option lol
+                                        rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
+                                            switch(newoptstate) {
+                                                case 'enable':
+                                                    optionlist[4].state = "Enabled";
+                                                    console.log(clc.green('Successfully enabled ' + clc.white(optionlist[4].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                case 'disable':
+                                                    optionlist[4].state = "Disabled";
+                                                    console.log(clc.green('Successfully disabled ' + clc.white(optionlist[4].option)));
+                                                    rl.prompt();
+                                                break;
+
+                                                default:
+                                                    console.log(clc.red('Maybe you should provide a new state for the option'));
+                                                    rl.prompt();
+                                                break;
+                                            }
+                                        })
+                                    break;
+
                                     default:
                                         console.log(clc.red('Maybe you should provide an option to modify lol'));
                                         rl.prompt();
@@ -791,6 +824,7 @@ client.on('ready', () => {
                             optionlist[1].value = 'Sanic Bot Terminal';
                             optionlist[2].state = 'Enabled';
                             optionlist[3].state = 'Enabled';
+                            optionlist[4].state = 'Enabled';
                             console.log(clc.green('Terminal Settings restored! Restart the console to apply the changes'));
                             rl.prompt();
                         break;
@@ -1086,12 +1120,18 @@ client.on('ready', () => {
             "option": optionlist[3].option,
             "state": optionlist[3].state,
         }
+
+        const useconsole = {
+            "option": optionlist[4].option,
+            "state": optionlist[4].state,
+        }
         
         const alltogetherig = {
             clearconsoleoptions,
             consoletitleoption,
             displaytermveroption,
             autochangestatus,
+            useconsole
         }
         
         const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
@@ -1280,7 +1320,7 @@ client.on('ready', () => {
         console.log(clc.red('Closing the console...'));
         process.exit(0);
     });
-    //#endregion
+}    //#endregion
 });
 
 client.on('messageCreate', async (message) => {
@@ -1296,7 +1336,7 @@ client.on('messageCreate', async (message) => {
     {
         case 'ping':
             const pingembedsomethingfirst = new Discord.MessageEmbed()
-            .setTitle('Calculating the bot ping...');
+            .setTitle('Calculando el ping del bot...');
 
             message.reply({
                 embeds: [pingembedsomethingfirst]
@@ -1307,8 +1347,8 @@ client.on('messageCreate', async (message) => {
                 .setTitle('Pong!')
                 .addFields
                 (
-                    { name: 'Bot Latency ', value: `${msgigping}ms`, inline: true},
-                    { name: 'Bot Ping ', value: `${client.ws.ping}ms`, inline: true}
+                    { name: 'Latencia del bot ', value: `${msgigping}ms`, inline: true},
+                    { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true}
                 ).setColor('#008000');
 
                 resultMessage.edit({
@@ -1324,23 +1364,23 @@ client.on('messageCreate', async (message) => {
             executedcmdslist[2].latestexc = false;
         break;
 
-        case 'changelog':
+        case 'cambios':
             const changelogembed = new Discord.MessageEmbed()
-            .setTitle('Sanic Bot Changelog')
+            .setTitle('Cambios de Sanic Bot')
             .setColor('#0099ff')
             .addFields(
-                {name: 'New Terminal Features', value: newterminalfeatures},
-                {name: 'Terminal Bug Fixes', value: terminalbugfixes},
-                {name: 'Terminal Issues', value: terminalissues},
+                {name: 'Nuevas caracteristicas de la terminal', value: newterminalfeatures},
+                {name: 'Arreglos de bugs en la terminal', value: terminalbugfixes},
+                {name: 'Problemas de la terminal', value: terminalissues},
 
                 {name: '\u200B', value: '\u200B'},
 
-                {name: 'New Features', value: newfeatures},
-                {name: 'Bug Fixes', value: bugfixes},
-                {name: 'Issues', value: issues},
-                {name: 'To Do', value: todo}
+                {name: 'Nuevas caracteristicas', value: newfeatures},
+                {name: 'Arreglos de bugs', value: bugfixes},
+                {name: 'Problemas', value: issues},
+                {name: 'Por hacer', value: todo}
             )
-            .setFooter('Terminal Version: ' + terminalver + ' | Sanic Bot Version: ' + activityname + '\nA Full changelog will be available soon')
+            .setFooter('Versión de la terminal: ' + terminalver + ' | Versión de Sanic Bot: ' + activityname)
             message.reply({
                 embeds: [changelogembed]
             });
@@ -1428,6 +1468,7 @@ client.on('messageCreate', async (message) => {
         break;
         
         //k mierda man mira como cambiarlo a que sea como antes osea soy gai? 
+        //really sorry for this command
         case 'gaycheck':
             const funnygaiembedxd = new Discord.MessageEmbed()
             .setTitle(randomgai2)
@@ -1437,15 +1478,36 @@ client.on('messageCreate', async (message) => {
             .setTitle(randomgai2)
             .setDescription("Que suerte tienes manito");
 
+            const funnymaybegaiembedxd = new Discord.MessageEmbed()
+            .setTitle(randomgai2)
+            .setDescription("Aweno no se que decir");
+
             if(randomgai2 == "si sos"){
                 message.reply({embeds: [funnygaiembedxd]});
-            } else {
+            } else if (randomgai2 == "no sos") {
                 message.reply({embeds: [funnynotgaiembedxd]});
+            } else {
+                message.reply({embeds: [funnymaybegaiembedxd]});
             }
-       
         break;
 
-        
+        //no se porque todo tiene que ser un embed pero esta bastante guapo ngl
+        case 'ayuda':
+            const helpembed = new Discord.MessageEmbed()
+            .setTitle('Menú de ayuda')
+            .setDescription('comandos rotos a veces supongo')
+            .addFields(
+                {name: 'ping', value: 'pa ver si funciona o esta activo supongo'},
+                {name: 'cambios', value: 'para ver los ultimos cambios/actualizaciones del bot'},
+                {name: 'reproducir <cosa que buscar>', value: 'para reproducir musica, a veces crashea el bot debido a que se salta 5 frames de la cancion'},
+                {name: 'desconectarse', value: 'desconectarse y parar de reproducir musica'},
+                {name: 'gaycheck (prob sea eliminado)', value: 'deberia ser random pero no parece serlo'}
+            )
+            .setFooter('a');
+            message.reply({
+                embeds: [helpembed]
+            });
+        break;
     }
 })
 

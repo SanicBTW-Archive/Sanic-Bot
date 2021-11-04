@@ -9,6 +9,7 @@ var optionlist = [
     { option: 'console title', state: null, value: 'Sanic Bot Terminal'},
     { option: 'display terminal version', state: 'Enabled', value: null},
     { option: 'auto change status', state: 'Enabled', value: null},
+    { option: 'use console mode', state: 'Enabled', value: null},
 ];
 
 class SettingsMenuEntry {

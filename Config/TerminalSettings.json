@@ -13,6 +13,10 @@
     },
     "autochangestatus": {
         "option": "auto change status",
-        "state": "Enabled"
+        "state": "Disabled"
+    },
+    "useconsole": {
+        "option": "use console mode",
+        "state": "Disabled"
     }
 }
