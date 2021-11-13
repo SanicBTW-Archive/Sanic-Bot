@@ -4,7 +4,8 @@
   "description": "a stupid bot for my friends or something i guess",
   "main": "index.js",
   "scripts": {
-    "iniciar": ""
+    "start": "node index.js",
+    "register": "node registertoken.js"
   },
   "author": "Sanic",
   "license": "ISC",

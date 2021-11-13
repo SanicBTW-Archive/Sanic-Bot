@@ -26,7 +26,9 @@ const { HelpMenuEntry } = require('./Commands/helpmenu');
 const { SettingsMenuEntry, optionlist} = require('./Commands/settingsmenu');
 const { SendMenuHelp } = require('./Commands/sendmenu');
 
-const { token, prefix, activityname, thingypresencestatus, 
+const {token} = require('./Config/DiscToken.json');
+
+const {prefix, activityname, thingypresencestatus, 
 mainaccowner, altaccowner} = require('./Config/DiscordSettings.json');
     
 const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff, quotesoptions} = require('./Helper/lists');

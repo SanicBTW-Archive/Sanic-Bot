@@ -17,6 +17,6 @@
     },
     "useconsole": {
         "option": "use console mode",
-        "state": "Disabled"
+        "state": "Enabled"
     }
 }
