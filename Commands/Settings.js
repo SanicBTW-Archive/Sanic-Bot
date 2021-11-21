@@ -2,14 +2,16 @@
 //figure out some way to make some list to save settings temp and then 
 //save it into a json file that will load from it automatically ig
 const clc = require('cli-color');
+const { Log } = require('../Helper/Log');
 
 //idk why i did it here but ig it fits here
 var optionlist = [
     { option: 'clear console on startup', state: 'Disabled', value: null},
     { option: 'console title', state: null, value: 'Sanic Bot Terminal'},
     { option: 'display terminal version', state: 'Enabled', value: null},
-    { option: 'auto change status', state: 'Enabled', value: null},
+    { option: 'auto change status', state: 'Disabled', value: null},
     { option: 'use console mode', state: 'Enabled', value: null},
+    { option: 'show debug logs', state: 'Disabled', value: null},
 ];
 
 class SettingsMenuEntry {

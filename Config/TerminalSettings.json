@@ -18,5 +18,9 @@
     "useconsole": {
         "option": "use console mode",
         "state": "Enabled"
+    },
+    "debuglogs": {
+        "option": "show debug logs",
+        "state": "Disabled"
     }
 }

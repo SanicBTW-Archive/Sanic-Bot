@@ -52,10 +52,14 @@ var quotesoptions = [
     { quote: ''},
 ];
 
+var loaderstuff = [
+    { saidloaded: false}
+];
 
 module.exports = {
     executedcmdslist,
     channelidslist,
     formusicstuff,
-    quotesoptions
+    quotesoptions,
+    loaderstuff
 }
