@@ -14,6 +14,8 @@ class Load {
         var LoadedQuotesCount = 0;
         var LoadedSettingsCount = 0;
 
+        var SettingsLoaded = false; //Kind of dumb ngl
+
         if(loaderstuff[0].saidloaded == false){
             //Dumb fix but it works
             new Log("Trying to load stuff...", 0);
@@ -182,48 +184,6 @@ class Load {
                 new Log(`Finished loading ${LoadedIDSCount} Channel IDS`, 1);
             }
         }
-        else if (wtload == "Quotes")
-        {
-            new Log("Loading Quotes...", 0);
-
-            const QuotesOptions = require('./StatusOptions.json');
-
-            quotesoptions[0].quote = QuotesOptions.firstquote;
-
-            if(QuotesOptions.firstquote.length > 1){
-                LoadedQuotesCount ++;
-            }
-
-            quotesoptions[1].quote = QuotesOptions.secondquote;
-
-            if(QuotesOptions.secondquote.length > 1){
-                LoadedQuotesCount ++;
-            }
-
-            quotesoptions[2].quote = QuotesOptions.thirdquote;
-
-            if(QuotesOptions.thirdquote.length > 1){
-                LoadedQuotesCount ++;
-            }
-
-            quotesoptions[3].quote = QuotesOptions.fourthquote;
-
-            if(QuotesOptions.fourthquote.length > 1){
-                LoadedQuotesCount ++;
-            }
-
-            quotesoptions[4].quote = QuotesOptions.fifthquote;
-
-            if(QuotesOptions.fifthquote.length > 1){
-                LoadedQuotesCount ++;
-            }
-
-            if(LoadedQuotesCount == 0){
-                new Log(`Couldn't find any Quote`, 3);
-            } else {
-                new Log(`Finished loading ${LoadedQuotesCount} Quotes`, 1);
-            }
-        }
         else if (wtload == "Options")
         {
             new Log("Loading Settings...", 0);
@@ -246,20 +206,14 @@ class Load {
                 LoadedSettingsCount ++;
             }
 
-            optionlist[3].state = TerminalSettings.autochangestatus.state;
-
-            if(TerminalSettings.autochangestatus.state.length > 1){
-                LoadedSettingsCount ++;
-            }
-
             //Real fucking dumb
-            optionlist[4].state = TerminalSettings.useconsole.state;
+            optionlist[3].state = TerminalSettings.useconsole.state;
 
             if(TerminalSettings.useconsole.state.length > 1){
                 LoadedSettingsCount ++;
             }
 
-            optionlist[5].state = TerminalSettings.debuglogs.state;
+            optionlist[4].state = TerminalSettings.debuglogs.state;
 
             if(TerminalSettings.debuglogs.state.length > 1){
                 LoadedSettingsCount ++;
@@ -267,6 +221,7 @@ class Load {
 
             //cant be impossible to have 0 settings loaded lol
             new Log(`Finished loading ${LoadedSettingsCount} Settings`, 1);
+            SettingsLoaded = true;
         }
     }
 }

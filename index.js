@@ -36,13 +36,12 @@ newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');
 
 new CheckFiles("TerminalSettings");
 new CheckFiles("ChannelIDS");
-new CheckFiles("Quotes"); //Check Todo lol
 
 //#region More Imports due to code order execution
 //I have to load this after the check files stuff due to the code execution order
 const TerminalSettings = require('./Config/TerminalSettings.json');
 const { Load } = require('./Helper/Loader');
-const { SendMenuHelp, SendHelper } = require('./Commands/Send');
+const { SendMenuHelp, SendHelper, AddHelper } = require('./Commands/Send');
 
 //#endregion
 
@@ -64,33 +63,11 @@ client.on('ready', () => {
 
     new Load("Channel IDS");
 
-    //I'm extremely sorry for this again, I'm really sorry for everything from the settings thingy
-    if (optionlist[3].state.includes("Enabled")){
-        new Load("Quotes");
-
-        const updateStatus = () => {
-            let counter = 0;
-            client.user.setPresence({
-                activities: [{
-                    name: quotesoptions[counter].quote
-                }], status: thingypresencestatus
-            });
-    
-            if(++counter >= quotesoptions.length){
-                counter = 0;
-            }
-    
-            setTimeout(updateStatus, 1000 * 5)
-        }
-        updateStatus()
-        
-    } else {
-        client.user.setPresence({
-            activities: [{
-                name: activityname
-            }], status: thingypresencestatus
-        });    
-    }
+    client.user.setPresence({
+        activities: [{
+            name: activityname
+        }], status: thingypresencestatus
+    });
     //#endregion
     
     new Log(`Logged in as ${client.user.tag}`, 0);
@@ -99,7 +76,7 @@ client.on('ready', () => {
     formusicstuff[0].curplayingmusic = false;
 
     //#region Terminal Commands
-    if(optionlist[4].state.includes("Enabled")) 
+    if(optionlist[3].state.includes("Enabled")) 
     //the {} are placed in a weird way, i will probably fix this someday or rewrite the entire code
     //but im really lazy to and also with such a fucking rejection that i got i dont want to do anything
     {   
@@ -163,8 +140,6 @@ client.on('ready', () => {
                     else if(client.ws.ping > "100")
                         console.log('The current ping is: ' + clc.yellow(`${client.ws.ping}ms`))
                     else if (client.ws.ping < "100")
-                        console.log('The current ping is: ' + clc.green(`${client.ws.ping}ms`)) 
-                    console.log('The current ping is: ' + clc.green(`${client.ws.ping}ms`)) 
                         console.log('The current ping is: ' + clc.green(`${client.ws.ping}ms`)) 
                 break;
 
@@ -305,9 +280,8 @@ client.on('ready', () => {
                     new SettingsMenuEntry(optionlist[0].option, 'When started up the console will be cleared\nIf enabled the console will be wiped once the bot starts', optionlist[0].state, null);
                     new SettingsMenuEntry(optionlist[1].option, 'Change the console title\nIts really basic stuff right?', null, optionlist[1].value);
                     new SettingsMenuEntry(optionlist[2].option, 'Display the Terminal Version\nIf disabled it wont display the Terminal Version', optionlist[2].state, null);
-                    new SettingsMenuEntry(optionlist[3].option, 'Auto changes the Bot status/presence', optionlist[3].state, null);
-                    new SettingsMenuEntry(optionlist[4].option, 'Literally use this mode, warning if you disable this\nyou will need to enable it through the json file or through the bot', optionlist[4].state, null);
-                    new SettingsMenuEntry(optionlist[5].option, 'Show debug logs when using the bot', optionlist[5].state, null);
+                    new SettingsMenuEntry(optionlist[3].option, 'Literally toggles the console usage, warning if you disable this\nyou will need to enable it through the json file or through the bot', optionlist[4].state, null);
+                    new SettingsMenuEntry(optionlist[4].option, 'Show debug logs when using the bot', optionlist[5].state, null);
 
                     rl.question('Do you wish to modify some setting? (y/n) ', (confirmation) => {
                         switch(confirmation) {
@@ -423,30 +397,6 @@ client.on('ready', () => {
                                             })
                                         break;
 
-                                        case optionlist[5].option:
-                                            //just a copy paste of the first option lol
-                                            rl.question('Do you want to enable or disable this option? ', (newoptstate) => {
-                                                switch(newoptstate) {
-                                                    case 'enable':
-                                                        optionlist[5].state = "Enabled";
-                                                        console.log(clc.green('Successfully enabled ' + clc.white(optionlist[5].option)));
-                                                        rl.prompt();
-                                                    break;
-
-                                                    case 'disable':
-                                                        optionlist[5].state = "Disabled";
-                                                        console.log(clc.green('Successfully disabled ' + clc.white(optionlist[5].option)));
-                                                        rl.prompt();
-                                                    break;
-
-                                                    default:
-                                                        console.log(clc.red('Maybe you should provide a new state for the option'));
-                                                        rl.prompt();
-                                                    break;
-                                                }
-                                            })
-                                        break;
-
                                         default:
                                             console.log(clc.red('Maybe you should provide an option to modify lol'));
                                             rl.prompt();
@@ -475,9 +425,8 @@ client.on('ready', () => {
                                 optionlist[0].state = 'Disabled';
                                 optionlist[1].value = 'Sanic Bot Terminal';
                                 optionlist[2].state = 'Enabled';
-                                optionlist[3].state = 'Disabled';
-                                optionlist[4].state = 'Enabled';
-                                optionlist[5].state = 'Disable';
+                                optionlist[3].state = 'Enabled';
+                                optionlist[4].state = 'Disabled';
                                 new Log("Terminal Settings Restored! Restart the console to apply the changes", 1);
                                 rl.prompt();
                             break;
@@ -494,17 +443,19 @@ client.on('ready', () => {
                     })
                 break;
 
-            case 'add channelid':
-                rl.question('Please enter the Channel Name: ', (chnlidname) => {
-                    if(chnlidname.length > 0){
-                        rl.question('Please enter the Channel ID: ', (chnlid) => {
-                            if(chnlid.length = 18){
-                                rl.question('Where do you want to save this info? (0 to 20): ', (wheretosave) => {
-                                    switch(wheretosave){
-                                        case "0":
-                                            channelidslist[0].name = chnlidname.toString();
+                case 'add channelid':
+                    rl.question('Please enter the Channel Name: ', (chnlidname) => {
+                        if(chnlidname.length > 0){
+                            rl.question('Please enter the Channel ID: ', (chnlid) => {
+                                if(chnlid.length = 18){
+                                    rl.question('Where do you want to save this info? (0 to 20): ', (wheretosave) => {
+                                        switch(wheretosave){
+                                            case "0":
+                                                new AddHelper(channelidslist[0], chnlidname, chnlid);
+                                            /*
+                                                channelidslist[0].name = chnlidname.toString();
                                             channelidslist[0].chnlid = chnlid.toString();
-                                            console.log(clc.green("Successfully saved the info to the index 0"));
+                                            console.log(clc.green("Successfully saved the info to the index 0"));*/
                                             rl.prompt();
                                             break;
 
@@ -942,19 +893,6 @@ client.on('ready', () => {
         const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
         //#endregion
         
-        //#region Example status options fields ig
-        const quotesthingyfields = {
-            "firstquote": quotesoptions[0].quote,
-            "secondquote": quotesoptions[1].quote,
-            "thirdquote": quotesoptions[2].quote,
-            "fourthquote": quotesoptions[3].quote,
-            "fifthquote": quotesoptions[4].quote
-        };
-
-        //I'm extremely sorry for these I'm really fucking dumb
-        const fixedquotesig = JSON.stringify(quotesthingyfields, null, 4);
-        //#endregion
-
         try {
             console.log(clc.white('\n-------------------')); //Idk why the fuck did i do this but looks cool ig lol
             console.log(clc.yellowBright('Trying to save the terminal settings...'));
@@ -964,8 +902,6 @@ client.on('ready', () => {
             console.log(clc.yellowBright('Trying to save the channel ids...'));
             fs.writeFileSync(__dirname + "/Helper/ChannelIDS.json", fixedchannelidsig);
             console.log(clc.white('\n-------------------'));
-            console.log(clc.yellowBright('Trying to save the quotes...'));
-            fs.writeFileSync(__dirname + "/Helper/StatusOptions.json", fixedquotesig);
             console.log(clc.green('Saved all the necessary!\nProceeding with the shutdown'));
 
         } catch (error) {

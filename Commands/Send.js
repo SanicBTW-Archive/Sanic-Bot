@@ -53,4 +53,20 @@ class SendHelper {
     }
 }
 
-module.exports = { SendMenuHelp, SendHelper }
+class AddHelper {
+    //I doubt this will work tho
+    //It goes here because its part of the channel id stuff, i will probably transfer it to helper someday or i guess it wont happen
+    constructor(slot, channelname, channelid){
+        if(debuglogs.state == "Enabled"){
+            new Log("Slot where the channel id and name will be saved: " + slot, 2);
+            new Log("Slot.name: " + slot.name, 2);
+            new Log("Slot.chnlid: " + slot.chnlid, 2);
+            new Log("Channel Name that will be saved in the slot: " + channelname, 2);
+            new Log("Channel ID that will be saved in the slot: " + channelid);
+        }
+
+        
+    }
+}
+
+module.exports = { SendMenuHelp, SendHelper, AddHelper }

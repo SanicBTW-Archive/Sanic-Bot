@@ -201,20 +201,6 @@ const allchannelidstogether = {
 const fixedchannelidsig = JSON.stringify(allchannelidstogether, null, 4);
 //#endregion
 
-//#region Example status options fields ig 
-//Rename the region field
-const quotesthingyfields = {
-    "firstquote": quotesoptions[0].quote,
-    "secondquote": quotesoptions[1].quote,
-    "thirdquote": quotesoptions[2].quote,
-    "fourthquote": quotesoptions[3].quote,
-    "fifthquote": quotesoptions[4].quote
-};
-
-//I'm extremely sorry for these I'm really fucking dumb
-const fixedquotesig = JSON.stringify(quotesthingyfields, null, 4);
-//#endregion
-
 class CheckFiles {
     constructor(wtcheck){
         this.wtcheck = wtcheck; //wtcheck = what to check
@@ -236,17 +222,6 @@ class CheckFiles {
                     new Log("You don't seem to have the Channel IDS File, creating it...", 3);
                     fs.writeFileSync(chnlidfiledir, fixedchannelidsig);
                     new Log("Created ChannelIDS.json", 1);
-                }
-            }
-            catch (ex){
-                new Log(ex, 4);
-            }
-        } else if (wtcheck == "Quotes"){
-            try{
-                if(!fs.existsSync(quotdir)){
-                    new Log("You don't seem to have the Quotes File, creating it...", 3);
-                    fs.writeFileSync(quotdir, fixedquotesig);
-                    new Log("Created StatusOptions.json", 1);
                 }
             }
             catch (ex){
