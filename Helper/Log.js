@@ -13,7 +13,7 @@ class Log {
         const succcolor = clc.cyan;
         const debugcolor = clc.cyanBright;
         const warningcolor = clc.yellowBright;
-        const errorcolor = clc.redBright + clc.bgRed;
+        const errorcolor = clc.redBright.bold;
 
         var LogLevels = [
             { level: "Info"},

@@ -9,7 +9,6 @@ const { Log } = require('./Log');
 const path = require('path');
 const termsetdir = path.join(__dirname, '..', "Config"  ,'TerminalSettings.json');
 const chnlidfiledir = path.join(__dirname, 'ChannelIDS.json');
-const quotdir = path.join(__dirname, 'StatusOptions.json');
 
 //#region Terminal Settings Fields
 const clearconsoleoptions = {
@@ -27,33 +26,27 @@ const displaytermveroption = {
     "state": optionlist[2].state,
 };
 
-const autochangestatus = {
+const useconsole = {
     "option": optionlist[3].option,
     "state": optionlist[3].state,
 }
 
-const useconsole = {
-    "option": optionlist[4].option,
-    "state": optionlist[4].state,
-}
-
 const debuglogs = {
-    "option": optionlist[5].option,
-    "state": optionlist[5].state
+    "option": optionlist[4].option,
+    "state": optionlist[4].state
 }
     
 const alltogetherig = {
     clearconsoleoptions,
     consoletitleoption,
     displaytermveroption,
-    autochangestatus,
     useconsole,
     debuglogs
 }
     
 const fixedoptionsig = JSON.stringify(alltogetherig, null, 4);
 //#endregion
-        
+
 //#region New ChannelIDS.json file fields
 const fstchnlid = {
     "name": channelidslist[0].name,

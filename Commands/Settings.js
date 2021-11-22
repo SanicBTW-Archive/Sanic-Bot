@@ -27,7 +27,7 @@ class SettingsMenuEntry {
         else if (curstate == "Inactive" || curstate == "Off" || curstate == "Disabled" && value == null) {
             console.log(clc.cyan(option) + " " + clc.white(description) + "\nCurrent state: " + clc.red(curstate));
         }
-         
+        
         else if (curstate == null && value.length > 0){
             console.log(clc.cyan(option) + " " + clc.white(description) + "\nCurrent value: " + clc.white(value)); 
         }
