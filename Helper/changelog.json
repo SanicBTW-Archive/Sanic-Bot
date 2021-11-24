@@ -1,12 +1,3 @@
 {
-    "terminalver": "Beta 4.6.1",
-    "newterminalfeatures": "Creation of files when they don't exist is back,\n10 more slots on the new channel id system",
-    "terminalbugfixes": "None",
-    "terminalissues": "None",
-
-    "newfeatures": "None",
-    "bugfixes": "None",
-    "issues": "None",
-
-    "todo": "Merge all the config stuff in one file or something\nShould add more commands or something"
+    "terminalver": "null"
 }

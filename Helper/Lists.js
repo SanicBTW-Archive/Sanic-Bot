@@ -1,9 +1,12 @@
 //Used to save values for the lastexecuted command for the terminal
-//{ sprcmd: 'shutdown', exectimes: 0, lastusertoexec: 'user', latestexc: false}
+//{ sprcmd: '', exectimes: 0, lastusertoexec: 'user', latestexc: false},
 var executedcmdslist = [
     { sprcmd: 'ping', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'changelog', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'play', exectimes: 0, lastusertoexec: 'user', latestexc: false}
+    { sprcmd: 'play', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'stop', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'ayuda', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'apagar', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'preguntarcons', exectimes: 0, lastusertoexec: 'user', latestexc: false}
 ];
 
 //Really bad way to store a value but meh

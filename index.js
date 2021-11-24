@@ -30,8 +30,7 @@ const { prefix, activityname, thingypresencestatus,
 
 const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff, quotesoptions } = require('./Helper/Lists');
 
-const { terminalver, newterminalfeatures, terminalbugfixes, terminalissues,
-    newfeatures, bugfixes, issues, todo, } = require('./Helper/changelog.json');
+const { terminalver } = require('./Helper/changelog.json');
 //#endregion    
 
 new CheckFiles("TerminalSettings");
@@ -43,8 +42,15 @@ const TerminalSettings = require('./Config/TerminalSettings.json');
 const { Load } = require('./Helper/Loader');
 const { SendMenuHelp, SendHelper } = require('./Commands/Send');
 const { AddHelper, RestoreHelper } = require('./Helper/ChannelIDS');
+const { RegLastCMD, LastExecMenu } = require('./Commands/LastExec');
 
 //#endregion
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: '> '
+});
 
 //#endregion
 
@@ -78,15 +84,7 @@ client.on('ready', () => {
 
     //#region Terminal Commands
     if (optionlist[3].state.includes("Enabled"))
-    //the {} are placed in a weird way, i will probably fix this someday or rewrite the entire code
-    //but im really lazy to and also with such a fucking rejection that i got i dont want to do anything
     {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            prompt: '> '
-        });
-
         new Log("Type 'help' to show the list of available commands", 0);
 
         rl.prompt();
@@ -557,6 +555,10 @@ client.on('ready', () => {
                     })
                     break;
 
+                case 'last executed':
+                    new LastExecMenu();
+                    break;
+
                 default:
                     console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`)));
                     break;
@@ -799,42 +801,15 @@ client.on('messageCreate', async (message) => {
                     embeds: [pingembedsomethingsecond]
                 });
             });
-
+            
+            new RegLastCMD(executedcmdslist[0], message, true);
+            /*
             executedcmdslist[0].exectimes++;
             executedcmdslist[0].lastusertoexec = message.author.tag;
 
             executedcmdslist[0].latestexc = true;
             executedcmdslist[1].latestexc = false;
-            executedcmdslist[2].latestexc = false;
-            break;
-
-        case 'cambios':
-            const changelogembed = new Discord.MessageEmbed()
-                .setTitle('Cambios de Sanic Bot')
-                .setColor('#0099ff')
-                .addFields(
-                    { name: 'Nuevas caracteristicas de la terminal', value: newterminalfeatures },
-                    { name: 'Arreglos de bugs en la terminal', value: terminalbugfixes },
-                    { name: 'Problemas de la terminal', value: terminalissues },
-
-                    { name: '\u200B', value: '\u200B' },
-
-                    { name: 'Nuevas caracteristicas', value: newfeatures },
-                    { name: 'Arreglos de bugs', value: bugfixes },
-                    { name: 'Problemas', value: issues },
-                    { name: 'Por hacer', value: todo }
-                )
-                .setFooter('Versión de la terminal: ' + terminalver + ' | Versión de Sanic Bot: ' + activityname)
-            message.reply({
-                embeds: [changelogembed]
-            });
-
-            executedcmdslist[1].exectimes++;
-            executedcmdslist[1].lastusertoexec = message.author.tag;
-
-            executedcmdslist[0].latestexc = false;
-            executedcmdslist[1].latestexc = true;
-            executedcmdslist[2].latestexc = false;
+            executedcmdslist[2].latestexc = false;*/
             break;
 
         case 'play':
@@ -883,6 +858,7 @@ client.on('messageCreate', async (message) => {
 
                 message.channel.send({ embeds: [funnynoresultsfound] });
             }
+            new RegLastCMD(executedcmdslist[1], message);
             break;
 
         case 'stop':
@@ -900,23 +876,107 @@ client.on('messageCreate', async (message) => {
                 connection.destroy();
                 formusicstuff[0].curplayingmusic = true;
             }
+            new RegLastCMD(executedcmdslist[2], message);
             break;
 
         //no se porque todo tiene que ser un embed pero esta bastante guapo ngl
         case 'ayuda':
             const helpembed = new Discord.MessageEmbed()
                 .setTitle('Menú de ayuda')
-                .setDescription('comandos rotos a veces supongo')
+                .setDescription('comandos rotos a veces supongo\n[] - Opcional, <> - Requerido')
                 .addFields(
                     { name: 'ping', value: 'pa ver si funciona o esta activo supongo' },
                     { name: 'cambios', value: 'para ver los ultimos cambios/actualizaciones del bot' },
                     { name: 'play <cosa que buscar/link>', value: 'para reproducir musica, a veces crashea el bot debido a que se salta 5 frames de la cancion' },
                     { name: 'stop', value: 'desconectarse y parar de reproducir musica' },
+                    { name: 'apagar [-f]', value: 'manda peti a la consola para apagar el bot, -f fuerza el apagado'},
+                    { name: 'preguntarcons <pregunta>', value: 'pregunta a la consola lo que quieras'}
                 )
                 .setFooter('a');
             message.reply({
                 embeds: [helpembed]
             });
+            new RegLastCMD(executedcmdslist[3], message);
+            break;
+
+        case 'apagar':
+            if(!args[1]){
+                const shutdownconfsent = new Discord.MessageEmbed()
+                .setDescription("Una confirmación para apagar el bot fue enviada a la terminal, esperando a la respuesta");
+
+                message.reply({
+                    embeds: [shutdownconfsent]
+                }).then(resultMessage => {
+                    const shutdownconftrue = new Discord.MessageEmbed()
+                    .setDescription("El apagado fue confirmado por la terminal")
+                    .setColor('#008000');
+    
+                    const shutdownconffalse = new Discord.MessageEmbed()
+                    .setDescription("El apagado fue rechazado por la terminal")
+                    .setColor('#FF0000');
+                    
+                    new Log("The following user wants to shutdown the bot: " + message.author.tag, 0);
+                    rl.question("Do you want to shutdown the bot? (y/n) ", (confirmation) => {
+                        switch(confirmation)
+                        {
+                            case 'y':
+                                resultMessage.edit({
+                                    embeds: [shutdownconftrue]
+                                }).then(() => {
+                                    if(optionlist[4].state == "Enabled" || TerminalSettings.debuglogs.state == "Enabled"){
+                                        new Log("Closing Readline", 2);
+                                    }
+                                    rl.close();
+                                })
+                                break;
+
+                            default:
+                                resultMessage.edit({
+                                    embeds: [shutdownconffalse]
+                                }).then(() => {
+                                    rl.prompt();
+                                })
+                                break;
+                        }
+                    })
+                })
+            } else if (args[1] === "-f") {
+                if(mainaccowner || altaccowner){
+                    new Log("The following user is forcing the bot shutdown: " + message.author.tag, 0);
+                    const shutdownforce = new Discord.MessageEmbed()
+                    .setDescription("Forzando el apagado del bot, sin confirmación de la terminal (20s)");
+    
+                    message.reply({
+                        embeds: [shutdownforce]
+                    }).then((resultMessage) => {
+                        new Log("Shutting down the bot in 20s", 3);
+                        setTimeout(function(){
+                            rl.close();
+                        }, 20000)
+                    })
+                }
+            } else {
+                new Log("The following user tried to force the bot shutdown: " + message.author.tag, 0);
+                message.reply("No tienes permiso para apagar el bot");
+            }
+            new RegLastCMD(executedcmdslist[4], message);
+            break;
+
+        case 'preguntarcons':
+            if(args[1]) {
+                rl.question("The following user " + message.author.tag + " asked: " + message.content.replace("s?preguntarcons ", "") + " ", (respuesta) => {
+                    new SendHelper(message.channelId, "Enviado desde la consola: " + respuesta, client);
+                    rl.prompt();
+                });
+            }
+            new RegLastCMD(executedcmdslist[5], message);
+            break;
+        case 'purge':
+            if(args[1]) {
+                if(mainaccowner || altaccowner){
+                    message.channel.bulkDelete(args[1]);
+                }
+            }
             break;
     }
 })
