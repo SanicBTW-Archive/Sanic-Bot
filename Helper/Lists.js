@@ -6,7 +6,10 @@ var executedcmdslist = [
     { sprcmd: 'stop', exectimes: 0, lastusertoexec: 'user', latestexc: false},
     { sprcmd: 'ayuda', exectimes: 0, lastusertoexec: 'user', latestexc: false},
     { sprcmd: 'apagar', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'preguntarcons', exectimes: 0, lastusertoexec: 'user', latestexc: false}
+    { sprcmd: 'preguntar consola', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'purge', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'add channelid', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+    { sprcmd: 'repetir', exectimes: 0, lastusertoexec: 'user', latestexc: false}, //funny thing is that i aint doing shit for the args, global command only
 ];
 
 //Really bad way to store a value but meh
@@ -44,7 +47,7 @@ var channelidslist = [
 
 //I'm extremely fucking sorry for this, I don't know any other way to check if I'm playing music
 var formusicstuff = [
-    { curplayingmusic: true | false}
+    { curplayingmusic: true | false, repeat: false, repeaturl: null}
 ]
 
 var quotesoptions = [

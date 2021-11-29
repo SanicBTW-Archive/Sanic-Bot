@@ -1,5 +1,3 @@
-//Redo the channelids system in a way that it isnt a lot of useless code lol
-
 //#region Discord stuff
 const Discord = require('discord.js');
 const intents = new Discord.Intents(32767);
@@ -26,7 +24,7 @@ const { CheckFiles } = require('./Helper/CheckFiles');
 const { token } = require('./Config/DiscToken.json');
 
 const { prefix, activityname, thingypresencestatus,
-    mainaccowner, altaccowner } = require('./Config/DiscordSettings.json');
+    mainaccowner, oldmainaccowner } = require('./Config/DiscordSettings.json');
 
 const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff, quotesoptions } = require('./Helper/Lists');
 
@@ -78,6 +76,7 @@ client.on('ready', () => {
     //#endregion
 
     new Log(`Logged in as ${client.user.tag}`, 0);
+    new Log("Currently using a custom command handler", 0);
 
     //Set the fucking curplayingmusic thingy to false, using the lists.js from the Helper folder
     formusicstuff[0].curplayingmusic = false;
@@ -775,53 +774,371 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', async (message) => {
+    //Workin on a custom command handler thingy ig, not the best one neither the worst
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     let args = message.content.substring(prefix.length).split(" ");
 
-    switch (args[0]) {
-        case 'ping':
-            const pingembedsomethingfirst = new Discord.MessageEmbed()
-                .setTitle('Calculando el ping del bot...');
+    if(args[0] === "ping")
+    {
+        const calcping = new Discord.MessageEmbed()
+        .setTitle('Calculando el ping del bot...');
 
-            message.reply({
-                embeds: [pingembedsomethingfirst]
-            }).then(resultMessage => {
-                const msgigping = resultMessage.createdTimestamp - message.createdTimestamp
+        message.reply({
+            embeds: [calcping]
+        }).then(resultMessage => {
+            const msgpingsomething = resultMessage.createdTimestamp - message.createdTimestamp;
 
-                const pingembedsomethingsecond = new Discord.MessageEmbed()
-                    .setTitle('Pong!')
-                    .addFields
-                    (
-                        { name: 'Latencia del bot ', value: `${msgigping}ms`, inline: true },
-                        { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true }
-                    ).setColor('#008000');
+            const pingresult = new Discord.MessageEmbed()
+            .setTitle('Pong! :ping_pong:')
+            .addFields
+            (
+                { name: 'Latencia del bot ', value: `${msgpingsomething}ms`, inline: true},
+                { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true}
+            ).setColor('#008000');
 
-                resultMessage.edit({
-                    embeds: [pingembedsomethingsecond]
-                });
+            resultMessage.edit({
+                embeds: [pingresult]
             });
-            
-            new RegLastCMD(executedcmdslist[0], message, true);
-            /*
-            executedcmdslist[0].exectimes++;
-            executedcmdslist[0].lastusertoexec = message.author.tag;
+        });
 
-            executedcmdslist[0].latestexc = true;
-            executedcmdslist[1].latestexc = false;
-            executedcmdslist[2].latestexc = false;*/
-            break;
+        new RegLastCMD(executedcmdslist[0], message);
+    }
+    else if (args[0] === "play")
+    {
+        //why is this crashing?
+        //also fun fact, this code is really bad and its based off a cheat sheet from a guide
+        //some of the code was also based off some video i found about making a bot to play songs
+        //also it has more code designed for older versions of discord.js and etc
+        //guess ill have to fix this sooner or later
+        const { channel } = message.member.voice;
 
-        case 'play':
+        if (!channel) return message.reply('Necesitas estar en un canal de voz!');
+        const permissions = channel.permissionsFor(message.client.user);
+        if(!permissions.has('CONNECT')) return message.reply('No tienes los permisos necesarios');
+        if(!permissions.has('SPEAK')) return message.reply('No tienes los permisos necesarios');
+        if(!args[1]) return message.reply('Necesitas poner un argumento más (Link de youtube o algo para buscar)');
+        let VoiceConnection = Voice.joinVoiceChannel
+        ({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator
+        });
+
+        const videoFinder = async (query) => {
+            const videoResult = await ytSearch(query);
+
+            return (videoResult.videos.length > 1) ? videoResult.videos[0] : null;
+        }
+
+        const video = await videoFinder(args.join(' '));
+
+        if(video)
+        {
+            const streamurl = ytdl(video.url, { filter: 'audioonly'});
+
+            if(formusicstuff[0].repeat == true) formusicstuff[0].repeaturl = video.url;
+            const resource = Voice.createAudioResource(streamurl, {inlineVolume: true});
+            resource.volume.setVolume(0.2);
+            const player = Voice.createAudioPlayer();
+            VoiceConnection.subscribe(player);
+            player.play(resource);
+
+            const funnyvidembed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`Ahora reproduciendo ***${video.title}***`)
+            .setDescription(video.description)
+            .setAuthor(video.author.name)
+            .setURL(video.url)
+            .setFooter(`Música solicitada por ${message.author.tag} | Cambiando este mensaje`);
+
+            await message.channel.send({embeds: [funnyvidembed]});
+            formusicstuff[0].curplayingmusic = true;
+        } else {
+            const funnynoresultsfound = new Discord.MessageEmbed()
+            .setTitle('No se ha encontrado ningún resultado relacionado a: ' + message.toString().replace("s?play ", ""));
+            message.channel.send({embeds: [funnynoresultsfound]});
+        }
+        new RegLastCMD(executedcmdslist[1], message);
+
+    }
+    else if (args[0] === "stop")
+    {
+        const whythefuckitisntworking = message.member.voice;
+        const connection = Voice.getVoiceConnection(whythefuckitisntworking.guild.id);
+
+        if(!whythefuckitisntworking.channel) return message.reply('Necesitas estar en un canal de voz para poder parar la música');
+        //I'm sorry for this if condition
+        if(formusicstuff[0].curplayingmusic == false) return message.reply('No estoy reproduciendo música actualmente');
+        if(Voice.VoiceConnectionStatus.Ready || formusicstuff[0].curplayingmusic == true)
+        {
+            const funnystopmusic = new Discord.MessageEmbed()
+            .setTitle('Parando la reproducción de la música actual :pensive:')
+            .setFooter('Solicitado por: ' + message.author.tag);
+
+            await message.channel.send({ embeds: [funnystopmusic]});
+            connection.destroy();
+            formusicstuff[0].curplayingmusic = false;
+        }
+        new RegLastCMD(executedcmdslist[2], message);
+    }
+    else if (args[0] === "ayuda")
+    {
+        //prob gonna do custom menu shit
+        const helpembed = new Discord.MessageEmbed()
+        .setTitle('Menú de ayuda')
+        .setDescription('comandos rotos a veces supongo\n[] - Opcional, <> - Requerido')
+        .addFields(
+            { name: 'ping', value: 'pa ver si funciona o esta activo supongo' },
+            { name: 'cambios', value: 'para ver los ultimos cambios/actualizaciones del bot' },
+            { name: 'play <cosa que buscar/link>', value: 'para reproducir musica, a veces crashea el bot debido a que se salta 5 frames de la cancion' },
+            { name: 'stop', value: 'desconectarse y parar de reproducir musica' },
+            { name: 'apagar [-f]', value: 'manda peti a la consola para apagar el bot, -f fuerza el apagado'},
+            { name: 'preguntar consola <pregunta>', value: 'pregunta a la consola lo que quieras'}
+        )
+        .setFooter('a');
+        message.reply({
+            embeds: [helpembed]
+        });
+        new RegLastCMD(executedcmdslist[3], message);
+    }
+    else if (args[0] === "apagar")
+    {
+        if(!args[1])
+        {
+            const confirmationsent = new Discord.MessageEmbed()
+            .setDescription('Una confirmación para apagar el bot ue enviada a la terminal, esperando a la respuesta');
+
+            message.reply({ embeds: [confirmationsent]}).then(resultMessage => {
+                const shutdownconfirmed = new Discord.MessageEmbed()
+                .setDescription('El apagado fue confirmado por la terminal')
+                .setColor('#008000');
+
+                const shutdowndenied = new Discord.MessageEmbed()
+                .setDescription('El apagado ha sido rechazado por la terminal')
+                .setColor('#FF0000');
+
+                new Log('The following user wants to shutdown the bot: ' + message.author.tag, 0);
+                rl.question('Do you want to shutdown the bot? (y/n) ', (confirmation) => {
+                    switch(confirmation)
+                    {
+                        case 'y':
+                            resultMessage.edit({ embeds: [shutdownconfirmed]}).then(() => {
+                                if(optionlist[4].state == "Enabled" || TerminalSettings.debuglogs.state == "Enabled") new Log("Closing everything due to confirming shutdown", 2);
+                                rl.close();
+                            });
+                            break;
+
+                        default:
+                            resultMessage.edit({ embeds: [shutdowndenied]}).then(() => rl.prompt());
+                            break;
+                    }
+                })
+            })
+        }
+        else if (args[1] === "-f")
+        {
+            if(message.author.id === mainaccowner)
+            {
+                new Log("The following user is forcing the bot shutdown: " + message.author.tag, 0);
+                const shutdownforced = new Discord.MessageEmbed()
+                .setDescription('Forzando el apagado del bot');
+
+                message.reply({ embeds: [shutdownforced]}).then((resultMessage) => {
+                    new Log("Shutting down the bot in 20s", 3);
+                    setTimeout(function(){rl.close()}, 20000);
+                })
+            }
+            else
+            {
+                new Log("The following user tried to force the bot shutdown: " + message.author.tag, 0);
+                message.reply('No tienes permiso para apagar el bot');
+            }
+        }
+        new RegLastCMD(executedcmdslist[4], message);
+    }
+    else if (args[0] === "preguntar" && args[1] === "consola")
+    { //dumb shitty fix
+        if(args[2])
+        {
+            rl.question('The following user ' + message.author.tag + " asked: " + message.content.replace("s?preguntarcons ", "") + " ", (respuesta) => {
+                new SendHelper(message.channelId, "Enviado desde la consola: " + respuesta, client);
+                rl.prompt();
+            });
+        }
+        new RegLastCMD(executedcmdslist[5], message);
+    }
+    else if (args[0] === "purge")
+    {
+        if(!args[1]) return message.reply("Necesitas un número de mensajes que eliminar (Ejemplo: s?purge 1)");
+        else 
+        {
+            if(message.author.id === mainaccowner)
+            {
+                message.channel.bulkDelete(args[1]);
+
+                const deletedmsgs = new Discord.MessageEmbed()
+                .setTitle(`Se han eliminado ${args[1]} mensajes`)
+                .setFooter(`Ejecutado por ${message.author.tag}`);
+
+                message.channel.send({embeds: [deletedmsgs]}).then((resultMessage) => {
+                    setTimeout(() => {
+                        resultMessage.delete();
+                    }, 1000);
+                })
+            }
+            else
+            {
+                message.reply('No pareces tener permisos para eliminar mensajes');
+            }
+        }
+        new RegLastCMD(executedcmdslist[6], message);
+    }
+    else if (args[0] === "add" && args[1] === "channelid")
+    { //dumb fix actually
+        //should check the funny thing in the add helper instead but alr
+        switch(args[2])
+        {
+            case "0":
+                new AddHelper(channelidslist[0], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 0');
+                break;
+
+            case "1":
+                new AddHelper(channelidslist[1], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 1');
+                break;
+
+            case "2":
+                new AddHelper(channelidslist[2], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 2');
+                break;
+
+            case "3":
+                new AddHelper(channelidslist[3], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 3');
+                break;
+
+            case "4":
+                new AddHelper(channelidslist[4], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 4');
+                break;
+
+            case "5":
+                new AddHelper(channelidslist[5], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 5');
+                break;
+
+            case "6":
+                new AddHelper(channelidslist[6], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 6');
+                break;
+
+            case "7":
+                new AddHelper(channelidslist[7], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 7');
+                break;
+
+            case "8":
+                new AddHelper(channelidslist[8], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 8');
+                break;
+
+            case "9":
+                new AddHelper(channelidslist[9], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 9');
+                break;
+
+            case "10":
+                new AddHelper(channelidslist[10], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 10');
+                break;
+
+            case "11":
+                new AddHelper(channelidslist[11], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 11');
+                break;
+
+            case "12":
+                new AddHelper(channelidslist[12], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 12');
+                break;
+
+            case "13":
+                new AddHelper(channelidslist[13], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 13');
+                break;
+
+            case "14":
+                new AddHelper(channelidslist[14], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 14');
+                break;
+
+            case "15":
+                new AddHelper(channelidslist[15], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 15');
+                break;
+
+            case "16":
+                new AddHelper(channelidslist[16], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 16');
+                break;
+
+            case "17":
+                new AddHelper(channelidslist[17], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 17');
+                break;
+
+            case "18":
+                new AddHelper(channelidslist[18], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 18');
+                break;
+
+            case "19":
+                new AddHelper(channelidslist[19], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 19');
+                break;
+
+            case "20":
+                new AddHelper(channelidslist[20], message.channel.name, message.channel.id, rl);
+                message.channel.send('Información guardada en el espacio 20');
+                break;
+
+            default:
+                message.channel.send("Especifica un espacio donde guardar la información")
+        }
+        new RegLastCMD(executedcmdslist[7], message);
+    }
+    else if (args[0] === "repetir")
+    {
+        if(args[1] === "activar")
+        {
+            if(formusicstuff[0].repeat == true)
+            {
+                formusicstuff[0].repeat = false;
+                message.channel.send("Repetición desactivada");
+            }
+            else if (formusicstuff[0].repeat == false)
+            {
+                formusicstuff[0].repeat = true;
+                message.channel.send("Repetición activada");
+            }
+        }
+        else if (args[1] == "ahora" && formusicstuff[0].repeat == true)
+        {
+            //just funny copy paste modified
             const { channel } = message.member.voice;
-
-            if (!channel) return message.reply('Necesitas estar en un canal de voz!');
+            if (!channel) return message.reply('Necesitas estar en un canal de voz');
             const permissions = channel.permissionsFor(message.client.user);
-            if (!permissions.has('CONNECT')) return message.reply('No tienes los permisos correctos');
-            if (!permissions.has('SPEAK')) return message.reply('No tienes los permisos correctos');
-            if (!args[1]) return message.reply('Necesitas añadir un link o poner una frase para buscar la música');
-
-            let VoiceConnection = Voice.joinVoiceChannel({ channelId: channel.id, guildId: channel.guild.id, adapterCreator: channel.guild.voiceAdapterCreator });
+            if(!permissions.has('CONNECT')) return message.reply('No tienes los permisos necesarios');
+            if(!permissions.has('SPEAK')) return message.reply('No tienes los permisos necesarios');
+            if(formusicstuff[0].repeaturl == null) return message.reply('No hay nada que repetir');   
+            let VoiceConnection = Voice.joinVoiceChannel
+            ({
+                channelId: channel.id,
+                guildId: channel.guild.id,
+                adapterCreator: channel.guild.voiceAdapterCreator
+            });
 
             const videoFinder = async (query) => {
                 const videoResult = await ytSearch(query);
@@ -829,155 +1146,39 @@ client.on('messageCreate', async (message) => {
                 return (videoResult.videos.length > 1) ? videoResult.videos[0] : null;
             }
 
-            const video = await videoFinder(args.join(' '));
-
-            if (video) {
-                const streamurl = ytdl(video.url, { filter: 'audioonly' });
-
-                const resource = Voice.createAudioResource(streamurl, { inlineVolume: true });
+            const video = await videoFinder(formusicstuff[0].repeaturl);
+    
+            if(video)
+            {
+                const streamurl = ytdl(video.url, { filter: 'audioonly'});
+    
+                const resource = Voice.createAudioResource(streamurl, {inlineVolume: true});
                 resource.volume.setVolume(0.2);
                 const player = Voice.createAudioPlayer();
                 VoiceConnection.subscribe(player);
                 player.play(resource);
-
                 const funnyvidembed = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(`Ahora reproduciendo ***${video.title}***`)
-                    .setDescription(video.description)
-                    .setImage(video.image)
-                    .setAuthor(video.author.name)
-                    .setURL(video.url)
-                    .setFooter(`Música solicitada por ${message.author.tag}`);
+                .setColor('#0099ff')
+                .setTitle(`Ahora reproduciendo ***${video.title}***`)
+                .setDescription(video.description)
+                .setAuthor(video.author.name)
+                .setURL(video.url)
+                .setFooter(`Música solicitada por ${message.author.tag} | Cambiando este mensaje`);
 
-                await message.channel.send({ embeds: [funnyvidembed] });
+                await message.channel.send({embeds: [funnyvidembed]});
                 formusicstuff[0].curplayingmusic = true;
-
             } else {
+                //is this really necessary?
                 const funnynoresultsfound = new Discord.MessageEmbed()
-                    .setTitle('No se han encontrado resultados');
-
-                message.channel.send({ embeds: [funnynoresultsfound] });
+                .setTitle('No se ha encontrado ningún resultado relacionado a: ' + message.toString().replace("s?play ", ""));
+                message.channel.send({embeds: [funnynoresultsfound]});
             }
-            new RegLastCMD(executedcmdslist[1], message);
-            break;
-
-        case 'stop':
-            const whythefuckitisntworking = message.member.voice;
-            const connection = Voice.getVoiceConnection(whythefuckitisntworking.guild.id);
-
-            if (!whythefuckitisntworking.channel) return message.reply('Necesitas estar en un canal de voz para poder parar de reproducir música!');
-            //I'm really fucking sorry for this if condition
-            if (formusicstuff[0].curplayingmusic == false) return message.reply('No estoy reproduciendo música actualmente');
-            if (Voice.VoiceConnectionStatus.Ready || formusicstuff[0].curplayingmusic == true) {
-                const funnystopmusicsad = new Discord.MessageEmbed()
-                    .setTitle('Parando de reproducir música :pensive:');
-
-                await message.channel.send({ embeds: [funnystopmusicsad] });
-                connection.destroy();
-                formusicstuff[0].curplayingmusic = true;
-            }
-            new RegLastCMD(executedcmdslist[2], message);
-            break;
-
-        //no se porque todo tiene que ser un embed pero esta bastante guapo ngl
-        case 'ayuda':
-            const helpembed = new Discord.MessageEmbed()
-                .setTitle('Menú de ayuda')
-                .setDescription('comandos rotos a veces supongo\n[] - Opcional, <> - Requerido')
-                .addFields(
-                    { name: 'ping', value: 'pa ver si funciona o esta activo supongo' },
-                    { name: 'cambios', value: 'para ver los ultimos cambios/actualizaciones del bot' },
-                    { name: 'play <cosa que buscar/link>', value: 'para reproducir musica, a veces crashea el bot debido a que se salta 5 frames de la cancion' },
-                    { name: 'stop', value: 'desconectarse y parar de reproducir musica' },
-                    { name: 'apagar [-f]', value: 'manda peti a la consola para apagar el bot, -f fuerza el apagado'},
-                    { name: 'preguntarcons <pregunta>', value: 'pregunta a la consola lo que quieras'}
-                )
-                .setFooter('a');
-            message.reply({
-                embeds: [helpembed]
-            });
-            new RegLastCMD(executedcmdslist[3], message);
-            break;
-
-        case 'apagar':
-            if(!args[1]){
-                const shutdownconfsent = new Discord.MessageEmbed()
-                .setDescription("Una confirmación para apagar el bot fue enviada a la terminal, esperando a la respuesta");
-
-                message.reply({
-                    embeds: [shutdownconfsent]
-                }).then(resultMessage => {
-                    const shutdownconftrue = new Discord.MessageEmbed()
-                    .setDescription("El apagado fue confirmado por la terminal")
-                    .setColor('#008000');
-    
-                    const shutdownconffalse = new Discord.MessageEmbed()
-                    .setDescription("El apagado fue rechazado por la terminal")
-                    .setColor('#FF0000');
-                    
-                    new Log("The following user wants to shutdown the bot: " + message.author.tag, 0);
-                    rl.question("Do you want to shutdown the bot? (y/n) ", (confirmation) => {
-                        switch(confirmation)
-                        {
-                            case 'y':
-                                resultMessage.edit({
-                                    embeds: [shutdownconftrue]
-                                }).then(() => {
-                                    if(optionlist[4].state == "Enabled" || TerminalSettings.debuglogs.state == "Enabled"){
-                                        new Log("Closing Readline", 2);
-                                    }
-                                    rl.close();
-                                })
-                                break;
-
-                            default:
-                                resultMessage.edit({
-                                    embeds: [shutdownconffalse]
-                                }).then(() => {
-                                    rl.prompt();
-                                })
-                                break;
-                        }
-                    })
-                })
-            } else if (args[1] === "-f") {
-                if(mainaccowner || altaccowner){
-                    new Log("The following user is forcing the bot shutdown: " + message.author.tag, 0);
-                    const shutdownforce = new Discord.MessageEmbed()
-                    .setDescription("Forzando el apagado del bot, sin confirmación de la terminal (20s)");
-    
-                    message.reply({
-                        embeds: [shutdownforce]
-                    }).then((resultMessage) => {
-                        new Log("Shutting down the bot in 20s", 3);
-                        setTimeout(function(){
-                            rl.close();
-                        }, 20000)
-                    })
-                }
-            } else {
-                new Log("The following user tried to force the bot shutdown: " + message.author.tag, 0);
-                message.reply("No tienes permiso para apagar el bot");
-            }
-            new RegLastCMD(executedcmdslist[4], message);
-            break;
-
-        case 'preguntarcons':
-            if(args[1]) {
-                rl.question("The following user " + message.author.tag + " asked: " + message.content.replace("s?preguntarcons ", "") + " ", (respuesta) => {
-                    new SendHelper(message.channelId, "Enviado desde la consola: " + respuesta, client);
-                    rl.prompt();
-                });
-            }
-            new RegLastCMD(executedcmdslist[5], message);
-            break;
-        case 'purge':
-            if(args[1]) {
-                if(mainaccowner || altaccowner){
-                    message.channel.bulkDelete(args[1]);
-                }
-            }
-            break;
+        }
+        else if (args[1] == "ahora" && formusicstuff[0].repeat == false)
+        {
+            message.reply("La repetición esta desactivada");
+        }
+        new RegLastCMD(executedcmdslist[8], message);
     }
 })
 
