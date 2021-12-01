@@ -1,5 +1,24 @@
 //Used to save values for the lastexecuted command for the terminal
 //{ sprcmd: '', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+
+//should improve it or something lol, also i should make something for the args thingy
+//once this update is pushed i will look a way to improve this
+//also the args arent really that important because im stupid or something lol
+var commands = [
+    { name: String}, //ping
+    { name: String, argtip: String}, //play
+    { name: String}, //stop
+    { name: String, arg1: String, arg2: String, arg3: String}, //ayuda
+    { name: String, arg1: String}, //apagar
+    { name: String, arg1: String}, //preguntar consola
+    { name: String, argtip: String}, //purge
+    { name: String, arg1: String, argtip: String}, //add channelid
+    { name: String, arg1: String, arg2: String, argtip: String}, //repetir
+    { name: String} //servidores
+];
+
+//I want to remake this br
+
 var executedcmdslist = [
     { sprcmd: 'ping', exectimes: 0, lastusertoexec: 'user', latestexc: false},
     { sprcmd: 'play', exectimes: 0, lastusertoexec: 'user', latestexc: false},
@@ -10,12 +29,6 @@ var executedcmdslist = [
     { sprcmd: 'purge', exectimes: 0, lastusertoexec: 'user', latestexc: false},
     { sprcmd: 'add channelid', exectimes: 0, lastusertoexec: 'user', latestexc: false},
     { sprcmd: 'repetir', exectimes: 0, lastusertoexec: 'user', latestexc: false}, //funny thing is that i aint doing shit for the args, global command only
-];
-
-//Really bad way to store a value but meh
-//Plus doesn't really work for some reason so uh yeah
-var defaultembedcolor = [
-    { defaultcolor: '#0099ff', oldcolor: '#0099ff'}
 ];
 
 //Gonna try to improve the channel ids system 
@@ -50,22 +63,14 @@ var formusicstuff = [
     { curplayingmusic: true | false, repeat: false, repeaturl: null}
 ]
 
-var quotesoptions = [
-    { quote: ''},
-    { quote: ''},
-    { quote: ''},
-    { quote: ''},
-    { quote: ''},
-];
-
 var loaderstuff = [
     { saidloaded: false}
 ];
 
 module.exports = {
-    executedcmdslist,
+    commands,
     channelidslist,
     formusicstuff,
-    quotesoptions,
-    loaderstuff
+    loaderstuff,
+    executedcmdslist
 }

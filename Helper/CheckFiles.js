@@ -1,7 +1,7 @@
 //TODO: Redo the code sometime for now its working okay ig
 //TODO 2: Add debug stuff 
-//Check todo lol
-//Also I think this is kind of unncessary as you will download the source stuff with everything in it ig lol but just in case
+//TODO 3: Add Checking the commands file thingy lol
+//Also I think this is kind of unecessary as you will download the source stuff with everything in it ig lol but just in case
 const { optionlist } = require('../Commands/Settings');
 const { channelidslist, quotesoptions } = require('./Lists');
 const fs = require('fs');

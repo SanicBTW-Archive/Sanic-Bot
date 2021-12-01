@@ -18,29 +18,32 @@ const readline = require('readline');
 const { HelpMenuEntry } = require('./Commands/helpmenu');
 const { SettingsMenuEntry, optionlist } = require('./Commands/Settings');
 
-const { Log } = require('./Helper/Log');
+const Log = require('./Helper/Log');
 const { CheckFiles } = require('./Helper/CheckFiles');
 
 const { token } = require('./Config/DiscToken.json');
 
-const { prefix, activityname, thingypresencestatus,
+const { prefix, thingypresencestatus,
     mainaccowner, oldmainaccowner } = require('./Config/DiscordSettings.json');
 
-const { executedcmdslist, defaultembedcolor, channelidslist, formusicstuff, quotesoptions } = require('./Helper/Lists');
+const { commands, channelidslist, formusicstuff } = require('./Helper/Lists');
 
-const { terminalver } = require('./Helper/changelog.json');
+const { terminalver, activityname } = require('./Config/Versions.json'); //Terminal Version innacurate cuz I lost the number lol anyways
 //#endregion    
 
+//tbh still thinking that its useless
 new CheckFiles("TerminalSettings");
 new CheckFiles("ChannelIDS");
-
 //#region More Imports due to code order execution
 //I have to load this after the check files stuff due to the code execution order
 const TerminalSettings = require('./Config/TerminalSettings.json');
-const { Load } = require('./Helper/Loader');
-const { SendMenuHelp, SendHelper } = require('./Commands/Send');
-const { AddHelper, RestoreHelper } = require('./Helper/ChannelIDS');
+const Load = require('./Helper/Load');
+const { SendMenuHelp } = require('./Commands/Send');
+const { RestoreHelper } = require('./Helper/ChannelIDS');
 const { RegLastCMD, LastExecMenu } = require('./Commands/LastExec');
+const SendHelper = require('./Commands/SendHelper');
+const AddHelper = require('./Helper/AddHelper');
+const Restore = require('./Commands/Restore');
 
 //#endregion
 
@@ -53,8 +56,8 @@ const rl = readline.createInterface({
 //#endregion
 
 client.on('ready', () => {
-    //#region Load Terminal settings/stuff
-    new Load("Options");
+    //#region Load settings/stuff
+    Load("Options");
 
     if (optionlist[0].state.includes("Enabled")) {
         console.clear();
@@ -66,17 +69,19 @@ client.on('ready', () => {
         process.title = TerminalSettings.consoletitleoption.value;
     }
 
-    new Load("Channel IDS");
+    Load("Channel IDS");
 
     client.user.setPresence({
         activities: [{
             name: activityname
         }], status: thingypresencestatus
     });
+
+    Load("Commands"); //Loads Discord Commands to make some stuff easier, doesn't affect the real commands lol or something
     //#endregion
 
-    new Log(`Logged in as ${client.user.tag}`, 0);
-    new Log("Currently using a custom command handler", 0);
+    Log(`Logged in as ${client.user.tag}`, 0);
+    Log("Currently using a custom command handler", 0);
 
     //Set the fucking curplayingmusic thingy to false, using the lists.js from the Helper folder
     formusicstuff[0].curplayingmusic = false;
@@ -84,7 +89,7 @@ client.on('ready', () => {
     //#region Terminal Commands
     if (optionlist[3].state.includes("Enabled"))
     {
-        new Log("Type 'help' to show the list of available commands", 0);
+        Log("Type 'help' to show the list of available commands", 0);
 
         rl.prompt();
 
@@ -179,87 +184,87 @@ client.on('ready', () => {
                             if (msgcont.length > 0) {
                                 switch (selectedchnlid) {
                                     case "0":
-                                        new SendHelper(channelidslist[0].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[0].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "1":
-                                        new SendHelper(channelidslist[1].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[1].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "2":
-                                        new SendHelper(channelidslist[2].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[2].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "3":
-                                        new SendHelper(channelidslist[3].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[3].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "4":
-                                        new SendHelper(channelidslist[4].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[4].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "5":
-                                        new SendHelper(channelidslist[5].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[5].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "6":
-                                        new SendHelper(channelidslist[6].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[6].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "7":
-                                        new SendHelper(channelidslist[7].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[7].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "8":
-                                        new SendHelper(channelidslist[8].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[8].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "9":
-                                        new SendHelper(channelidslist[9].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[9].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "10":
-                                        new SendHelper(channelidslist[10].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[10].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "11":
-                                        new SendHelper(channelidslist[11].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[11].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "12":
-                                        new SendHelper(channelidslist[12].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[12].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "13":
-                                        new SendHelper(channelidslist[13].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[13].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "14":
-                                        new SendHelper(channelidslist[14].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[14].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "15":
-                                        new SendHelper(channelidslist[15].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[15].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "16":
-                                        new SendHelper(channelidslist[16].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[16].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "17":
-                                        new SendHelper(channelidslist[17].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[17].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "18":
-                                        new SendHelper(channelidslist[18].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[18].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "19":
-                                        new SendHelper(channelidslist[19].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[19].chnlid.toString(), msgcont, client);
                                         break;
 
                                     case "20":
-                                        new SendHelper(channelidslist[20].chnlid.toString(), msgcont, client);
+                                        SendHelper(channelidslist[20].chnlid.toString(), msgcont, client);
                                         break;
                                 } //end of switch
                                 if (selectedchnlid.toString().length == 18) {
@@ -413,14 +418,7 @@ client.on('ready', () => {
                     rl.question('Are you sure that you want to restore the Terminal Settings? (y/n) ', (restoreconf) => {
                         switch (restoreconf) {
                             case 'y':
-                                new Log("Restoring Terminal Settings...", 3);
-                                optionlist[0].state = 'Disabled';
-                                optionlist[1].value = 'Sanic Bot Terminal';
-                                optionlist[2].state = 'Enabled';
-                                optionlist[3].state = 'Enabled';
-                                optionlist[4].state = 'Disabled';
-                                new Log("Terminal Settings Restored! Restart the console to apply the changes", 1);
-                                rl.prompt();
+                                Restore("Settings", rl);
                                 break;
 
                             default:
@@ -438,97 +436,97 @@ client.on('ready', () => {
                                     rl.question('Where do you want to save this info? (0 to 20): ', (wheretosave) => {
                                         switch (wheretosave) {
                                             case "0":
-                                                new AddHelper(channelidslist[0], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[0], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "1":
-                                                new AddHelper(channelidslist[1], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[1], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "2":
-                                                new AddHelper(channelidslist[2], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[2], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "3":
-                                                new AddHelper(channelidslist[3], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[3], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "4":
-                                                new AddHelper(channelidslist[4], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[4], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "5":
-                                                new AddHelper(channelidslist[5], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[5], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "6":
-                                                new AddHelper(channelidslist[6], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[6], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "7":
-                                                new AddHelper(channelidslist[7], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[7], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "8":
-                                                new AddHelper(channelidslist[8], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[8], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "9":
-                                                new AddHelper(channelidslist[9], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[9], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "10":
-                                                new AddHelper(channelidslist[10], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[10], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "11":
-                                                new AddHelper(channelidslist[11], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[11], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "12":
-                                                new AddHelper(channelidslist[12], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[12], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "13":
-                                                new AddHelper(channelidslist[13], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[13], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "14":
-                                                new AddHelper(channelidslist[14], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[14], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "15":
-                                                new AddHelper(channelidslist[15], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[15], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "16":
-                                                new AddHelper(channelidslist[16], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[16], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "17":
-                                                new AddHelper(channelidslist[17], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[17], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "18":
-                                                new AddHelper(channelidslist[18], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[18], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "19":
-                                                new AddHelper(channelidslist[19], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[19], chnlidname, chnlid, rl);
                                                 break;
 
                                             case "20":
-                                                new AddHelper(channelidslist[20], chnlidname, chnlid, rl);
+                                                AddHelper(channelidslist[20], chnlidname, chnlid, rl);
                                                 break;
                                         } //End of the switch
                                     })
                                 } else {
-                                    new Log("This doesn't look like a Channel ID\n(Channel ID must be 18 characters long)", 3);
+                                    Log("This doesn't look like a Channel ID\n(Channel ID must be 18 characters long)", 3);
                                     rl.prompt();
                                 }
                             })
                         } else {
-                            new Log("Please provide a longer name", 3);
+                            Log("Please provide a longer name", 3);
                             rl.prompt();
                         }
                     })
@@ -539,12 +537,7 @@ client.on('ready', () => {
                     rl.question('Are you sure that you want to restore the Channel IDS json? (y/n) ', (restoreconf) => {
                         switch (restoreconf) {
                             case 'y':
-                                new Log("Restoring the Channel IDS...", 3);
-
-                                new RestoreHelper();
-
-                                new Log("Channel IDS Restored! Restart the console to apply the changes", 1);
-                                rl.prompt();
+                                Restore("Channel IDS", rl);
                                 break;
 
                             default:
@@ -554,9 +547,10 @@ client.on('ready', () => {
                     })
                     break;
 
+                /* as of now im gonna push commit and ill work on this later 
                 case 'last executed':
                     new LastExecMenu();
-                    break;
+                    break;*/
 
                 default:
                     console.log(clc.red("Oops couldn't find a command called " + clc.white(`${line.trim()}`)));
@@ -749,24 +743,24 @@ client.on('ready', () => {
             //#endregion
 
             try {
-                new Log("Trying to save the Terminal Settings", 0);
+                Log("Trying to save the Terminal Settings", 0);
                 fs.writeFileSync(__dirname + '/Config/TerminalSettings.json', fixedoptionsig);
-                new Log("Saved Terminal Settings", 1);
-                new Log("Trying to save the Channel IDS", 0);
+                Log("Saved Terminal Settings", 1);
+                Log("Trying to save the Channel IDS", 0);
                 fs.writeFileSync(__dirname + "/Helper/ChannelIDS.json", fixedchannelidsig);
-                new Log("Saved Channel IDS", 1);
-                new Log("Saved Everything", 1);
-                new Log("Proceeding with the shutdown", 0);
+                Log("Saved Channel IDS", 1);
+                Log("Saved Everything", 1);
+                Log("Proceeding with the shutdown", 0);
             } catch (error) {
                 console.error(error);
             }
 
-            new Log("Shutting down Sanic Bot", 3);
+            Log("Shutting down Sanic Bot", 3);
             client.destroy();
             if(TerminalSettings.debuglogs.state == "Enabled"){
-                new Log("Client Destroyed", 2);
+                Log("Client Destroyed", 2);
             }
-            new Log("Closing the console", 3);
+            Log("Closing the console", 3);
             process.exit(0);
         });
     }
@@ -779,14 +773,12 @@ client.on('messageCreate', async (message) => {
 
     let args = message.content.substring(prefix.length).split(" ");
 
-    if(args[0] === "ping")
+    if(args[0] === commands[0].name)
     {
         const calcping = new Discord.MessageEmbed()
         .setTitle('Calculando el ping del bot...');
 
-        message.reply({
-            embeds: [calcping]
-        }).then(resultMessage => {
+        message.reply({embeds: [calcping]}).then(resultMessage => {
             const msgpingsomething = resultMessage.createdTimestamp - message.createdTimestamp;
 
             const pingresult = new Discord.MessageEmbed()
@@ -797,14 +789,11 @@ client.on('messageCreate', async (message) => {
                 { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true}
             ).setColor('#008000');
 
-            resultMessage.edit({
-                embeds: [pingresult]
-            });
+            resultMessage.edit({ embeds: [pingresult]});
         });
 
-        new RegLastCMD(executedcmdslist[0], message);
     }
-    else if (args[0] === "play")
+    else if (args[0] === commands[1].name)
     {
         //why is this crashing?
         //also fun fact, this code is really bad and its based off a cheat sheet from a guide
@@ -817,7 +806,7 @@ client.on('messageCreate', async (message) => {
         const permissions = channel.permissionsFor(message.client.user);
         if(!permissions.has('CONNECT')) return message.reply('No tienes los permisos necesarios');
         if(!permissions.has('SPEAK')) return message.reply('No tienes los permisos necesarios');
-        if(!args[1]) return message.reply('Necesitas poner un argumento más (Link de youtube o algo para buscar)');
+        if(!args[1]) return message.reply(commands[1].argtip); //stupid but cool ig
         let VoiceConnection = Voice.joinVoiceChannel
         ({
             channelId: channel.id,
@@ -849,8 +838,10 @@ client.on('messageCreate', async (message) => {
             .setTitle(`Ahora reproduciendo ***${video.title}***`)
             .setDescription(video.description)
             .setAuthor(video.author.name)
-            .setURL(video.url)
-            .setFooter(`Música solicitada por ${message.author.tag} | Cambiando este mensaje`);
+            .setURL(video.url);
+
+            if(formusicstuff[0].repeat == true) funnyvidembed.setFooter(`Música solicitada por ${message.author.tag} | Repetición activada`);
+            if(formusicstuff[0].repeat == false) funnyvidembed.setFooter(`Música solicitada por ${message.author.tag} | Repetición desactivada`);
 
             await message.channel.send({embeds: [funnyvidembed]});
             formusicstuff[0].curplayingmusic = true;
@@ -859,10 +850,9 @@ client.on('messageCreate', async (message) => {
             .setTitle('No se ha encontrado ningún resultado relacionado a: ' + message.toString().replace("s?play ", ""));
             message.channel.send({embeds: [funnynoresultsfound]});
         }
-        new RegLastCMD(executedcmdslist[1], message);
 
     }
-    else if (args[0] === "stop")
+    else if (args[0] === commands[2].name)
     {
         const whythefuckitisntworking = message.member.voice;
         const connection = Voice.getVoiceConnection(whythefuckitisntworking.guild.id);
@@ -880,31 +870,69 @@ client.on('messageCreate', async (message) => {
             connection.destroy();
             formusicstuff[0].curplayingmusic = false;
         }
-        new RegLastCMD(executedcmdslist[2], message);
     }
-    else if (args[0] === "ayuda")
+    else if (args[0] === commands[3].name) //im really fucking dumb i need to rework this asap, prob after commit
     {
-        //prob gonna do custom menu shit
-        const helpembed = new Discord.MessageEmbed()
-        .setTitle('Menú de ayuda')
-        .setDescription('comandos rotos a veces supongo\n[] - Opcional, <> - Requerido')
-        .addFields(
-            { name: 'ping', value: 'pa ver si funciona o esta activo supongo' },
-            { name: 'cambios', value: 'para ver los ultimos cambios/actualizaciones del bot' },
-            { name: 'play <cosa que buscar/link>', value: 'para reproducir musica, a veces crashea el bot debido a que se salta 5 frames de la cancion' },
-            { name: 'stop', value: 'desconectarse y parar de reproducir musica' },
-            { name: 'apagar [-f]', value: 'manda peti a la consola para apagar el bot, -f fuerza el apagado'},
-            { name: 'preguntar consola <pregunta>', value: 'pregunta a la consola lo que quieras'}
-        )
-        .setFooter('a');
-        message.reply({
-            embeds: [helpembed]
-        });
-        new RegLastCMD(executedcmdslist[3], message);
+        switch(args[1])
+        {
+            default:
+                const helpembed = new Discord.MessageEmbed()
+                .setTitle('Menú de ayuda')
+                .setDescription('Que pongo aqui')
+                .addFields(
+                    { name: commands[3].name + " " + commands[3].arg1, value: 'a' },
+                    { name: commands[3].name + " " + commands[3].arg2, value: 'para ver los ultimos cambios/actualizaciones del bot' },
+                    { name: commands[3].name + " " + commands[3].arg3, value: 'para reproducir musica, a veces crashea el bot debido a que se salta 5 frames de la cancion' }
+                )
+                .setFooter('a');
+                message.reply({
+                    embeds: [helpembed]
+                });
+                break;
+            case commands[3].arg1:
+                const princhelpembed = new Discord.MessageEmbed()
+                .setTitle('Menú de ayuda principal')
+                .setDescription('Comandos principales\n<> - Requerido | [] - Opcional')
+                .addFields
+                (
+                    {name: commands[0].name, value: 'Pa ver si funciona o esta activo el bot'},
+                    {name: commands[4].name + " [" + commands[4].arg1 + "] ", value: 'Envia una peti a la terminal para apgar el bot, si se usa el argumento proporcionado se apagara directamente'},
+                    {name: commands[6].name, value: 'Sirve para eliminar mensajes, se require una cantidad de mensajes para eliminar'},
+                    {}
+                )
+                .setFooter('Probando organización de comandos');
+                message.channel.send({embeds: [princhelpembed]});
+                break;
+            case commands[3].arg2:
+                const musichelpembed = new Discord.MessageEmbed()
+                .setTitle('Menú de ayuda de música')
+                .setDescription('Comandos para reproducir música')
+                .addFields
+                (
+                    {name: commands[1].name, value: 'Reproduce música cuando estes en un chat de voz\nArgumentos necesarios: ' + commands[1].arg1},
+                    {name: commands[2].name, value: 'Cancela la reproducción de la música que este sonando en ese momento'},
+                    {name: commands[8].name + " " + commands[8].arg1 + " o " + commands[8].arg2, value: 'La función del comando esta bastante clara'}
+                )
+                .setFooter('El comando de play rompe mucho el bot, funciona cuando quiere');
+                message.channel.send({embeds: [musichelpembed]});
+                break;
+            case commands[3].arg3:
+                const idkembed = new Discord.MessageEmbed()
+                .setTitle('Menú de ayuda de comandos miscelaneos')
+                .setDescription('Comandos que he hecho al aburrirme y porque estan bastante guapos en mi opinion\n<> - Requerido | [] - Opcional')
+                .addFields
+                (
+                    {name: commands[5].name + " " + commands[5].arg1, value: 'Pregunta algo a la consola!'},
+                    {name: commands[7].name + " " + commands[7].arg1 + " < Espacio para guardar info (0-20) >", value: 'Sirve mas para la consola, añade un canal de texto para enviar mensajes y lo añade a la consola automaticamente'}
+                )
+                .setFooter("a");
+                message.channel.send({embeds: [idkembed]});
+                break;
+        }
     }
-    else if (args[0] === "apagar")
+    else if (args[0] === commands[4].name)
     {
-        if(!args[1])
+        if(args[1] == null)
         {
             const confirmationsent = new Discord.MessageEmbed()
             .setDescription('Una confirmación para apagar el bot ue enviada a la terminal, esperando a la respuesta');
@@ -918,13 +946,13 @@ client.on('messageCreate', async (message) => {
                 .setDescription('El apagado ha sido rechazado por la terminal')
                 .setColor('#FF0000');
 
-                new Log('The following user wants to shutdown the bot: ' + message.author.tag, 0);
+                Log('The following user wants to shutdown the bot: ' + message.author.tag, 0);
                 rl.question('Do you want to shutdown the bot? (y/n) ', (confirmation) => {
                     switch(confirmation)
                     {
                         case 'y':
                             resultMessage.edit({ embeds: [shutdownconfirmed]}).then(() => {
-                                if(optionlist[4].state == "Enabled" || TerminalSettings.debuglogs.state == "Enabled") new Log("Closing everything due to confirming shutdown", 2);
+                                if(optionlist[4].state == "Enabled" || TerminalSettings.debuglogs.state == "Enabled") Log("Closing everything due to confirming shutdown", 2);
                                 rl.close();
                             });
                             break;
@@ -936,41 +964,39 @@ client.on('messageCreate', async (message) => {
                 })
             })
         }
-        else if (args[1] === "-f")
+        else if (args[1] === commands[4].arg1)
         {
             if(message.author.id === mainaccowner)
             {
-                new Log("The following user is forcing the bot shutdown: " + message.author.tag, 0);
+                Log("The following user is forcing the bot shutdown: " + message.author.tag, 0);
                 const shutdownforced = new Discord.MessageEmbed()
                 .setDescription('Forzando el apagado del bot');
 
                 message.reply({ embeds: [shutdownforced]}).then((resultMessage) => {
-                    new Log("Shutting down the bot in 20s", 3);
+                    Log("Shutting down the bot in 20s", 3);
                     setTimeout(function(){rl.close()}, 20000);
                 })
             }
             else
             {
-                new Log("The following user tried to force the bot shutdown: " + message.author.tag, 0);
+                Log("The following user tried to force the bot shutdown: " + message.author.tag, 0);
                 message.reply('No tienes permiso para apagar el bot');
             }
         }
-        new RegLastCMD(executedcmdslist[4], message);
     }
-    else if (args[0] === "preguntar" && args[1] === "consola")
+    else if (args[0] === commands[5].name && args[1] === commands[5].arg1)
     { //dumb shitty fix
         if(args[2])
         {
-            rl.question('The following user ' + message.author.tag + " asked: " + message.content.replace("s?preguntarcons ", "") + " ", (respuesta) => {
-                new SendHelper(message.channelId, "Enviado desde la consola: " + respuesta, client);
+            rl.question('The following user ' + message.author.tag + " asked: " + message.content.replace("s?preguntar consola ", "") + " ", (respuesta) => {
+                SendHelper(message.channelId, "Enviado desde la consola: " + respuesta, client);
                 rl.prompt();
             });
         }
-        new RegLastCMD(executedcmdslist[5], message);
     }
-    else if (args[0] === "purge")
+    else if (args[0] === commands[6].name)
     {
-        if(!args[1]) return message.reply("Necesitas un número de mensajes que eliminar (Ejemplo: s?purge 1)");
+        if(args[1] == null) return message.reply(commands[6].argtip);
         else 
         {
             if(message.author.id === mainaccowner)
@@ -992,126 +1018,125 @@ client.on('messageCreate', async (message) => {
                 message.reply('No pareces tener permisos para eliminar mensajes');
             }
         }
-        new RegLastCMD(executedcmdslist[6], message);
     }
-    else if (args[0] === "add" && args[1] === "channelid")
+    else if (args[0] === commands[7].name && args[1] === commands[7].arg1)
     { //dumb fix actually
         //should check the funny thing in the add helper instead but alr
         switch(args[2])
         {
             case "0":
-                new AddHelper(channelidslist[0], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[0], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 0');
                 break;
 
             case "1":
-                new AddHelper(channelidslist[1], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[1], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 1');
                 break;
 
             case "2":
-                new AddHelper(channelidslist[2], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[2], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 2');
                 break;
 
             case "3":
-                new AddHelper(channelidslist[3], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[3], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 3');
                 break;
 
             case "4":
-                new AddHelper(channelidslist[4], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[4], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 4');
                 break;
 
             case "5":
-                new AddHelper(channelidslist[5], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[5], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 5');
                 break;
 
             case "6":
-                new AddHelper(channelidslist[6], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[6], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 6');
                 break;
 
             case "7":
-                new AddHelper(channelidslist[7], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[7], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 7');
                 break;
 
             case "8":
-                new AddHelper(channelidslist[8], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[8], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 8');
                 break;
 
             case "9":
-                new AddHelper(channelidslist[9], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[9], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 9');
                 break;
 
             case "10":
-                new AddHelper(channelidslist[10], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[10], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 10');
                 break;
 
             case "11":
-                new AddHelper(channelidslist[11], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[11], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 11');
                 break;
 
             case "12":
-                new AddHelper(channelidslist[12], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[12], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 12');
                 break;
 
             case "13":
-                new AddHelper(channelidslist[13], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[13], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 13');
                 break;
 
             case "14":
-                new AddHelper(channelidslist[14], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[14], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 14');
                 break;
 
             case "15":
-                new AddHelper(channelidslist[15], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[15], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 15');
                 break;
 
             case "16":
-                new AddHelper(channelidslist[16], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[16], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 16');
                 break;
 
             case "17":
-                new AddHelper(channelidslist[17], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[17], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 17');
                 break;
 
             case "18":
-                new AddHelper(channelidslist[18], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[18], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 18');
                 break;
 
             case "19":
-                new AddHelper(channelidslist[19], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[19], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 19');
                 break;
 
             case "20":
-                new AddHelper(channelidslist[20], message.channel.name, message.channel.id, rl);
+                AddHelper(channelidslist[20], message.channel.name, message.channel.id, rl);
                 message.channel.send('Información guardada en el espacio 20');
                 break;
 
             default:
-                message.channel.send("Especifica un espacio donde guardar la información")
+                message.channel.send(commands[7].argtip)
         }
-        new RegLastCMD(executedcmdslist[7], message);
     }
-    else if (args[0] === "repetir")
+    else if (args[0] === commands[8].name)
     {
-        if(args[1] === "activar")
+        if(args[1] == null) return message.channel.send(commands[8].argtip);
+        else if(args[1] === commands[8].arg1)
         {
             if(formusicstuff[0].repeat == true)
             {
@@ -1124,7 +1149,7 @@ client.on('messageCreate', async (message) => {
                 message.channel.send("Repetición activada");
             }
         }
-        else if (args[1] == "ahora" && formusicstuff[0].repeat == true)
+        else if (args[1] == commands[8].arg2 && formusicstuff[0].repeat == true)
         {
             //just funny copy paste modified
             const { channel } = message.member.voice;
@@ -1167,18 +1192,37 @@ client.on('messageCreate', async (message) => {
 
                 await message.channel.send({embeds: [funnyvidembed]});
                 formusicstuff[0].curplayingmusic = true;
-            } else {
-                //is this really necessary?
-                const funnynoresultsfound = new Discord.MessageEmbed()
-                .setTitle('No se ha encontrado ningún resultado relacionado a: ' + message.toString().replace("s?play ", ""));
-                message.channel.send({embeds: [funnynoresultsfound]});
             }
         }
-        else if (args[1] == "ahora" && formusicstuff[0].repeat == false)
+        else if (args[1] == commands[8].arg2 && formusicstuff[0].repeat == false)
         {
             message.reply("La repetición esta desactivada");
         }
-        new RegLastCMD(executedcmdslist[8], message);
+    }
+    else if(args[0] === commands[9].name)
+    {
+        client.guilds.cache.forEach((guild) =>{
+
+            const serversembed = new Discord.MessageEmbed()
+                .setTitle(`${guild.name}`)
+                .setThumbnail(guild.iconURL())
+                .addFields
+                (
+                    {
+                        name: 'Tiene un total de:',
+                        value: `${guild.memberCount} miembros`,
+                        inline: false
+                    },
+                    {
+                        name: 'Fue creado el: ',
+                        value: `${guild.createdAt}`,
+                        inline: true
+                    }
+                )
+                .setColor(Math.floor(Math.random() * 16777214) +1);
+
+            message.channel.send({embeds: [serversembed]});
+        })
     }
 })
 

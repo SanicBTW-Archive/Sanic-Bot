@@ -17,6 +17,6 @@
     },
     "debuglogs": {
         "option": "show debug logs",
-        "state": "Enabled"
+        "state": "Disabled"
     }
 }
