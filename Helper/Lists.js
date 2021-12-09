@@ -1,76 +1,74 @@
-//Used to save values for the lastexecuted command for the terminal
-//{ sprcmd: '', exectimes: 0, lastusertoexec: 'user', latestexc: false},
+//#region Imports
+const DSettings = require('../Config/DSettings.json');
+//#endregion
 
-//should improve it or something lol, also i should make something for the args thingy
-//once this update is pushed i will look a way to improve this
-//also the args arent really that important because im stupid or something lol
-var commands = [
-    { name: String}, //ping
-    { name: String, argtip: String}, //play
-    { name: String}, //stop
-    { name: String, arg1: String, arg2: String, arg3: String}, //ayuda
-    { name: String, arg1: String}, //apagar
-    { name: String, arg1: String}, //preguntar consola
-    { name: String, argtip: String}, //purge
-    { name: String, arg1: String, argtip: String}, //add channelid
-    { name: String, arg1: String, arg2: String, argtip: String}, //repetir
-    { name: String} //servidores
-];
-
-//I want to remake this br
-
-var executedcmdslist = [
-    { sprcmd: 'ping', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'play', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'stop', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'ayuda', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'apagar', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'preguntar consola', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'purge', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'add channelid', exectimes: 0, lastusertoexec: 'user', latestexc: false},
-    { sprcmd: 'repetir', exectimes: 0, lastusertoexec: 'user', latestexc: false}, //funny thing is that i aint doing shit for the args, global command only
-];
-
-//Gonna try to improve the channel ids system 
-//The type should be normal or announcements, probably gonna work on this new sys whenever i feel like it
-var channelidslist = [
-    { chnlid: 0, name: ''}, //0
-    { chnlid: 0, name: ''}, //1
-    { chnlid: 0, name: ''}, //2
-    { chnlid: 0, name: ''}, //3
-    { chnlid: 0, name: ''}, //4
-    { chnlid: 0, name: ''}, //5
-    { chnlid: 0, name: ''}, //6
-    { chnlid: 0, name: ''}, //7
-    { chnlid: 0, name: ''}, //8
-    { chnlid: 0, name: ''}, //9
-    { chnlid: 0, name: ''}, //10
-    //New slots
-    { chnlid: 0, name: ''}, //11
-    { chnlid: 0, name: ''}, //12
-    { chnlid: 0, name: ''}, //13
-    { chnlid: 0, name: ''}, //14
-    { chnlid: 0, name: ''}, //15
-    { chnlid: 0, name: ''}, //16
-    { chnlid: 0, name: ''}, //17
-    { chnlid: 0, name: ''}, //18
-    { chnlid: 0, name: ''}, //19
-    { chnlid: 0, name: ''}, //20
-];
-
-//I'm extremely fucking sorry for this, I don't know any other way to check if I'm playing music
-var formusicstuff = [
-    { curplayingmusic: true | false, repeat: false, repeaturl: null}
+//#region Channel IDS Stuff
+//SoftCoded to 55 because I made it so you can specify how many channel ids you want to use
+//Min its 5 max its 55 because im dumb or something
+//I need to find a way to explain this or something helperi 09wr8903wt09gi09r
+var ChannelIDSDataLIST = [
+    {ChannelID: "", ChannelName: ""}, //0
+    {ChannelID: "", ChannelName: ""}, //1
+    {ChannelID: "", ChannelName: ""}, //2
+    {ChannelID: 0, ChannelName: ""}, //3
+    {ChannelID: 0, ChannelName: ""}, //4
+    {ChannelID: 0, ChannelName: ""}, //5
+    {ChannelID: 0, ChannelName: ""}, //6
+    {ChannelID: 0, ChannelName: ""}, //7
+    {ChannelID: 0, ChannelName: ""}, //8
+    {ChannelID: 0, ChannelName: ""}, //9
+    {ChannelID: 0, ChannelName: ""}, //10
+    {ChannelID: 0, ChannelName: ""}, //11
+    {ChannelID: 0, ChannelName: ""}, //12
+    {ChannelID: 0, ChannelName: ""}, //13
+    {ChannelID: 0, ChannelName: ""}, //14
+    {ChannelID: 0, ChannelName: ""}, //15
+    {ChannelID: 0, ChannelName: ""}, //16
+    {ChannelID: 0, ChannelName: ""}, //17
+    {ChannelID: 0, ChannelName: ""}, //18
+    {ChannelID: 0, ChannelName: ""}, //19
+    {ChannelID: 0, ChannelName: ""}, //20
+    {ChannelID: 0, ChannelName: ""}, //21
+    {ChannelID: 0, ChannelName: ""}, //22
+    {ChannelID: 0, ChannelName: ""}, //23
+    {ChannelID: 0, ChannelName: ""}, //24
+    {ChannelID: 0, ChannelName: ""}, //25
+    {ChannelID: 0, ChannelName: ""}, //26
+    {ChannelID: 0, ChannelName: ""}, //27
+    {ChannelID: 0, ChannelName: ""}, //28
+    {ChannelID: 0, ChannelName: ""}, //29
+    {ChannelID: 0, ChannelName: ""}, //30
+    {ChannelID: 0, ChannelName: ""}, //31
+    {ChannelID: 0, ChannelName: ""}, //32
+    {ChannelID: 0, ChannelName: ""}, //33
+    {ChannelID: 0, ChannelName: ""}, //34
+    {ChannelID: 0, ChannelName: ""}, //35
+    {ChannelID: 0, ChannelName: ""}, //36
+    {ChannelID: 0, ChannelName: ""}, //37
+    {ChannelID: 0, ChannelName: ""}, //38
+    {ChannelID: 0, ChannelName: ""}, //39
+    {ChannelID: 0, ChannelName: ""}, //40
+    {ChannelID: 0, ChannelName: ""}, //41
+    {ChannelID: 0, ChannelName: ""}, //42
+    {ChannelID: 0, ChannelName: ""}, //43
+    {ChannelID: 0, ChannelName: ""}, //44
+    {ChannelID: 0, ChannelName: ""}, //45
+    {ChannelID: 0, ChannelName: ""}, //46
+    {ChannelID: 0, ChannelName: ""}, //47
+    {ChannelID: 0, ChannelName: ""}, //48
+    {ChannelID: 0, ChannelName: ""}, //49
+    {ChannelID: 0, ChannelName: ""}, //50
+    {ChannelID: 0, ChannelName: ""}, //51
+    {ChannelID: 0, ChannelName: ""}, //52
+    {ChannelID: 0, ChannelName: ""}, //53
+    {ChannelID: 0, ChannelName: ""}, //54
+    {ChannelID: 0, ChannelName: ""}, //55    
 ]
+//#endregion
 
-var loaderstuff = [
-    { saidloaded: false}
-];
-
+//#region Exports
+//im dumb for making only a region for exports bruh
 module.exports = {
-    commands,
-    channelidslist,
-    formusicstuff,
-    loaderstuff,
-    executedcmdslist
+    ChannelIDSDataLIST
 }
+//#endregion
