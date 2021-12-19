@@ -1,0 +1,11 @@
+{
+    "Ping":
+        {
+            "name": "ping"
+        },
+    "Music":
+        {
+            "cmd1": "play",
+            "cmd2": "stop"
+        }
+}
