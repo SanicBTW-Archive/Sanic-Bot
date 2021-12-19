@@ -9,6 +9,7 @@ const ytSearch = require('yt-search');
 const Voice = require('@discordjs/voice');
 const { token } = require('./Config/DiscToken.json');
 const DSettings = require('./Config/DSettings.json');
+const DiscCommands = require('./Helper/DiscCommands');
 //#endregion
 //#region Import Modules
 const fs = require('fs');
@@ -45,8 +46,11 @@ client.on('ready', () => {
     Log(`Logged in as ${client.user.tag}`, 0);
 
     RLCommands(rl, client);
+
+    DiscCommands(client, rl);
 });
 
+/*
 client.on('messageCreate', (message) => {
     if (!message.content.startsWith(DSettings.prefix) || message.author.bot) return;
     let args = message.content.substring(DSettings.prefix.length).split(" ");
@@ -87,6 +91,6 @@ client.on('messageCreate', (message) => {
     {
 
     }
-})
+})*/
 
 client.login(token);

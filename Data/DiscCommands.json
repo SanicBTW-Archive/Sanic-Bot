@@ -1,0 +1,10 @@
+{
+    "Ping":
+        {
+            "name": "ping"
+        },
+    "Play":
+        {
+            "name": "play"
+        }
+}

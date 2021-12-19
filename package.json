@@ -10,14 +10,11 @@
   "author": "Sanic",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/voice": "^0.6.0",
+    "@discordjs/voice": "^0.7.5",
     "cli-color": "^2.0.0",
     "discord.js": "^13.1.0",
-    "ffmpeg-static": "^4.4.0",
-    "inquirer": "^8.1.2",
+    "ffmpeg": "^0.0.4",
     "libsodium-wrappers": "^0.7.9",
-    "opusscript": "^0.0.8",
-    "yt-search": "^2.10.1",
-    "ytdl-core": "^4.9.1"
+    "opusscript": "^0.0.8"
   }
 }
