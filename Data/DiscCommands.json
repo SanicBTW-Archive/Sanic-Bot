@@ -3,8 +3,9 @@
         {
             "name": "ping"
         },
-    "Play":
+    "Music":
         {
-            "name": "play"
+            "cmd1": "play",
+            "cmd2": "stop"
         }
 }
