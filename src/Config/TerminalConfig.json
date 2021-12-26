@@ -1,0 +1,8 @@
+{
+    "AmountOfOptions": "1",
+    "config1": {
+        "option": "clear console on startup",
+        "state": "disabled",
+        "value": null
+    }
+}
