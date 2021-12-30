@@ -14,9 +14,6 @@ export async function InitLoad(){
 }
 
 async function LoadSettings(){
-    //now its the time where it comes the stupid logic lol
-    //note after doing the whole for thingy, i thought i was able to access the json option number field thingy but i cant lol 
-    //managed to do it, check the comment above the let TermConf xd
     Logger(TermConfigJSON.AmountOfOptions, 3); //it has the control of everything
     for(let funny = 1; funny < TermConfigJSON.AmountOfOptions + 1; funny++)
     {
@@ -29,17 +26,19 @@ async function LoadSettings(){
         })
         SettingsHelper(funny);*/
 
-        //I dont know how it worked, I spent like 3 hours on trying to index the json file
+        //the logger thingy will get deleted after this push
         let TermConf:any = TermConfigJSON.Options;
         //the ! is to tell typescript that im sure that it wont return null
-        Logger("JSON Option " + TermConf[funny].option!, 3); 
-        Logger("JSON State " + TermConf[funny].state!, 3); 
-        Logger("JSON Value " + TermConf[funny].value!, 3); 
-        TermConfigList.push(TermConf[funny].option!);
-        
-        /*
-        TermConfigList[funny!].option = TermConf[funny].option!;
-        Logger("List Option " + TermConfigList[funny!].option, 3);*/
+        Logger("JSON Option " + TermConf[funny].option!, 3);
+        Logger("JSON State " + TermConf[funny].state!, 3);
+        Logger("JSON Value " + TermConf[funny].value!, 3);
+        Logger("Loading settings", 0);
+        TermConfigList[funny].option! = TermConf[funny].option!;
+        TermConfigList[funny].state! = TermConf[funny].state!;
+        TermConfigList[funny].value! = TermConf[funny].value!;
+        Logger("List Option " + TermConfigList[funny].option!, 3);
+        Logger("List State " + TermConfigList[funny].state!, 3);
+        Logger("List Value " + TermConfigList[funny].value!, 3);
     }
     return LoaderThingy[0].SettingsLoaded = true;
 }

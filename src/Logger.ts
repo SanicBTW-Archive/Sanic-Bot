@@ -1,4 +1,5 @@
 //stolen from my typescript test project
+//we have a problem, if i only want to show debug logs when the setting is enabled then ill have a problem when trying to hide them when the logger is already running (idk how to explain)
 
 import clc from 'cli-color';
 
