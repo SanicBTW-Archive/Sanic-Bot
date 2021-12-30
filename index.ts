@@ -23,7 +23,7 @@ const rl = readline.createInterface({
 });
 //#endregion
 //#endregion
-import {InitConsoleCommands} from './src/ConsoleHelper/Commands';
+import {InitConsoleCommands} from './src/TerminalHelper/Commands';
 import {InitLoad} from './src/Loader';
 //#endregion
 
