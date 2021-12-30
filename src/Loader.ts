@@ -11,21 +11,13 @@ export async function InitLoad(){
     await LoadSettings().then(() => {
         if(LoaderThingy[0].SettingsLoaded == true){ Logger('Finished Loading Settings', 4); }
     })
+    return LoaderThingy[0].EverythingLoaded = true;
 }
 
 async function LoadSettings(){
-    //Logger(TermConfigJSON.AmountOfOptions, 3); //it has the control of everything
+    //Logger(TermConfigJSON.AmountOfOptions, 3); //it has the control of everything, will give an error if it cant find the specified number slot or something
     for(let funny = 1; funny < TermConfigJSON.AmountOfOptions + 1; funny++)
     {
-        /* failed attempts or something, will remove after push
-        let what:Array<any> = [];
-        what.push(funny.toString());
-        Logger("Array stuff: " + what, 3);
-        what.forEach(function(value) {
-            TerminalConfig.Options[value];
-        })
-        SettingsHelper(funny);*/
-
         const LoadIndicator = `${funny}/${TermConfigJSON.AmountOfOptions}`; //amount of settings loaded and left to load ig
 
         let TermConf:any = TermConfigJSON.Options;

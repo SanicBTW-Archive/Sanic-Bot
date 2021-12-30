@@ -14,6 +14,7 @@ export function InitConsoleCommands(client:Discord.Client, rl:readline.Interface
 
         if(!args[0]) return rl.prompt();
         if(args[0] == "exit") return rl.close();
+        if(args[0] == "settings") { }
     }).on('close', () => {
         client.destroy();
         Logger("Client destroyed", 1);
