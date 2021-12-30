@@ -1,8 +1,15 @@
 {
-    "AmountOfOptions": "1",
-    "config1": {
-        "option": "clear console on startup",
-        "state": "disabled",
-        "value": null
+    "AmountOfOptions": 2,
+    "Options": {
+        "1": {
+            "option":"clear console on startup",
+            "state":"disabled",
+            "value":null
+        },
+        "2": {
+            "option":"show debug logs",
+            "state":"disabled",
+            "value":null
+        }
     }
 }

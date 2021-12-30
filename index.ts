@@ -24,15 +24,18 @@ const rl = readline.createInterface({
 //#endregion
 //#endregion
 import {InitConsoleCommands} from './src/ConsoleHelper/Commands';
+import {InitLoad} from './src/Loader';
 //#endregion
 
-client.on('ready', () => {
-    Logger(`Logged in as ${client.user?.tag}`, 0);
-    client.user?.setPresence({ status: "dnd",
-    activity: {
-        name: Versions.DiscordBotVer
-    }});
-    InitConsoleCommands(client, rl);
+client.on('ready', async () => {
+    await InitLoad().then(() => {
+        Logger(`Logged in as ${client.user?.tag}`, 0);
+        client.user?.setPresence({ status: "dnd",
+        activity: {
+            name: Versions.DiscordBotVer
+        }});
+        InitConsoleCommands(client, rl);
+    })
 });
 
 client.login(token);

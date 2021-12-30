@@ -1,4 +1,6 @@
 //stolen from my typescript test project
+//todo: make so every line that was prompted while calling the logger prints the [ level ] or while using \n instead of calling the logger again
+//todo 2: actually use the enum correctly
 
 import clc from 'cli-color';
 
