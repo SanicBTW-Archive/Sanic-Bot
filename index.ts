@@ -30,6 +30,13 @@ import {InitFunctions} from './src/TerminalHelper/ConfigFunctions';
 
 client.on('ready', async () => {
     await InitLoad().then(async (done:boolean) => {
+        Logger(`Logged in as ${client.user?.tag}`, 0);
+        client.user?.setPresence({ status: "dnd",
+        activity: {
+            name: Versions.DiscordBotVer
+        }});
+        InitConsoleCommands(client, rl);
+        /*
         await InitFunctions(done).then(() => {
             Logger(`Logged in as ${client.user?.tag}`, 0);
             client.user?.setPresence({ status: "dnd",
@@ -37,7 +44,7 @@ client.on('ready', async () => {
                 name: Versions.DiscordBotVer
             }});
             InitConsoleCommands(client, rl);
-        })
+        })*/
     })
 });
 

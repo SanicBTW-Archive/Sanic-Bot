@@ -3,9 +3,10 @@ import LoaderThingy from './LoaderHelper/LoaderList';
 import { Logger } from './Logger';
 import TermConfigJSON from './Config/TerminalConfig.json'
 import TermConfigList from './TerminalHelper/ConfigList';
+import { ReturnOption, ReturnOptState, ReturnOptValue, ReturnFields } from './LoaderHelper/ConfigReturns';
 //#endregion
 
-//clean the comments lol
+//clean the comments lol, i will clean up some comments after the next push lol
 export async function InitLoad(){
     //this just calls every load function
     await LoadSettings().then(() => {
@@ -16,16 +17,32 @@ export async function InitLoad(){
 
 async function LoadSettings(){
     //Logger(TermConfigJSON.AmountOfOptions, 3); //it has the control of everything, will give an error if it cant find the specified number slot or something
+    
+    //var what = DoTheLoadCount(); removed due to not working properly
+    
     for(let funny = 1; funny < TermConfigJSON.AmountOfOptions + 1; funny++)
     {
         const LoadIndicator = `${funny}/${TermConfigJSON.AmountOfOptions}`; //amount of settings loaded and left to load ig
 
-        let TermConf:any = TermConfigJSON.Options;
-        //the ! is to tell typescript that im sure that it wont return null
-        Logger("Loading settings " + LoadIndicator, 0);
-        TermConfigList[funny].option! = TermConf[funny].option!;
-        TermConfigList[funny].state! = TermConf[funny].state!;
-        TermConfigList[funny].value! = TermConf[funny].value!;
+        //#region Starting up
+        var MainJSON = ReturnFields(funny, false); //yoooooooooo it actually fucking works too lol
+        var OptionJSON = ReturnOption(MainJSON);
+        var StateJSON = ReturnOptState(MainJSON);
+        var ValueJSON = ReturnOptValue(MainJSON);
+
+        //i love how it works
+        var MainList = ReturnFields(funny, true);
+        var OptionList = ReturnOption(MainList);
+        var StateList = ReturnOptState(MainList);
+        var ValueList = ReturnOptValue(MainList);
+        //#endregion
+
+        //#region Loading stuff and more ig
+        Logger("Loading Settings " + LoadIndicator, 0);
+        OptionList = OptionJSON;
+        StateList = StateJSON;
+        ValueList = ValueJSON;
+        //#endregion
     }
     return LoaderThingy[0].SettingsLoaded = true;
 }
