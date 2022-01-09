@@ -21,9 +21,7 @@ async function LoadSettings(){
         //#region Starting up
         var MainJSON = ReturnFields(funny, false); //yoooooooooo it actually fucking works too lol
         var OptionJSON = ReturnOption(MainJSON);
-        Logger('option on json ' + OptionJSON, "DEBUG");
         var StateJSON = ReturnOptState(MainJSON);
-        Logger('option state in json ' + StateJSON, "DEBUG")
         var ValueJSON = ReturnOptValue(MainJSON);
 
         //i love how it works
