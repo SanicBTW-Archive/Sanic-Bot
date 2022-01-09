@@ -1,5 +1,5 @@
 {
-    "AmountOfOptions": 2,
+    "AmountOfOptions": 3,
     "Options": {
         "1": {
             "option":"clear console on startup",
@@ -9,6 +9,11 @@
         "2": {
             "option":"show debug logs",
             "state":"disabled",
+            "value":null
+        },
+        "3": {
+            "option":"log colors",
+            "state":"enabled",
             "value":null
         }
     }

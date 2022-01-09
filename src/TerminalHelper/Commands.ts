@@ -17,8 +17,8 @@ export function InitConsoleCommands(client:Discord.Client, rl:readline.Interface
         if(args[0] == "settings") { }
     }).on('close', () => {
         client.destroy();
-        Logger("Client destroyed", 1);
-        Logger("Finishing process", 1);
+        Logger("Client destroyed", 'WARNING');
+        Logger("Finishing process", 'WARNING');
         process.exit();
     })
 }

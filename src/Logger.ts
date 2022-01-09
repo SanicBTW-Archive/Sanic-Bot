@@ -1,7 +1,12 @@
 //stolen from my typescript test project
-//we have a problem, if i only want to show debug logs when the setting is enabled then ill have a problem when trying to hide them when the logger is already running (idk how to explain)
+//i have a problem, if i only want to show debug logs when the setting is enabled then ill have a problem when trying to hide them when the logger is already running (idk how to explain)
 
 import clc from 'cli-color';
+import { ReturnFields, ReturnOptState} from './Returner';
+
+//it gets the option from the json because when the load function is called the logger is used in some cases
+let MainJSON = ReturnFields(3);
+let LogColorsState = ReturnOptState(MainJSON);
 
 var infoColor = clc.greenBright;
 var warningColor = clc.yellowBright;
@@ -18,29 +23,38 @@ enum LogLevels
     "SUCCESSFUL"
 }
 
-/**
- * 
- * @param message message to print
- * @param loglevel log level to use - 0 info, 1 warning, 2 error, 3 debug, 4 successful
- */
-export function Logger(message:any, loglevel:number)
+type LogLevelStrings = keyof typeof LogLevels;
+
+export function Logger(message:any, key:LogLevelStrings)
 {
-    switch(loglevel)
+    const theThing = `[ ${key} ] `;
+    /* for debug purposes
+    const num = LogLevels[key];
+    console.log("log level key " + key);
+    console.log("log level val " + num);
+    console.log("log level message " + message);*/
+
+    switch(key)
     {
-        case 0:
-            console.log(infoColor(`[ ${LogLevels[loglevel]} ] `) + message);
+        case 'INFO':
+            if(LogColorsState == "enabled") return console.log(infoColor(theThing) + message);
+            else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
-        case 1:
-            console.log(warningColor(`[ ${LogLevels[loglevel]} ] `) + message);
+        case 'WARNING':
+            if(LogColorsState == "enabled") return console.log(warningColor(theThing) + message);
+            else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
-        case 2:
-            console.error(errorColor(`[ ${LogLevels[loglevel]} ] `) + message);
+        case 'ERROR':
+            if(LogColorsState == "enabled") return console.log(errorColor(theThing) + message);
+            else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
-        case 3:
-            console.log(debugColor(`[ ${LogLevels[loglevel]} ] `) + message);
+        case 'DEBUG':
+            if(LogColorsState == "enabled") return console.log(debugColor(theThing) + message);
+            else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
-        case 4:
-            console.log(succColor(`[ ${LogLevels[loglevel]} ] `) + message);
+        case 'SUCCESSFUL':
+            if(LogColorsState == "enabled") return console.log(succColor(theThing) + message);
+            else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
     }
 }

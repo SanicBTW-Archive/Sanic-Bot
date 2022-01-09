@@ -3,23 +3,17 @@ import LoaderThingy from './LoaderHelper/LoaderList';
 import { Logger } from './Logger';
 import TermConfigJSON from './Config/TerminalConfig.json'
 import TermConfigList from './TerminalHelper/ConfigList';
-import { ReturnOption, ReturnOptState, ReturnOptValue, ReturnFields } from './LoaderHelper/ConfigReturns';
+import { ReturnOption, ReturnOptState, ReturnOptValue, ReturnFields } from './Returner';
 //#endregion
 
-//clean the comments lol, i will clean up some comments after the next push lol
 export async function InitLoad(){
-    //this just calls every load function
     await LoadSettings().then(() => {
-        if(LoaderThingy[0].SettingsLoaded == true){ Logger('Finished Loading Settings', 4); }
+        if(LoaderThingy[0].SettingsLoaded == true){ Logger('Finished Loading Settings', 'SUCCESSFUL'); }
     })
     return LoaderThingy[0].EverythingLoaded = true;
 }
 
 async function LoadSettings(){
-    //Logger(TermConfigJSON.AmountOfOptions, 3); //it has the control of everything, will give an error if it cant find the specified number slot or something
-    
-    //var what = DoTheLoadCount(); removed due to not working properly
-    
     for(let funny = 1; funny < TermConfigJSON.AmountOfOptions + 1; funny++)
     {
         const LoadIndicator = `${funny}/${TermConfigJSON.AmountOfOptions}`; //amount of settings loaded and left to load ig
@@ -27,7 +21,9 @@ async function LoadSettings(){
         //#region Starting up
         var MainJSON = ReturnFields(funny, false); //yoooooooooo it actually fucking works too lol
         var OptionJSON = ReturnOption(MainJSON);
+        Logger('option on json ' + OptionJSON, "DEBUG");
         var StateJSON = ReturnOptState(MainJSON);
+        Logger('option state in json ' + StateJSON, "DEBUG")
         var ValueJSON = ReturnOptValue(MainJSON);
 
         //i love how it works
@@ -38,7 +34,7 @@ async function LoadSettings(){
         //#endregion
 
         //#region Loading stuff and more ig
-        Logger("Loading Settings " + LoadIndicator, 0);
+        Logger("Loading Settings " + LoadIndicator, "INFO");
         OptionList = OptionJSON;
         StateList = StateJSON;
         ValueList = ValueJSON;
