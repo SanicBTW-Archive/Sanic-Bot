@@ -3,7 +3,7 @@
     "Options": {
         "1": {
             "option":"clear console on startup",
-            "state":"enabled",
+            "state":"disabled",
             "value":null
         },
         "2": {

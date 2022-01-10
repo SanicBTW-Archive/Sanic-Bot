@@ -2,10 +2,9 @@
 //i have a problem, if i only want to show debug logs when the setting is enabled then ill have a problem when trying to hide them when the logger is already running (idk how to explain)
 
 import clc from 'cli-color';
-import { ReturnFields, ReturnOptState} from './Returner';
+import { ReturnConfigFields, ReturnOptState} from './Returner';
 
-//it gets the option from the json because when the load function is called the logger is used in some cases
-let MainJSON = ReturnFields(3);
+let MainJSON = ReturnConfigFields(3);
 let LogColorsState = ReturnOptState(MainJSON);
 
 var infoColor = clc.greenBright;
@@ -45,8 +44,8 @@ export function Logger(message:any, key:LogLevelStrings)
             else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
         case 'ERROR':
-            if(LogColorsState == "enabled") return console.log(errorColor(theThing) + message);
-            else if(LogColorsState == "disabled") return console.log(theThing + message);
+            if(LogColorsState == "enabled") throw errorColor(theThing) + message;
+            else if(LogColorsState == "disabled") throw theThing + message;
             break;
         case 'DEBUG':
             if(LogColorsState == "enabled") return console.log(debugColor(theThing) + message);
