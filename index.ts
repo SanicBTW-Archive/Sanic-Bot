@@ -4,13 +4,12 @@ var client:Discord.Client = new Discord.Client!;
 import { token } from './src/Config/DiscToken.json';
 import DiscordSettings from './src/Config/DiscordConfig.json';
 import * as readline from 'readline';
-import clc from 'cli-color';
 import { Logger } from './src/Logger';
 import Versions from './src/Data/Version.json';
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: clc.cyan("> ")
+    prompt: "> "
 });
 import {InitConsoleCommands} from './src/TerminalHelper/Commands';
 import {InitFunctions} from './src/TerminalHelper/ConfigFunctions';

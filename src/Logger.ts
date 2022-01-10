@@ -4,8 +4,11 @@
 import clc from 'cli-color';
 import { ReturnConfigFields, ReturnOptState} from './Returner';
 
-let MainJSON = ReturnConfigFields(3);
-let LogColorsState = ReturnOptState(MainJSON);
+let TheLogColorThingyIdk = ReturnConfigFields(3); //forced to check the log colors index number
+let LogColorsState = ReturnOptState(TheLogColorThingyIdk);
+
+let DebugThingy = ReturnConfigFields(2);
+let DebugState = ReturnOptState(DebugThingy);
 
 var infoColor = clc.greenBright;
 var warningColor = clc.yellowBright;
@@ -40,16 +43,23 @@ export function Logger(message:any, key:LogLevelStrings)
             else if(LogColorsState == "disabled") return console.log(theThing + message);
             break;
         case 'WARNING':
-            if(LogColorsState == "enabled") return console.log(warningColor(theThing) + message);
-            else if(LogColorsState == "disabled") return console.log(theThing + message);
+            if(LogColorsState == "enabled") return console.warn(warningColor(theThing) + message);
+            else if(LogColorsState == "disabled") return console.warn(theThing + message);
             break;
-        case 'ERROR':
+        case 'ERROR': //just in case we terminate the process to prevent errors
             if(LogColorsState == "enabled") throw errorColor(theThing) + message;
             else if(LogColorsState == "disabled") throw theThing + message;
             break;
         case 'DEBUG':
-            if(LogColorsState == "enabled") return console.log(debugColor(theThing) + message);
-            else if(LogColorsState == "disabled") return console.log(theThing + message);
+            if(DebugState == "enabled")
+            {
+                if(LogColorsState == "enabled") return console.log(debugColor(theThing) + message);
+                else if(LogColorsState == "disabled") return console.log(theThing + message);    
+            }
+            else
+            {
+                throw Logger("Can't show Debug logs if the option is disabled", "ERROR");
+            }
             break;
         case 'SUCCESSFUL':
             if(LogColorsState == "enabled") return console.log(succColor(theThing) + message);

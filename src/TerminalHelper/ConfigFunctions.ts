@@ -16,25 +16,18 @@ export async function InitFunctions() {
                 switch(OptionState)
                 {
                     case "enabled": //case sensitive detection gonna suck a fat dick
-                        Logger("clear console on", "DEBUG");
+                        console.clear();
                         break;
                     case "disabled":
-                        Logger("clear console off", "DEBUG");
+                        //do nothing lol
                         break;
                     default:
                         Logger("The fuck??, cant get that state", "ERROR");
                 }
                 break;
+            case "console title":
+                if(OptionValue != null) { process.title = OptionValue; }
+                break;
         }
-
-        /*
-        let TermConf:any = TermConfigJSON.Options;
-        if(TermConf[uh].option! == Config[uh].option!) //????? another check just in case or something bruh
-        {
-            if(Config[uh].state! == "enabled") //will make some case sentive check soon, lazy to do rn
-            {
-                console.clear();
-            }
-        }*/
     }
 }

@@ -1,5 +1,5 @@
 {
-    "AmountOfOptions": 3,
+    "AmountOfOptions": 4,
     "Options": {
         "1": {
             "option":"clear console on startup",
@@ -8,13 +8,18 @@
         },
         "2": {
             "option":"show debug logs",
-            "state":"disabled",
+            "state":"enabled",
             "value":null
         },
         "3": {
             "option":"log colors",
             "state":"enabled",
             "value":null
+        },
+        "4": {
+            "option":"console title",
+            "state": null,
+            "value": "Sanic Bot"
         }
     }
 }
