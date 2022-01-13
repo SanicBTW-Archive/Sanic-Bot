@@ -1,4 +1,4 @@
 /node_modules
 /package-lock.json
-/src/Config/DiscToken.json
+/src/Config/Secrets.json
 /Helper/ChannelIDS.json
