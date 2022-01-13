@@ -24,7 +24,7 @@ export function InitConsoleCommands(client:Discord.Client, rl:readline.Interface
     }).on('close', () => {
         client.destroy();
         Logger("Client destroyed", 'WARNING');
-        Logger("Finishing process", 'WARNING');
+        Logger("Terminating process", 'WARNING');
         process.exit();
     })
 }
