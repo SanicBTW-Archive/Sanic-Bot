@@ -1,11 +1,11 @@
 import TermConfigJSON from '../Config/TerminalConfig.json'
 import { Logger } from '../Logger';
-import { ReturnConfigFields, ReturnOption, ReturnOptState, ReturnOptValue } from '../Returner';
+import { ReturnFields, ReturnOption, ReturnOptState, ReturnOptValue } from '../Returner';
 
 export async function InitFunctions() {
     for(let uh = 1; uh < TermConfigJSON.AmountOfOptions + 1; uh++)
     {
-        var JSONFields = ReturnConfigFields(uh);
+        var JSONFields = ReturnFields("Config",uh);
         var OptionName = ReturnOption(JSONFields);
         var OptionState = ReturnOptState(JSONFields);
         var OptionValue = ReturnOptValue(JSONFields);

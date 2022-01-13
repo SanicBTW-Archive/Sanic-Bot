@@ -2,12 +2,12 @@
 //i have a problem, if i only want to show debug logs when the setting is enabled then ill have a problem when trying to hide them when the logger is already running (idk how to explain)
 
 import clc from 'cli-color';
-import { ReturnConfigFields, ReturnOptState} from './Returner';
+import { ReturnFields, ReturnOptState} from './Returner';
 
-let TheLogColorThingyIdk = ReturnConfigFields(3); //forced to check the log colors index number
+let TheLogColorThingyIdk = ReturnFields("Config",3); //forced to check the log colors index number
 let LogColorsState = ReturnOptState(TheLogColorThingyIdk);
 
-let DebugThingy = ReturnConfigFields(2);
+let DebugThingy = ReturnFields("Config",2);
 let DebugState = ReturnOptState(DebugThingy);
 
 var infoColor = clc.greenBright;
