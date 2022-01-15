@@ -3,7 +3,7 @@ import TermConfigJSON from './Config/TerminalConfig.json';
 import { Logger } from './Logger';
 import Discord from 'discord.js';
 import DiscordConfig from './Config/DiscordConfig.json';
-import Commands from './Data/Commands.json';
+//import Commands from './Data/Commands.json';
 
 enum FieldTypes //lol field types m
 {
@@ -22,8 +22,9 @@ export function ReturnFields(type:FieldType,index:number):any { //used for every
             let TermConf:any = TermConfigJSON.Options;
             return TermConf[index];
         case "Commands": //ig it works
-            let FunnyCmds:any = Commands;
-            return FunnyCmds[index];
+            //let FunnyCmds:any = Commands;
+            //return FunnyCmds[index];
+            return "Oops";
         default:
             Logger("oops cant get that field type", "ERROR");
     }
@@ -54,11 +55,11 @@ export function ReturnOptValue(AccessToConfFields:any):string{
 }
 
 //lost idea, guess ill come back to it later or something
-/*
-export function ReturnDiscordStatus(params:Discord.PresenceStatusData) {
-    DiscordConfig.BotStatus
-    return params;
-}*/
+
+export function ReturnDiscordStatus():Discord.PresenceStatusData {
+    var lmao:any = DiscordConfig.BotStatus; //thanks any, i hate this sometimes
+    return lmao;
+}
 
 export function ReturnCommandName(AccessToCMDSFields:any):string {
     return AccessToCMDSFields.name!;
@@ -69,5 +70,6 @@ export function ReturnCommandDescription(AccessToCMDSFields:any):string {
 }
 
 export function ReturnAmountOfCommands():number {
-    return Commands.AmountOfCMDS;
+    //return Commands.AmountOfCMDS;
+    return 0;
 }

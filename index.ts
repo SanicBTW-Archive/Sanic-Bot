@@ -15,17 +15,19 @@ const rl = readline.createInterface({
 });
 import {InitConsoleCommands} from './src/TerminalHelper/Commands';
 import {InitFunctions} from './src/TerminalHelper/ConfigFunctions';
+import {ReturnDiscordStatus} from './src/Returner';
 //#endregion
 
 client.on('ready', async () => {
     await Refresh().then(async () => {
         await InitFunctions().then(() => {
             Logger(`Logged in as ${client.user?.tag}`, 'INFO');
-            /*
-            client.user?.setPresence({ status: "dnd",
-            activity: {
-                name: Versions.DiscordBotVer
-            }});*/
+            var funny = ReturnDiscordStatus(); //it gets the status from the discord config json file
+            client.user?.setPresence({
+                activities: [{
+                    name: Versions.DiscordBotVer
+                }], status: funny
+            })
             InitConsoleCommands(client, rl);
         })    
     })
@@ -34,16 +36,38 @@ client.on('ready', async () => {
 client.on('interactionCreate', async(interaction) => {
     if(!interaction.isCommand()) return;
 
-    if(interaction.commandName === 'ping') {
-        const pingypingy:any = new Discord.MessageEmbed()
-        .setTitle('Pong! :ping_pong:')
-        .addFields
-        (
-            { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true}
-        ).setColor('#008000');
+    switch(interaction.commandName)
+    {
+        case "ping":
+            const pingypingy:any = new Discord.MessageEmbed()
+            .setTitle('Pong! :ping_pong:')
+            .addFields
+            (
+                { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true}
+            ).setColor('#008000');
+    
+            await interaction.reply({embeds: [pingypingy], ephemeral:true})
+    
+            break;
+        case "apagar":
+            if(interaction.options.getBoolean("forzar", false) == true){ //if the option is true
+                if(interaction.memberPermissions?.has("ADMINISTRATOR")){
+                    Logger("The following user is forcing the bot shutdown: " + interaction.user.tag, "INFO");
+                    const funnyembed = new Discord.MessageEmbed()
+                    .setDescription("Forzando el apagado del bot");
 
-        await interaction.reply({embeds: [pingypingy], ephemeral:true})
-    } else if (interaction.commandName === 'apagar') {
+                    interaction.reply({embeds: [funnyembed]}).then((funny) => {
+                        Logger("Shutting down the bot in 20s", "INFO");
+                        setTimeout(function(){rl.close()}, 20000);
+                    })
+                } else {
+                    Logger("The following user tried to shutdown the bot: " + interaction.user.tag, "INFO");
+                    interaction.reply("No tienes permiso para apagar el bot");
+                }
+            } else {
+                interaction.reply("xd");
+            }
+            break;
     }
 })
 

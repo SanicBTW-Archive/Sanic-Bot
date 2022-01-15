@@ -3,22 +3,18 @@ import {REST} from '@discordjs/rest';
 import {Routes} from 'discord-api-types/v9';
 import {token, app_id, guild_id} from './Config/Secrets.json';
 import { Logger } from './Logger';
-import { ReturnFields, ReturnAmountOfCommands , ReturnCommandName, ReturnCommandDescription } from './Returner';
+import fs from 'fs';
+import path from 'path'
 
 const commands:any[]= [];
 
-var TheThing = ReturnAmountOfCommands();
+var the = path.join(__dirname, "commands");
+const commandFiles = fs.readdirSync(the).filter(file => file.endsWith(".js"));
 
-for(let haha = 1; haha < TheThing + 1; haha++)
+for (const file of commandFiles)
 {
-    var Field = ReturnFields("Commands", haha);
-    var CommandName = ReturnCommandName(Field);
-    var CommandDesc = ReturnCommandDescription(Field);
-    const struct = {
-        name: CommandName,
-        description: CommandDesc
-    }
-    commands.push(struct);
+    const command = require(`./commands/${file}`);
+    commands.push(command.data.toJSON());
 }
 //#endregion
 
