@@ -5,6 +5,7 @@ import Discord from 'discord.js';
 import DiscordConfig from './Config/DiscordConfig.json';
 //import Commands from './Data/Commands.json';
 
+//todo, improve this or something
 enum FieldTypes //lol field types m
 {
     "Config",
@@ -12,7 +13,17 @@ enum FieldTypes //lol field types m
 }
 
 type FieldType = keyof typeof FieldTypes;
-//todo, improve this or something
+
+enum ShutDownEnum
+{
+    "Asking For It",
+    "Forced",
+    "Accepted",
+    "Denied",
+    "None"
+}
+
+export type ShutDownType = keyof typeof ShutDownEnum;
 //#endregion
 
 export function ReturnFields(type:FieldType,index:number):any { //used for everything lol
@@ -24,12 +35,13 @@ export function ReturnFields(type:FieldType,index:number):any { //used for every
         case "Commands": //ig it works
             //let FunnyCmds:any = Commands;
             //return FunnyCmds[index];
-            return "Oops";
+            return "Oops, this isn't a thing anymore, will get deleted soon";
         default:
             Logger("oops cant get that field type", "ERROR");
     }
 }
 
+//#region config returns ig
 export function ReturnOption(AccessToConfFields:any):string{
     try{
         if(AccessToConfFields.option != null) { return AccessToConfFields.option!}
@@ -53,23 +65,12 @@ export function ReturnOptState(AccessToConfFields:any):string{
 export function ReturnOptValue(AccessToConfFields:any):string{
     return AccessToConfFields.value!;
 }
+//#endregion
 
-//lost idea, guess ill come back to it later or something
-
+//#region discord stuff returns
 export function ReturnDiscordStatus():Discord.PresenceStatusData {
     var lmao:any = DiscordConfig.BotStatus; //thanks any, i hate this sometimes
     return lmao;
 }
-
-export function ReturnCommandName(AccessToCMDSFields:any):string {
-    return AccessToCMDSFields.name!;
-}
-
-export function ReturnCommandDescription(AccessToCMDSFields:any):string {
-    return AccessToCMDSFields.description!;
-}
-
-export function ReturnAmountOfCommands():number {
-    //return Commands.AmountOfCMDS;
-    return 0;
-}
+//the commands stuff was removed due to me actually understanding how the slash command builder works now
+//#endregion
