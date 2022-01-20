@@ -15,7 +15,8 @@ const rl = readline.createInterface({
 });
 import {InitConsoleCommands} from './src/TerminalHelper/Commands';
 import {InitFunctions} from './src/TerminalHelper/ConfigFunctions';
-import {ReturnDiscordStatus} from './src/Returner';
+import {ReturnDiscordStatus, ShutDownType} from './src/Returner';
+import FunnyExec from './src/commands/Functions';
 //#endregion
 
 client.on('ready', async () => {
@@ -36,39 +37,7 @@ client.on('ready', async () => {
 client.on('interactionCreate', async(interaction) => {
     if(!interaction.isCommand()) return;
 
-    switch(interaction.commandName)
-    {
-        case "ping":
-            const pingypingy:any = new Discord.MessageEmbed()
-            .setTitle('Pong! :ping_pong:')
-            .addFields
-            (
-                { name: 'Ping del bot ', value: `${client.ws.ping}ms`, inline: true}
-            ).setColor('#008000');
-    
-            await interaction.reply({embeds: [pingypingy], ephemeral:true})
-    
-            break;
-        case "apagar":
-            if(interaction.options.getBoolean("forzar", false) == true){ //if the option is true
-                if(interaction.memberPermissions?.has("ADMINISTRATOR")){
-                    Logger("The following user is forcing the bot shutdown: " + interaction.user.tag, "INFO");
-                    const funnyembed = new Discord.MessageEmbed()
-                    .setDescription("Forzando el apagado del bot");
-
-                    interaction.reply({embeds: [funnyembed]}).then((funny) => {
-                        Logger("Shutting down the bot in 20s", "INFO");
-                        setTimeout(function(){rl.close()}, 20000);
-                    })
-                } else {
-                    Logger("The following user tried to shutdown the bot: " + interaction.user.tag, "INFO");
-                    interaction.reply("No tienes permiso para apagar el bot");
-                }
-            } else {
-                interaction.reply("xd");
-            }
-            break;
-    }
+    FunnyExec(interaction.commandName, client, interaction, interaction, rl)
 })
 
 client.login(token);
