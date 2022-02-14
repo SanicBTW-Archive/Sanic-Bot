@@ -15,7 +15,8 @@ const rl = readline.createInterface({
 });
 import {InitConsoleCommands} from './src/TerminalHelper/Commands';
 import {InitFunctions} from './src/TerminalHelper/ConfigFunctions';
-import {ReturnDiscordStatus, ShutDownType} from './src/Returner';
+import {ReturnDiscordStatus, ReturnFields, ReturnOptState} from './src/Returner';
+var ChannelsArray:any[] = [];
 //#endregion
 
 client.on('ready', async () => {
@@ -28,7 +29,7 @@ client.on('ready', async () => {
                     name: Versions.DiscordBotVer
                 }], status: funny
             })
-            InitConsoleCommands(client, rl);
+            InitConsoleCommands(client, rl, ChannelsArray);
         })    
     })
 });
@@ -48,9 +49,7 @@ client.on('interactionCreate', async(interaction) => {
     
             await interaction.reply({embeds: [pingypingy], ephemeral:true})
             break;
-        case "apagar": //idk if it fully works or something, ok it doesnt work funny check not working and stuff
-            var state:ShutDownType = "None";
-
+        case "apagar":
             if(interaction.options.getBoolean("forzar", false) == true){ //if the option is true
                 if(interaction.memberPermissions?.has("ADMINISTRATOR")){
                     Logger("The following user is forcing the bot shutdown: " + interaction.user.tag, "INFO");
@@ -58,7 +57,6 @@ client.on('interactionCreate', async(interaction) => {
                     .setDescription("Forzando el apagado del bot");
 
                     interaction.reply({embeds: [funnyembed]}).then((funny) => {
-                        state = "Forced";
                         Logger("Shutting down the bot in 20s", "INFO");
                         setTimeout(function(){rl.close()}, 20000);
                     })
@@ -68,7 +66,7 @@ client.on('interactionCreate', async(interaction) => {
                 }
             } else {
                 const sentfunnyembed = new Discord.MessageEmbed()
-                .setDescription('Una confirmación para apagar el bot ue enviada a la terminal, esperando a la respuesta');
+                .setDescription('Una confirmación para apagar el bot fue enviada a la terminal, esperando a la respuesta');
 
                 const shutdownconfirmed = new Discord.MessageEmbed()
                 .setDescription('El apagado fue confirmado por la terminal')
@@ -78,41 +76,48 @@ client.on('interactionCreate', async(interaction) => {
                 .setDescription('El apagado ha sido rechazado por la terminal')
                 .setColor('#FF0000');
 
-                const alreadyaskin = new Discord.MessageEmbed()
-                .setDescription("Ya hay una persona que esta solicitando el apagado");
-
-                const shutforced = new Discord.MessageEmbed()
-                .setDescription("Hay un apagado en marcha (Forzado)");
-
-                if(state == "None" || state != "Forced"){
-                    interaction.reply({embeds: [sentfunnyembed]}).then(() => {
-                        state = "Asking For It";
-                        Logger("The following user wants to shutdown the bot: " + interaction.user.tag, "INFO");
-                        rl.question('Do you want to shutdown the bot? (y/n)', (conf) => {
-                            switch(conf)
-                            {
-                                case "y":
-                                    interaction.editReply({embeds: [shutdownconfirmed]}).then(() => {
-                                        Logger("Shutting down due to confirming shutdown", "DEBUG");
-                                        rl.close();
-                                    })
-                                    break;
-                                default:
-                                    interaction.editReply({embeds: [shutdowndenied]}).then(() => {
-                                        state = "Denied";
-                                        rl.prompt();
-                                    })
-                                    break;
-                            }
-                        })
+                interaction.reply({embeds: [sentfunnyembed]}).then(() => {
+                    Logger("The following user wants to shutdown the bot: " + interaction.user.tag, "INFO");
+                    rl.question('Do you want to shutdown the bot? (y/n)', (conf) => {
+                        switch(conf)
+                        {
+                            case "y":
+                                interaction.editReply({embeds: [shutdownconfirmed]}).then(() => {
+                                    Logger("Shutting down due to confirming shutdown", "DEBUG");
+                                    rl.close();
+                                })
+                                break;
+                            default:
+                                interaction.editReply({embeds: [shutdowndenied]}).then(() => {
+                                    rl.prompt();
+                                })
+                                break;
+                        }
                     })
-                } else if (state == "Asking For It" || state != "Forced"){
-                    interaction.reply({embeds: [alreadyaskin]});
-                } else if (state == "Forced"){
-                    interaction.reply({embeds: [shutforced]});
-                }
+                })
+
             }
             break;
+        case "añadir_canal":
+            let UseCustomName = ReturnFields("Config", 5);
+            let CustNameState = ReturnOptState(UseCustomName);
+
+            if(CustNameState == "enabled" && interaction.options.getString("custname", false) != null){
+                ChannelsArray.push(interaction.options.getString("custname", false));
+            } else {
+                ChannelsArray.push(interaction.options.getChannel("channel", true).name);
+            }
+            ChannelsArray.push(interaction.options.getChannel("channel", true).id);
+            const embed = new Discord.MessageEmbed()
+            .setTitle("Datos añadidos al array")
+            .addFields(
+                {name: CustNameState == "enabled" && interaction.options.getString("custname", false) != null? "Nombre custom" : "Nombre original", value: ChannelsArray[0]},
+                {name: 'ID del canal', value: ChannelsArray[1]}
+            );
+
+            interaction.reply({ephemeral: true, embeds: [embed]})
+            break;
+        
     }
 })
 

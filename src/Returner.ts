@@ -9,21 +9,9 @@ import DiscordConfig from './Config/DiscordConfig.json';
 enum FieldTypes //lol field types m
 {
     "Config",
-    "Commands"
 }
 
 type FieldType = keyof typeof FieldTypes;
-
-enum ShutDownEnum
-{
-    "Asking For It",
-    "Forced",
-    "Accepted",
-    "Denied",
-    "None"
-}
-
-export type ShutDownType = keyof typeof ShutDownEnum;
 //#endregion
 
 export function ReturnFields(type:FieldType,index:number):any { //used for everything lol
@@ -32,10 +20,6 @@ export function ReturnFields(type:FieldType,index:number):any { //used for every
         case "Config":
             let TermConf:any = TermConfigJSON.Options;
             return TermConf[index];
-        case "Commands": //ig it works
-            //let FunnyCmds:any = Commands;
-            //return FunnyCmds[index];
-            return "Oops, this isn't a thing anymore, will get deleted soon";
         default:
             Logger("oops cant get that field type", "ERROR");
     }

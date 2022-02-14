@@ -1,5 +1,5 @@
 {
-    "AmountOfOptions": 4,
+    "AmountOfOptions": 5,
     "Options": {
         "1": {
             "option":"clear console on startup",
@@ -20,6 +20,11 @@
             "option":"console title",
             "state": null,
             "value": "Sanic Bot"
+        },
+        "5": {
+            "option":"use custom channel names",
+            "state": "enabled",
+            "value": null
         }
     }
 }
