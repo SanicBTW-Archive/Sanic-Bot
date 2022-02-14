@@ -16,7 +16,7 @@ const rl = readline.createInterface({
 import {InitConsoleCommands} from './src/TerminalHelper/Commands';
 import {InitFunctions} from './src/TerminalHelper/ConfigFunctions';
 import {ReturnDiscordStatus, ReturnFields, ReturnOptState} from './src/Returner';
-var ChannelsArray:any[] = [];
+var ChannelsArray:any[] = [null];
 //#endregion
 
 client.on('ready', async () => {
@@ -108,11 +108,15 @@ client.on('interactionCreate', async(interaction) => {
                 ChannelsArray.push(interaction.options.getChannel("channel", true).name);
             }
             ChannelsArray.push(interaction.options.getChannel("channel", true).id);
+            var jajaslot = interaction.options.getInteger("saveslot", true);
+            Logger(jajaslot, "DEBUG");
+            Logger(ChannelsArray.length, "DEBUG");
+
             const embed = new Discord.MessageEmbed()
-            .setTitle("Datos añadidos al array")
+            .setTitle(`Datos añadidos al array (Slot: ${jajaslot})`)
             .addFields(
-                {name: CustNameState == "enabled" && interaction.options.getString("custname", false) != null? "Nombre custom" : "Nombre original", value: ChannelsArray[0]},
-                {name: 'ID del canal', value: ChannelsArray[1]}
+                {name: CustNameState == "enabled" && interaction.options.getString("custname", false) != null? "Nombre custom" : "Nombre original", value: ChannelsArray[jajaslot]},
+                {name: 'ID del canal', value: ChannelsArray[jajaslot + 1]}
             );
 
             interaction.reply({ephemeral: true, embeds: [embed]})

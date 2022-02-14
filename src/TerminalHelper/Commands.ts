@@ -20,8 +20,8 @@ export function InitConsoleCommands(client:Discord.Client, rl:readline.Interface
                 Logger(Channels, "DEBUG");
                 //0 is the custom name or the original name
                 //1 is the channel id
-                Logger(`${Channels[0]}`, "DEBUG");
                 Logger(`${Channels[1]}`, "DEBUG");
+                Logger(`${Channels[2]}`, "DEBUG");
                 break;
             case "exit":
                 rl.close();
